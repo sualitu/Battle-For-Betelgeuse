@@ -56,7 +56,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	public void ReceiveNetworkUnitMove(string id, int x, int y) {
 		Unit unit = gameControl.units.Find(u => u.Id.ToString() == id);
 		Hex hex = gameControl.gridControl.Map[x][y];
-		gameControl.movementControl.MoveUnit(unit, hex);
+		unit.PrepareMove(hex);
 	}
 	
 	public void PlayNetworkCardOn(Card card, Hex hex) {

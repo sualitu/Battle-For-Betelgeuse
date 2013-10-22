@@ -48,20 +48,22 @@ public class Unit : MonoBehaviour {
 		moved = 0;
 	}
 	
-	public void AttackTarget(Hex hex) {
+	public void AttackTarget(Hex hex, int delay) {
 		if(hex.Unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
 		args[1] = hex;
-		FireMissiles(args);
-		//iTween.RotateTo(gameObject, iTween.Hash ("rotation", hex.renderer.bounds.center,
-		//									     "oncomplete", "FireMissiles",
-		//										 "oncompleteparams", args));
+		
+		iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
+			"time", 1,
+			"delay", delay+1f,
+			"oncomplete", "FireMissiles",
+			"oncompleteparams", args));
 	}
 	
 	public void FireMissiles(System.Object[] args) {
 		int i = (int) args[0];
-		for(int j = 0; j < i; j++) {
+		for(int j = i; j > 0; j--) {
 		Hex hex = (Hex) args[1];
 			GameObject missile = (GameObject) Instantiate(MissilePrefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), transform.localRotation);
 			Vector3 targetPos = new Vector3(hex.transform.position.x+Random.Range (-0.5f, 0.5f), hex.transform.position.y+1f, hex.transform.position.z+Random.Range (-0.5f, 0.5f));
@@ -74,13 +76,57 @@ public class Unit : MonoBehaviour {
 			t[1] = v2;
 			t[2] = targetPos;
 			iTween.MoveTo(missile.gameObject, iTween.Hash ("path", t,
-														   "islocal", true,
-														   "orienttopath", true,
-														   "easetype", "easeInQuad",
-														   "time", 2,
-														   "delay", 0.5f*j,
-														   "oncomplete", "Hit"));
+				"islocal", true,
+				"orienttopath", true,
+				"easetype", "easeInQuad",
+				"time", 2,
+				"delay", 0.5f*j,
+				"oncomplete", "Hit"));
 		}
+	}
+	
+	public void PrepareMove(Hex hex) {
+		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
+		path.ForEach(h => h.renderer.material.color = Color.white);
+		if(path.Count > 0 && (hex.Unit == null || Team != hex.Unit.Team)) {
+			if(hex.Unit == null) {
+				MoveBy(path);
+			} else {
+				int delay = 0;
+				if(path.Count > 1) {
+					path.RemoveAt(path.Count-1);
+					delay = path.Count;
+					MoveBy(path);
+				} 
+				AttackTarget(hex, delay);
+			}
+		} else {
+			GameControl.gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, transform);			
+		}
+		
+	}
+	
+	void MoveBy(List<Hex> path) {
+		Move (path.Count);
+		Hex prevHex = Hex;
+		Hex newHex = path.FindLast(h => true);
+		List<Transform> p = path.ConvertAll<Transform>(h => h.transform);
+		if(p.Count > 1) {
+			iTween.MoveTo(gameObject, iTween.Hash (
+				"path", p.ToArray(),
+				"time", p.Count,
+				"orienttopath", true,
+				"easetype", "easeInOutQuad"));
+		} else {
+			iTween.MoveTo(gameObject, iTween.Hash (
+				"position", p[0],
+				"time", p.Count,
+				"orienttopath", true,
+				"easetype", "easeInOutQuad"));
+		}
+		prevHex.Unit = null;
+		Hex = newHex;
+		newHex.Unit = this;
 	}
 	
 	public void MovementDone(bool combatFollows) {

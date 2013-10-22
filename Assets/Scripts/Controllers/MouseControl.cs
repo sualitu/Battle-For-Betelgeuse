@@ -79,13 +79,11 @@ public class MouseControl : MonoBehaviour {
 							if(selectedUnit == null) {
 								selectHex(hex);
 							} else {
-								selectedUnit.AttackTarget(hex);
-								if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.myTurn) {
-									// Move unit
+								if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.myTurn) {								
 									if(GameControl.IsMulti) {
 										gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);
 									} else {
-										//gameControl.movementControl.MoveUnit(selectedUnit, hex);	
+										selectedUnit.PrepareMove (hex);
 									}
 								}
 							}

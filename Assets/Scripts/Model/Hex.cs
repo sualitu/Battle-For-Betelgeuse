@@ -17,12 +17,6 @@ public class Hex : MonoBehaviour
 	{
 		if(IsSelected) {
 			renderer.material.color = Color.blue;
-		} else if(Unit != null) {
-			if(Unit.Team == 1) {
-				renderer.material.color = Color.green;
-			} else {
-				renderer.material.color = Color.red;
-			}
 		}
 	}
 	

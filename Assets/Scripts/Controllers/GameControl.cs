@@ -11,6 +11,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(NetworkControl))]
 public class GameControl : MonoBehaviour {
 	
+	public static GameControl gameControl;
+	
 	private State state;
 	public Player thisPlayer;
 	public Player enemyPlayer;
@@ -40,6 +42,7 @@ public class GameControl : MonoBehaviour {
 	public bool myTurn = false;
 	
 	void Start () {
+		gameControl = this;
 		new MothershipCard();
 		thisPlayer = new Player(Card.RandomDeck());
 		thisPlayer.Ai = false;
