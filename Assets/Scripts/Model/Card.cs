@@ -28,10 +28,45 @@ public abstract class Card
 	
 	public static List<Card> RandomDeck() {
 		List<Card> result = new List<Card>();
-		for(int i = 0; i < 60; i++) {
-			Card card = Random.Range(1,5) > 1 ? (Card) new FighterSquadCard() : (Card) new CruiserCard();
-			result.Add(card);
-		}
+		result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());result.Add(new CowCard());
+		result.Add(new CowCard());
+		
 		return result;
 	}
 	

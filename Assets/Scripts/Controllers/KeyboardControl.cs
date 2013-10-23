@@ -7,7 +7,7 @@ public class KeyboardControl : MonoBehaviour
 	void Update ()
 	{
 		if(Input.GetKey(KeyCode.Escape)) {
-			Application.LoadLevel (1);
+			Application.LoadLevel (0);
 		}
 	}
 }

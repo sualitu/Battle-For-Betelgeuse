@@ -53,7 +53,7 @@ public class MouseControl : MonoBehaviour {
 	void Update () {
 		ray = Camera.main.ScreenPointToRay ( Input.mousePosition );
 		if (Physics.Raycast (ray, out rayHit, Mathf.Infinity)) {
-			/*try {*/
+			try {
 				Vector2 coords = rayHit.collider.GetComponent<Hex>().GridPosition;
 				Hex hex = gameControl.gridControl.Map[Mathf.FloorToInt(coords.x)][Mathf.FloorToInt(coords.y)];
 				if(PlayModeOn) {
@@ -116,8 +116,8 @@ public class MouseControl : MonoBehaviour {
 						}
 					}
 				}
-			/*} catch  {
-			}*/
+			} catch  {
+			}
 		} else {
 		}
 		if(Input.GetMouseButtonDown(0)){

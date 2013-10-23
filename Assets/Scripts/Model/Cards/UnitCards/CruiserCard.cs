@@ -41,7 +41,7 @@ public class CruiserCard : UnitCard
 
 	public override int id {
 		get {
-			return 1;
+			return 4;
 		}
 	}
 

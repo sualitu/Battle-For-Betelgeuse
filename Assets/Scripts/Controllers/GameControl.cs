@@ -18,7 +18,8 @@ public class GameControl : MonoBehaviour {
 	public Player enemyPlayer;
 	private Player currentPlayer;
 	
-	public static bool IsMulti = true;
+	public static bool IsMulti = false;
+	public static bool GameStarted = false;
 	
 	public List<Unit> units = new List<Unit>();	
 	public GameObject unitPreFab;
@@ -164,9 +165,10 @@ public class GameControl : MonoBehaviour {
 	public void SetUpGame() {
 		Card baseCard = new MothershipCard();
 		if(IsMulti) {
-		networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[16][4]);
-		networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[20][46]);
+			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[16][4]);
+			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[20][46]);
 		} else {
+			PlayCardOnHex(new DestroyerCard(), gridControl.Map[20][10],System.Guid.NewGuid().ToString());
 			bool t = myTurn;
 			myTurn = false;				
 			PlayCardOnHex(new CruiserCard(), gridControl.Map[16][7],System.Guid.NewGuid().ToString());
@@ -174,11 +176,30 @@ public class GameControl : MonoBehaviour {
 			PlayCardOnHex(baseCard, gridControl.Map[16][4], System.Guid.NewGuid().ToString());
 			PlayCardOnHex(baseCard, gridControl.Map[20][46], System.Guid.NewGuid().ToString());
 		}
+		thisPlayer.MaxMana++;
+		Vector3 mainCameraPosition = new Vector3(40,30,0);
+		Vector3 mainCameraRotation = new Vector3(50,0,0);
+		GameStarted = true;
+		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
+			"delay", 0.5f,
+			"time", 5));
+		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
+			"delay", 0.5f,
+			"time", 4));
 		gameIsSetUp = true;
 	}
 		
 	public void SetUpClientGame() {
-		Camera.main.transform.localRotation = Quaternion.Euler(new Vector3(50, 180, 0));
+		GameStarted = true;
+		Vector3 mainCameraPosition = new Vector3(40,30,120);
+		Vector3 mainCameraRotation = new Vector3(50,180,0);
+		GameStarted = true;
+		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
+			"delay", 0.5f,
+			"time", 5));
+		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
+			"delay", 0.5f,
+			"time", 4));
 		gameIsSetUp =  true;
 	}
 	

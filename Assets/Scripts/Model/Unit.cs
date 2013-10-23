@@ -143,7 +143,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void FromCard (Card card) {
-		model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), card.Prefab.transform.localRotation);
+		model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x+card.Prefab.transform.position.x, transform.position.y+card.Prefab.transform.position.y,transform.position.z+card.Prefab.transform.position.z), card.Prefab.transform.localRotation);
 		model.transform.parent = transform;
 		Attack = card.Attack;
 		MaxHealth = card.Health;

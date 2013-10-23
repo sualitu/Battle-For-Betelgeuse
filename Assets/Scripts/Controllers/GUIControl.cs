@@ -39,6 +39,9 @@ public class GUIControl : MonoBehaviour {
 	public void ShowFloatingText(string s, Transform tar) {
 		GameObject text = (GameObject) Instantiate(textPrefab, new Vector3(tar.position.x + 1, 1, tar.position.z+1), Quaternion.Euler(new Vector3(50f,0f,0f)));
 		TextMesh tm = text.GetComponent<TextMesh>();
+		if(GameControl.IsMulti && !PhotonNetwork.isMasterClient) {
+			// Fixme: Rotate properly
+		}
 		tm.text = s;
 		tm.fontSize = 10;
 	}

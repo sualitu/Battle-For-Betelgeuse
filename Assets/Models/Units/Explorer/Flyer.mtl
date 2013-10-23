@@ -1,0 +1,795 @@
+newmtl Antenna
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Arm_Rests
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.1 0.1 0.1
+Ni 1
+Ns 100
+Tf 1 1 1
+d 1
+
+newmtl Body
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Body_Front
+Ka 0 0 0
+Kd 0.309804 0.309804 0.309804
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Body_Top
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+map_Kd TopStripe.jpg
+
+newmtl Body_Top_Cutout_Front
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Body_Top_Cutouts
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Camera
+Ka 0 0 0
+Kd 0.737255 0.756863 0.827451
+Ks 0.89 0.89 0.89
+Ni 1
+Ns 649
+Tf 1 1 1
+d 1
+
+newmtl Camera_Glass
+Ka 0 0 0
+Kd 0.168627 0.215686 0.247059
+Ks 1 1 1
+Ni 1
+Ns 200
+Tf 1 1 1
+d 0.7
+
+newmtl Camera_Lens
+Ka 0 0 0
+Kd 0.247059 0.247059 0.247059
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Camera_Mount
+Ka 0 0 0
+Kd 0.345098 0.345098 0.345098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Camera_Tubes
+Ka 0 0 0
+Kd 0.345098 0.345098 0.345098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Cockpit_Arch
+Ka 0 0 0
+Kd 0.603922 0.603922 0.603922
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Cockpit_Connect
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Cockpit_Sphere
+Ka 0 0 0
+Kd 0.168627 0.215686 0.247059
+Ks 1 1 1
+Ni 1
+Ns 400
+Tf 1 1 1
+d 0.5
+
+newmtl Control_Box
+Ka 0 0 0
+Kd 0.345098 0.345098 0.345098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Default
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Displays
+Ka 0 0 0
+Kd 0 0 0.87451
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Door_Rings
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.89 0.89 0.89
+Ni 1
+Ns 649
+Tf 1 1 1
+d 1
+
+newmtl Engine_Flaps
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Engine_Ports
+Ka 0 0 0
+Kd 0 0 0
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Engine_Pylones
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Flight_Stick_Base
+Ka 0 0 0
+Kd 0.301961 0.301961 0.301961
+Ks 0.216 0.216 0.216
+Ni 1.5
+Ns 549
+Tf 1 1 1
+d 1
+
+newmtl Flight_Stick_Button1
+Ka 0 0 0
+Kd 1 0 0
+Ks 0.216 0.216 0.216
+Ni 1.5
+Ns 549
+Tf 1 1 1
+d 1
+
+newmtl Flight_Stick_Grip
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1.5
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Flight_Stick_Grip_Dark
+Ka 0 0 0
+Kd 0.454902 0.454902 0.454902
+Ks 0.3 0.3 0.3
+Ni 1.5
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Flight_Stick_Trigger
+Ka 0 0 0
+Kd 0 0 0
+Ks 0.216 0.216 0.216
+Ni 1.5
+Ns 549
+Tf 1 1 1
+d 1
+
+newmtl Foot_Peddle_Bar
+Ka 0 0 0
+Kd 0.603922 0.603922 0.603922
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Foot_Peddle_Cutouts
+Ka 0 0 0
+Kd 0.603922 0.603922 0.603922
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Foot_Peddle_Mounts
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Foot_Peddles
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Gun_Armor
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Gun_Covers
+Ka 0 0 0
+Kd 0.392157 0.392157 0.392157
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Gun_Lens
+Ka 0 0 0
+Kd 0.168627 0.215686 0.247059
+Ks 1 1 1
+Ni 1
+Ns 400
+Tf 1 1 1
+d 0.8
+
+newmtl Gun_Pivots
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Guns
+Ka 0 0 0
+Kd 0.501961 0.501961 0.501961
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Inner_Rotor_Ring
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Instirment_Panel
+Ka 0 0 0
+Kd 0.447059 0.447059 0.447059
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Leg_Ball_Mount
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Leg_Ball_Mount_Top
+Ka 0 0 0
+Kd 0.180392 0.180392 0.180392
+Ks 0.89 0.89 0.89
+Ni 1
+Ns 649
+Tf 1 1 1
+d 1
+
+newmtl Legs
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Pivot_Drome
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pivot_Drome_Dark
+Ka 0 0 0
+Kd 0.392157 0.392157 0.392157
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pivot_Frame
+Ka 0 0 0
+Kd 0.678431 0.678431 0.678431
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Pivot_Frame_Back
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Pod_Emgine_Glow
+Ka 0 0 0
+Kd 0.341176 0.501961 0.584314
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pod_End_Rings
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Pod_Ends
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Pod_Engine
+Ka 0 0 0
+Kd 0.270588 0.270588 0.270588
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pod_Intakes
+Ka 0 0 0
+Kd 0.941176 0.941176 0.941176
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pod_Intakes_Dark
+Ka 0 0 0
+Kd 0 0 0
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Pod_Left
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.6 0.6 0.6
+Ni 1
+Ns 600
+Tf 1 1 1
+d 1
+map_Kd Pods3.jpg
+map_bump Pods3.jpg
+bump Pods3.jpg
+
+newmtl Pod_Right
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.6 0.6 0.6
+Ni 1
+Ns 600
+Tf 1 1 1
+d 1
+map_Kd Pods3.jpg
+map_bump Pods3.jpg
+bump Pods3.jpg
+
+newmtl Pods
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Rotor_Thruster
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Rotor_Thruster_Cones
+Ka 0 0 0
+Kd 0.423529 0.423529 0.423529
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Seat_Backs
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Seat_Backs_Dark
+Ka 0 0 0
+Kd 0.4 0.4 0.4
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Seat_Dark
+Ka 0 0 0
+Kd 0.431373 0.431373 0.431373
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Seat_Mount_Plate
+Ka 0 0 0
+Kd 0.478431 0.478431 0.478431
+Ks 0.1 0.1 0.1
+Ni 1
+Ns 100
+Tf 1 1 1
+d 1
+
+newmtl Seats
+Ka 0 0 0
+Kd 0.752941 0.752941 0.752941
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Skid_Hole
+Ka 0 0 0
+Kd 0.501961 0.501961 0.501961
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Skid_Toe
+Ka 0 0 0
+Kd 0.588235 0.588235 0.588235
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Skids
+Ka 0 0 0
+Kd 0.411765 0.411765 0.411765
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Small_Winglet_Bottom_Left
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+map_Kd WingletStripe.jpg
+
+newmtl Small_Winglet_Bottom_Right
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+map_Kd WingletStripe.jpg
+
+newmtl Small_Winglet_End
+Ka 0 0 0
+Kd 0.270588 0.270588 0.270588
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Small_Winglet_Inner_Edge
+Ka 0 0 0
+Kd 0.294118 0.294118 0.294118
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Small_Winglet_Top_Left
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+map_Kd WingletStripe.jpg
+
+newmtl Small_Winglet_Top_Right
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+map_Kd WingletStripe.jpg
+
+newmtl Stick_Chrome
+Ka 0 0 0
+Kd 0.580392 0.580392 0.580392
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Stick_Chrome2
+Ka 0 0 0
+Kd 0.752941 0.752941 0.752941
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Stick_White
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Switch
+Ka 0 0 0
+Kd 0.709804 0.709804 0.709804
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Switch_Dark
+Ka 0 0 0
+Kd 0.215686 0.215686 0.215686
+Ks 0.1 0.1 0.1
+Ni 1
+Ns 100
+Tf 1 1 1
+d 1
+
+newmtl Switch_Red
+Ka 0 0 0
+Kd 0.823529 0 0
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Tail_Bom_Cutouts
+Ka 0 0 0
+Kd 0.501961 0.501961 0.501961
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Tail_Boom
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Tail_Boom_Top
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+map_Kd TopStripe2.jpg
+
+newmtl Tail_Ring_Fins
+Ka 0 0 0
+Kd 0.717647 0.717647 0.717647
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Tail_Ring_Inner
+Ka 0 0 0
+Kd 0.635294 0.635294 0.635294
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Tail_Rotor
+Ka 0 0 0
+Kd 0.717647 0.717647 0.717647
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Tail_Rotor_Covers
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
+newmtl Tail_Rotor_Ring
+Ka 0 0 0
+Kd 1 1 1
+Ks 0.6 0.6 0.6
+Ni 1
+Ns 600
+Tf 1 1 1
+d 1
+
+newmtl Tail_Rotor_Ring2
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.89 0.89 0.89
+Ni 1
+Ns 649
+Tf 1 1 1
+d 1
+
+newmtl Top_Fin
+Ka 0 0 0
+Kd 0.25098 0.25098 0.25098
+Ks 0.3 0.3 0.3
+Ni 1
+Ns 300
+Tf 1 1 1
+d 1
+
+newmtl Top_Fin_Tip
+Ka 0 0 0
+Kd 0.752941 0.752941 0.752941
+Ks 0.5 0.5 0.5
+Ni 1
+Ns 500
+Tf 1 1 1
+d 1
+
