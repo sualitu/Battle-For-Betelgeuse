@@ -19,6 +19,9 @@ public class Unit : MonoBehaviour {
 	// Fields
 	private int damageTaken;
 	private int moved;
+	private Unit attacking = null;
+	private bool activelyAttacking = false;
+	List<GameObject> projectiles = new List<GameObject>();
 	
 	// Unity 
 	public Transform explosion;
@@ -53,19 +56,23 @@ public class Unit : MonoBehaviour {
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
 		args[1] = hex;
-		
+		Move (int.MinValue);
 		iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
 			"time", 1,
-			"delay", delay+1f,
+			"delay", delay,
 			"oncomplete", "FireMissiles",
 			"oncompleteparams", args));
+		
 	}
 	
+	
 	public void FireMissiles(System.Object[] args) {
+		activelyAttacking = true;
 		int i = (int) args[0];
-		for(int j = i; j > 0; j--) {
+		for(int j = 0; j < i; j++) {
 		Hex hex = (Hex) args[1];
 			GameObject missile = (GameObject) Instantiate(MissilePrefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), transform.localRotation);
+			projectiles.Add(missile);
 			Vector3 targetPos = new Vector3(hex.transform.position.x+Random.Range (-0.5f, 0.5f), hex.transform.position.y+1f, hex.transform.position.z+Random.Range (-0.5f, 0.5f));
 			float deltaX = Mathf.Abs(missile.transform.position.x - targetPos.x)/3;
 			float deltaZ = Mathf.Abs(missile.transform.position.z - targetPos.z)/3;
@@ -81,7 +88,8 @@ public class Unit : MonoBehaviour {
 				"easetype", "easeInQuad",
 				"time", 2,
 				"delay", 0.5f*j,
-				"oncomplete", "Hit"));
+				"oncomplete", "Hit",
+				"oncompleteparams", this));
 		}
 	}
 	
@@ -98,7 +106,9 @@ public class Unit : MonoBehaviour {
 					delay = path.Count;
 					MoveBy(path);
 				} 
+				attacking = hex.Unit;
 				AttackTarget(hex, delay);
+				hex.Unit.AttackTarget(Hex, delay);
 			}
 		} else {
 			GameControl.gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, transform);			
@@ -155,6 +165,14 @@ public class Unit : MonoBehaviour {
 			i += 100;
 		} else {
 			i = 0;
+		}
+		
+		if(attacking != null && activelyAttacking) {
+			projectiles.RemoveAll(p => p == null);
+			if(projectiles.Count < 1) {
+				GameControl.gameControl.combatControl.Combat(this, attacking);
+				attacking = null;
+			}
 		}
 	}
 }

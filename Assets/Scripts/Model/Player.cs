@@ -37,7 +37,7 @@ public class Player
 	}
 	
 	public void DrawCard() {
-		if(Hand.Count > Settings.MaxHandCount) {
+		if(Hand.Count >= Settings.MaxHandCount) {
 			return ;
 		}
 		Card card = null;
