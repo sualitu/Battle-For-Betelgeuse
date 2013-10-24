@@ -92,7 +92,7 @@
             }
 
             // Finally move camera parallel to world axis
-			if(GameControl.GameStarted) {
+			if(GameControl.GameStarted()) {
             	camera.transform.position += translation;
 			}
         }

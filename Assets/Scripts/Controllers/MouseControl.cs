@@ -75,11 +75,11 @@ public class MouseControl : MonoBehaviour {
 					}
 					
 					if(Input.GetMouseButtonDown(0)){
-						if(!gameControl.guiControl.MouseIsOverGUI() && gameControl.AllowAction) {
+						if(!gameControl.guiControl.MouseIsOverGUI() && gameControl.state == State.MYTURN) {
 							if(selectedUnit == null) {
 								selectHex(hex);
 							} else {
-								if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.myTurn) {								
+								if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.state == State.MYTURN) {								
 									if(GameControl.IsMulti) {
 										gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);
 									} else {
@@ -106,7 +106,7 @@ public class MouseControl : MonoBehaviour {
 						hex.renderer.material.color = Color.red;
 					}
 					if(Input.GetMouseButton(0)) {
-						if(gameControl.thisPlayer.targets.Contains(hex) && gameControl.myTurn) {
+						if(gameControl.thisPlayer.targets.Contains(hex) && gameControl.state == State.MYTURN) {
 							// Play Card
 							if(GameControl.IsMulti) {
 								gameControl.networkControl.PlayNetworkCardOn(gameControl.thisPlayer.selectedCard, hex);

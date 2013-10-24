@@ -15,7 +15,7 @@ public class MovementControl : MonoBehaviour
 	}
 	
 	
-				
+	/*			
 	private void DoMove(Unit unit, List<Hex> moves) {
 		unit.Move(moves.Count);
 		moves.ForEach(h => h.renderer.material.color = Color.white);
@@ -55,7 +55,7 @@ public class MovementControl : MonoBehaviour
 		} else {
 			gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, unit.transform);
 		}
-	}
+	}*/
 	
 }
 

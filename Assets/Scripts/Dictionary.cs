@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class Dictionary {
-	public const string cannotMoveThereError = "Cannot move there!";
-	public const string version = "alpha 0.1";
+	public const string cannotMoveThereError = "Cannot move there";
+	public const string startGame = "Start Game";
+	public const string endTurn = "End Turn";
+	public const string endGame = "End Game";
+	public const string yourTurn = "Your Turn";
 }

@@ -13,17 +13,12 @@ public class GameControl : MonoBehaviour {
 	
 	public static GameControl gameControl;
 	
-	private State state;
+	public State state;
 	public Player thisPlayer;
-	public Player enemyPlayer;
-	private Player currentPlayer;
-	
-	public static bool IsMulti = false;
-	public static bool GameStarted = false;
+	public Player enemyPlayer;	
 	
 	public List<Unit> units = new List<Unit>();	
 	public GameObject unitPreFab;
-	public bool AllowAction { get; set; }
 	public GameObject CardPrefab;
 	
 	// Controllers
@@ -34,17 +29,33 @@ public class GameControl : MonoBehaviour {
 	public MouseControl mouseControl { get; set; }
 	public HandControl handControl {get; set; }
 	public NetworkControl networkControl { get; set; }
-	private AIController aiController;
-	private EndTurn et;
+	AIController aiController;
 	
-	// Fix me
-	private bool gameStarted = false;
-	private bool gameIsSetUp = false;
-	public bool myTurn = false;
+	// TODO Move to GUIController
+	EndTurn et;
+	
+	// TODO Consider Booleans
+	public static bool IsMulti = false;
 	
 	void Start () {
-		gameControl = this;
+		InitGame();
+		InitPlayers();
+		InitControllers();	
+		if(!IsMulti) {
+			InitSinglePlayer();
+		}
+		LoadingScreen.hide();
+	}
+	#region Init
+	
+	void InitGame() {
 		new MothershipCard();
+		state = State.PREGAME;
+		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
+		et.title = Dictionary.startGame;
+	}
+	
+	void InitPlayers() {
 		thisPlayer = new Player(Card.RandomDeck());
 		thisPlayer.Ai = false;
 		thisPlayer.Team = 1;
@@ -53,52 +64,47 @@ public class GameControl : MonoBehaviour {
 		enemyPlayer.Ai = !IsMulti;
 		enemyPlayer.Team = 2;
 		enemyPlayer.gameControl = this;
-		if(!IsMulti) { aiController = new AIController(enemyPlayer, this); }
-		initializeControllers();	
-		state = State.START;
-		AllowAction = false;
-		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
-		et.title = "Start Game";
-		LoadingScreen.hide();
-		if(!IsMulti) {
-			SetUpGame();
-		}
 	}
+	
+	void InitSinglePlayer() {
+		aiController = new AIController(enemyPlayer, this);
+		SetUpMasterGame();
+	}
+	
+	void InitControllers() {
+		gameControl = this;
+		gridControl = GetComponent<GridControl>();
+		guiControl = GetComponent<GUIControl>();
+		combatControl = GetComponent<CombatControl>();
+		movementControl = GetComponent<MovementControl>();
+		mouseControl = GetComponent<MouseControl>();
+		handControl = GetComponent<HandControl>();	
+		networkControl = GetComponent<NetworkControl>();
+	}
+	#endregion Init
 		
 	void DoGameLoop () {
 		guiControl.UpdateGUI();
 		switch(state) {
-			case State.START: 
-				state++;
+			case State.PRETURN:
+				if(!IsMulti || PhotonNetwork.isMasterClient) {
+					state = State.MYTURN;
+				} else {
+					state = State.ENEMYTURN;
+				}
 				DoGameLoop();
-				thisPlayer.DrawHand();				
 				break;
-			case State.PRETURN: 
-				et.title = "End Turn";
+			case State.MYTURN:
+				et.title = Dictionary.endTurn;
 				units.RemoveAll(u => u == null);
 				foreach(Unit u in units) {
 					u.ResetStats();
 				}
-				gameStarted = true;
-				state++;
-				DoGameLoop();
-				
 				break;
-			case State.TURN:
-				
-				mouseControl.deselectHex();
-				AllowAction = true;
-				
-				break;
-			case State.POSTTURN: 
-				state++;
-				DoGameLoop();
-				break;
-			case State.NONETURN:
-				state = State.PRETURN;
-				DoGameLoop();
-				break;
-			case State.GAMEOVER:
+			case State.ENEMYTURN:
+				if(!IsMulti) {
+					aiController.DoMove();
+				}
 				break;
 			default: 
 				break;
@@ -106,25 +112,16 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public void EndTurnClicked () {
-		if(gameIsSetUp) {
+		if(state >= State.START) {
 			switch(state) {
-			case State.TURN:
-				if(myTurn) {
-					AllowAction = false;
-					myTurn = false;
-					if(!IsMulti) {
-						aiController.DoMove();
-					} else {
+			case State.MYTURN:
+				if(state == State.MYTURN) {
+					if(IsMulti) {
 						networkControl.EndNetworkTurn();
 					}
-					state++;
+					state = State.ENEMYTURN;
 					DoGameLoop();
 				}
-				break;
-			case State.GAMEOVER:
-				units.ForEach(u => u.Damage(int.MaxValue));
-				state = State.START;
-				DoGameLoop();
 				break;
 			case State.START:
 				if(IsMulti) {
@@ -140,75 +137,62 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public void StartGame() {
-		if((!PhotonNetwork.isNonMasterClientInRoom && IsMulti) || !IsMulti) {
-			myTurn = true;
-		} 
+		thisPlayer.DrawHand();
+		state = State.PRETURN;
 		DoGameLoop();
-	}
-		
-	private void initializeControllers() {
-		gridControl = GetComponent<GridControl>();
-		guiControl = GetComponent<GUIControl>();
-		combatControl = GetComponent<CombatControl>();
-		movementControl = GetComponent<MovementControl>();
-		mouseControl = GetComponent<MouseControl>();
-		handControl = GetComponent<HandControl>();	
-		networkControl = GetComponent<NetworkControl>();
 	}
 	
 	private void EndGame() {
-		et.title = "End Game";
-		AllowAction = false;	
-		state = State.GAMEOVER;
+		et.title = Dictionary.endGame;	
 	}
 	
-	public void SetUpGame() {
+	public static bool GameStarted() {
+		return gameControl.state >= State.START;
+	}
+	
+	#region SetUp
+	public void SetUpMasterGame() {
 		Card baseCard = new MothershipCard();
 		if(IsMulti) {
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[16][4]);
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[20][46]);
 		} else {
-			PlayCardOnHex(new DestroyerCard(), gridControl.Map[20][10],System.Guid.NewGuid().ToString());
-			bool t = myTurn;
-			myTurn = false;				
-			PlayCardOnHex(new CruiserCard(), gridControl.Map[16][7],System.Guid.NewGuid().ToString());
-			myTurn = t;
 			PlayCardOnHex(baseCard, gridControl.Map[16][4], System.Guid.NewGuid().ToString());
 			PlayCardOnHex(baseCard, gridControl.Map[20][46], System.Guid.NewGuid().ToString());
 		}
 		thisPlayer.MaxMana++;
+		state = State.START;
+		// TODO Move to CameraControl
 		Vector3 mainCameraPosition = new Vector3(40,30,0);
 		Vector3 mainCameraRotation = new Vector3(50,0,0);
-		GameStarted = true;
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
 			"time", 5));
 		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
 			"delay", 0.5f,
 			"time", 4));
-		gameIsSetUp = true;
 	}
 		
 	public void SetUpClientGame() {
-		GameStarted = true;
+		state = State.START;
+		// TODO Move to CameraControl
 		Vector3 mainCameraPosition = new Vector3(40,30,120);
 		Vector3 mainCameraRotation = new Vector3(50,180,0);
-		GameStarted = true;
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
 			"time", 5));
 		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
 			"delay", 0.5f,
 			"time", 4));
-		gameIsSetUp =  true;
 	}
+	#endregion SetUp
 	
 	public void EnemeyEndTurn() {
-		myTurn = true;
+		state = State.MYTURN;
 		thisPlayer.DrawCard();
 		thisPlayer.MaxMana++;
 		thisPlayer.ManaSpend = 0;
-		guiControl.ShowSplashText("Your turn!");
+		guiControl.ShowSplashText(Dictionary.yourTurn);
 		DoGameLoop();
 	}
 	
@@ -222,10 +206,10 @@ public class GameControl : MonoBehaviour {
 		unit.transform.position = hex.transform.position;
 		hex.Unit = unit;
 		units.Add(unit);
-		unit.Team = myTurn ? 1 : 2;
+		unit.Team = state == State.MYTURN ? 1 : 2;
 		card.OnPlay(new StateObject(units, unit));
-		if(myTurn && thisPlayer.Hand.Count != 0) {
-			// Fix me
+		if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
+			// TODO Find a better way to sort this
 			thisPlayer.PlayCard();
 		}
 	}
@@ -238,8 +222,8 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	void Update() {
-		// Fix me
-		if(!gameStarted && gameIsSetUp && gridControl.Map[16][4].Unit != null && gridControl.Map[20][46].Unit != null) {
+		// TODO Do this properly
+		if(state != State.PREGAME && gridControl.Map[16][4].Unit != null && gridControl.Map[20][46].Unit != null) {
 			Unit myBase = null;
 			Unit enemyBase = null;
 			if(!PhotonNetwork.isNonMasterClientInRoom) {
@@ -261,6 +245,8 @@ public class GameControl : MonoBehaviour {
 
 		}
 	}
+	
+	// TODO Do this properly
 	void OnGUI() {
 		GUILayout.Label ("Mana left: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana);
 	}
@@ -268,4 +254,4 @@ public class GameControl : MonoBehaviour {
 	
 }
 
-public enum State { START, PRETURN, TURN, POSTTURN, NONETURN, GAMEOVER}
+public enum State { PREGAME, START, PRETURN, MYTURN, ENEMYTURN, }

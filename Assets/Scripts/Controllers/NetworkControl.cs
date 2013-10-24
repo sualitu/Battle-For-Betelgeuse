@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(GameControl))]
@@ -10,7 +10,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if(GameControl.IsMulti) {
-			PhotonNetwork.ConnectUsingSettings(Dictionary.version);
+			PhotonNetwork.ConnectUsingSettings(Settings.version);
 			gameControl = GetComponent<GameControl>();
 			NetworkPhoton = GetComponent<PhotonView>();
 		}
@@ -39,7 +39,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	[RPC]
 	void Joined() {
 		gameControl.guiControl.ShowSplashText("Opponent found!");
-		gameControl.SetUpGame();
+		gameControl.SetUpMasterGame();
 		PhotonNetwork.room.open = false;
 	}
 
