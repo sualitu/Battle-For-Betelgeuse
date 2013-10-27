@@ -8,6 +8,7 @@ public class AIControl : MonoBehaviour
 	GameControl gameControl;
 	
 	List<Hex> unitTargets = new List<Hex>();
+	int attempts;
 	
 	public AIControl SetAI(Player player, GameControl gameControl) {
 		player.Ai = true;
@@ -47,6 +48,7 @@ public class AIControl : MonoBehaviour
 		player.SpendMana(card.Cost);
 		player.Hand.Remove(card);
 		MoveUnits();
+		attempts = 0;
 		return true;
 	}
 	
@@ -101,6 +103,7 @@ public class AIControl : MonoBehaviour
 				return false;
 			}
 		}
+		attempts = 0;
 		unit.PrepareMove(targetHex);
 		return true;
 	}
@@ -113,6 +116,11 @@ public class AIControl : MonoBehaviour
 	void Update() {
 		if(MyTurn() && !MovesInProgress()) {
 			if(!PlayCard() && !MoveUnits()) {
+				EndTurn();
+			} else {
+				attempts++;
+			}
+			if(attempts > 100) {
 				EndTurn();
 			}
 		}

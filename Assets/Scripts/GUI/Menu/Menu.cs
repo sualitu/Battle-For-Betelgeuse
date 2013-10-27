@@ -46,8 +46,8 @@ public class Menu : MonoBehaviour {
 		currentMenu = currentMenu.Children[i-1];
 		if(currentMenu.Title == "Quit") { Application.Quit(); return; }
 		else if(currentMenu.Title == "Back") { currentMenu = currentMenu.Parent.Parent; }
-		else if(currentMenu.Title == "Random Opponent") {GameControl.IsMulti = true; LoadingScreen.show (); Application.LoadLevel(1); return; }
-		else if(currentMenu.Title == "Single Player") { GameControl.IsMulti = false; LoadingScreen.show (); Application.LoadLevel(1); return; }
+		else if(currentMenu.Title == "Random Opponent") {GameControl.IsMulti = true; LoadingScreen.show (); iTween.Stop ();Application.LoadLevel(1); return; }
+		else if(currentMenu.Title == "Single Player") { GameControl.IsMulti = false; LoadingScreen.show (); iTween.Stop ();Application.LoadLevel(1); return; }
 		foreach(Transform child in transform.transform) {
 			MenuBox menu = child.gameObject.GetComponent<MenuBox>();
 			if(!menu.clicked) {

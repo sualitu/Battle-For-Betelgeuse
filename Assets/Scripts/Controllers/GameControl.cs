@@ -182,9 +182,11 @@ public class GameControl : MonoBehaviour {
 		Vector3 mainCameraRotation = new Vector3(50,180,0);
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
+			"easetype", "easeInQuad",
 			"time", 5));
 		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
 			"delay", 0.5f,
+			"easetype", "easeInQuad",
 			"time", 4));
 	}
 	#endregion SetUp

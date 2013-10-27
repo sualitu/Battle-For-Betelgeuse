@@ -54,7 +54,6 @@ public class Unit : MonoBehaviour {
 	
 	public void AttackTarget(Hex hex, int delay) {
 		Card.OnAttack();
-		
 		if(hex.Unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
@@ -91,7 +90,8 @@ public class Unit : MonoBehaviour {
 		activelyAttacking = true;
 		int i = (int) args[0];
 		for(int j = 0; j < i; j++) {
-		Hex hex = (Hex) args[1];
+			AudioControl.PlayAudioFileAt("Missiles/ManyMissiles", new Vector3(transform.position.x, transform.position.y+1f,transform.position.z));		
+			Hex hex = (Hex) args[1];
 			GameObject missile = (GameObject) Instantiate(MissilePrefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), transform.localRotation);
 			projectiles.Add(missile);
 			Vector3 targetPos = new Vector3(hex.transform.position.x+Random.Range (-0.5f, 0.5f), hex.transform.position.y+1f, hex.transform.position.z+Random.Range (-0.5f, 0.5f));
@@ -143,25 +143,29 @@ public class Unit : MonoBehaviour {
 		Hex prevHex = Hex;
 		Hex newHex = path.FindLast(h => true);
 		List<Transform> p = path.ConvertAll<Transform>(h => h.transform);
+		gameObject.GetComponent<AudioSource>().Play();
 		if(p.Count > 1) {
 			iTween.MoveTo(gameObject, iTween.Hash (
 				"path", p.ToArray(),
 				"time", p.Count,
 				"orienttopath", true,
-				"easetype", "easeInOutQuad"));
+				"easetype", "easeInOutQuad",
+				"oncomplete", "MovementDone"));
 		} else {
 			iTween.MoveTo(gameObject, iTween.Hash (
 				"position", p[0],
 				"time", p.Count,
 				"orienttopath", true,
-				"easetype", "easeInOutQuad"));
+				"easetype", "easeInOutQuad",
+				"oncomplete", "MovementDone"));
 		}
 		prevHex.Unit = null;
 		Hex = newHex;
 		newHex.Unit = this;
 	}
 	
-	public void MovementDone(bool combatFollows) {
+	public void MovementDone() {
+		gameObject.GetComponent<AudioSource>().Stop();
 	}
 	
 	public void FromCard (Card card) {
