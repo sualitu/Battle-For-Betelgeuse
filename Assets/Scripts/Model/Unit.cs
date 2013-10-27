@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour {
 	public Hex Hex { get; set; }
 	public int MaxHealth { get; set; }
 	public int MaxMovement { get; set; }
+	public Card Card { get; set; }
 		
 	GameObject model;
 	int i = 0;
@@ -52,6 +53,8 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void AttackTarget(Hex hex, int delay) {
+		Card.OnAttack();
+		
 		if(hex.Unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
@@ -60,9 +63,27 @@ public class Unit : MonoBehaviour {
 		iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
 			"time", 1,
 			"delay", delay,
+			"onstart", "Attacked",
+			"onstarttarget", hex.Unit.gameObject,
+			"onstartparams", this,
 			"oncomplete", "FireMissiles",
 			"oncompleteparams", args));
 		
+	}
+	
+	public void Attacked(Unit attacker) {
+		bool defend = Card.OnAttacked();
+		if(defend && !attacker.Card.StandardSpecials.Exists(s => s is StandardSpecial.Ranged)) {
+			Hex hex = attacker.Hex;
+			System.Object[] args = new System.Object[2];
+			args[0] = 5;
+			args[1] = hex;
+			Move (int.MinValue);
+			iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
+			"time", 1,
+			"oncomplete", "FireMissiles",
+			"oncompleteparams", args));
+		}
 	}
 	
 	
@@ -108,10 +129,11 @@ public class Unit : MonoBehaviour {
 				} 
 				attacking = hex.Unit;
 				AttackTarget(hex, delay);
-				hex.Unit.AttackTarget(Hex, delay);
 			}
 		} else {
-			GameControl.gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, transform);			
+			if(GameControl.IsMulti) {
+				GameControl.gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, transform);			
+			}
 		}
 		
 	}
@@ -143,6 +165,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void FromCard (Card card) {
+		Card = card;
 		model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x+card.Prefab.transform.position.x, transform.position.y+card.Prefab.transform.position.y,transform.position.z+card.Prefab.transform.position.z), card.Prefab.transform.localRotation);
 		model.transform.parent = transform;
 		Attack = card.Attack;

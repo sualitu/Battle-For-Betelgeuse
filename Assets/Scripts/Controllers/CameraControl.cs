@@ -6,31 +6,7 @@
 
     {
 
-        private const int LevelArea = 90;
-
- 
-
-        private const int ScrollArea = 25;
-
-        private const int ScrollSpeed = 25;
-
-        private const int DragSpeed = 80;
-
- 
-
-        private const int ZoomSpeed = 25;
-
-        private const int ZoomMin = 8;
-
-        private const int ZoomMax = 70;
-
- 
-
-        private const int PanSpeed = 50;
-
-        private const int PanAngleMin = 35;
-
-        private const int PanAngleMax = 60;
+        
 
  
 
@@ -44,12 +20,12 @@
 
             var translation = Vector3.zero;
 		
-			var zoomDelta = Input.GetAxis("Mouse ScrollWheel")*ZoomSpeed*Time.deltaTime;
+			var zoomDelta = Input.GetAxis("Mouse ScrollWheel")*Settings.ZoomSpeed*Time.deltaTime;
 			
             if (zoomDelta!=0)
 
             {
-                translation -= Vector3.up * ZoomSpeed * zoomDelta;
+                translation -= Vector3.up * Settings.ZoomSpeed * zoomDelta;
             }
 		
 			     // Move camera with arrow keys
@@ -67,7 +43,7 @@
 
             var desiredPosition = camera.transform.position + translation;
 
-            if (desiredPosition.x < 15 || LevelArea < desiredPosition.x)
+            if (desiredPosition.x < 15 || Settings.LevelArea < desiredPosition.x)
 
             {
 
@@ -75,7 +51,7 @@
 
             }
 
-            if (desiredPosition.y < ZoomMin || ZoomMax < desiredPosition.y)
+            if (desiredPosition.y <Settings.ZoomMin || Settings.ZoomMax < desiredPosition.y)
 
             {
 
@@ -83,7 +59,7 @@
 
             }
 
-            if (desiredPosition.z < -10 || (!GameControl.IsMulti || PhotonNetwork.isMasterClient ? LevelArea : LevelArea+30) < desiredPosition.z)
+            if (desiredPosition.z < -15 || (!GameControl.IsMulti || PhotonNetwork.isMasterClient ? Settings.LevelArea : Settings.LevelArea+30) < desiredPosition.z)
 
             {
 

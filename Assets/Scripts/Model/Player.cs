@@ -23,7 +23,7 @@ public class Player
 		Hand = new List<Card>();
 		GuiHand = new List<GUICard>();
 	}
-	
+		
 	public int ManaLeft() {
 		return MaxMana - ManaSpend;
 	}
@@ -48,12 +48,14 @@ public class Player
 		} else if(cardsLeft == 1) {
 			card = Deck[0];
 		}
-		GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
-		guiCard.SetCard(card);
-		guiCard.Owner = this;
 		Hand.Add(card);
-		GuiHand.Add(guiCard);
-		SortCards();
+		if(!Ai) {
+			GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
+			guiCard.SetCard(card);
+			guiCard.Owner = this;
+			GuiHand.Add(guiCard);
+			SortCards();
+		}
 	}
 	
 	public void PlayCard() {

@@ -9,6 +9,8 @@ public class GridControl : MonoBehaviour
 	public Vector2 MapSize;
 	public GameObject HexGrid;
 	public TextAsset mapfile;
+	public Vector2 Base1;
+	public Vector2 Base2;
 	
 	public List<List<Hex>> Map { get; set; }
 	public List<List<bool>> boolMap;
@@ -29,13 +31,24 @@ public class GridControl : MonoBehaviour
 		boolMap = new List<List<bool>>();
 		var lines = file.Split("\n"[0]);
 		System.Array.Reverse(lines);
-		
+		int z = 0;
+		int i;
 		foreach(string line in lines) {
+			i = 0;
 			List<bool> row = new List<bool>();
 			var types = line.Split(" "[0]);
-			foreach(string type in types) {
-				row.Add(int.Parse (type) > 0);
+			foreach(string s in types) {
+				int type = int.Parse(s);
+				// TODO Prettify
+				if(type == 2) {
+					Base1 = new Vector2(i, z);
+				} else if (type == 3) {
+					Base2 = new Vector2(i, z);
+				}
+				row.Add(type > 0);
+				i++;
 			}
+			z++;
 			boolMap.Add(row);
 		}
 		MapSize = new Vector2(boolMap[0].Count,boolMap.Count);
@@ -59,6 +72,14 @@ public class GridControl : MonoBehaviour
 					string s = tokens[i];
 					if(s.Length > 0) {
 						int type = int.Parse(s);
+						Debug.Log(type);
+						if(type == 2) {
+							Base1 = new Vector2(z, i);
+							Debug.Log(Base1);
+						} else if (type == 3) {
+							Base2 = new Vector2(z, i);
+							Debug.Log(Base2);
+						}
 						row.Add(type > 0);
 					}
 				}
@@ -105,7 +126,6 @@ public class GridControl : MonoBehaviour
 		
 	void Start ()
 	{		
-		//BuildFromExtFile();
 		GetHexProperties();
 		GenerateMap();
 		//gameControl = GetComponent<GameControl>();

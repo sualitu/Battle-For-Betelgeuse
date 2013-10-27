@@ -44,6 +44,10 @@ public class MothershipCard : UnitCard
 			return 0;
 		}
 	}
+	
+	public MothershipCard() {
+		StandardSpecials.Add(new StandardSpecial.Defenseless());
+	}
 
 	public override void OnPlay (StateObject s)
 	{

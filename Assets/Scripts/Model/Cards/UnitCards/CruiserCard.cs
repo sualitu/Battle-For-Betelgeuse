@@ -44,6 +44,10 @@ public class CruiserCard : UnitCard
 			return 4;
 		}
 	}
+	
+	public CruiserCard() {
+		StandardSpecials.Add(new StandardSpecial.Ranged(1));
+	}
 
 	public override void OnPlay (StateObject s)
 	{

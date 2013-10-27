@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(GUIControl))]
 [RequireComponent(typeof(CombatControl))]
-[RequireComponent(typeof(MovementControl))]
 [RequireComponent(typeof(MouseControl))]
 [RequireComponent(typeof(GridControl))]
 [RequireComponent(typeof(HandControl))]
@@ -25,11 +24,10 @@ public class GameControl : MonoBehaviour {
 	public GridControl gridControl { get; set; }
 	public GUIControl guiControl { get; set; }
 	public CombatControl combatControl { get; set; }
-	public MovementControl movementControl { get; set; }
 	public MouseControl mouseControl { get; set; }
 	public HandControl handControl {get; set; }
 	public NetworkControl networkControl { get; set; }
-	AIController aiController;
+	AIControl aiController;
 	
 	// TODO Move to GUIController
 	EndTurn et;
@@ -67,7 +65,9 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	void InitSinglePlayer() {
-		aiController = new AIController(enemyPlayer, this);
+		gameObject.AddComponent<AIControl>();
+		aiController = GetComponent<AIControl>().SetAI(enemyPlayer, this);
+		enemyPlayer.DrawHand();
 		SetUpMasterGame();
 	}
 	
@@ -76,7 +76,6 @@ public class GameControl : MonoBehaviour {
 		gridControl = GetComponent<GridControl>();
 		guiControl = GetComponent<GUIControl>();
 		combatControl = GetComponent<CombatControl>();
-		movementControl = GetComponent<MovementControl>();
 		mouseControl = GetComponent<MouseControl>();
 		handControl = GetComponent<HandControl>();	
 		networkControl = GetComponent<NetworkControl>();
@@ -103,7 +102,9 @@ public class GameControl : MonoBehaviour {
 				break;
 			case State.ENEMYTURN:
 				if(!IsMulti) {
-					aiController.DoMove();
+					enemyPlayer.DrawCard();
+					enemyPlayer.MaxMana++;
+					enemyPlayer.ManaSpend = 0;
 				}
 				break;
 			default: 
@@ -152,18 +153,19 @@ public class GameControl : MonoBehaviour {
 	
 	#region SetUp
 	public void SetUpMasterGame() {
+		
 		Card baseCard = new MothershipCard();
 		if(IsMulti) {
-			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[16][4]);
-			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[20][46]);
+			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)]);
+			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)]);
 		} else {
-			PlayCardOnHex(baseCard, gridControl.Map[16][4], System.Guid.NewGuid().ToString());
-			PlayCardOnHex(baseCard, gridControl.Map[20][46], System.Guid.NewGuid().ToString());
+			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)], System.Guid.NewGuid().ToString());
+			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)], System.Guid.NewGuid().ToString());
 		}
 		thisPlayer.MaxMana++;
 		state = State.START;
 		// TODO Move to CameraControl
-		Vector3 mainCameraPosition = new Vector3(40,30,0);
+		Vector3 mainCameraPosition = new Vector3(40,30,-14);
 		Vector3 mainCameraRotation = new Vector3(50,0,0);
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
@@ -176,7 +178,7 @@ public class GameControl : MonoBehaviour {
 	public void SetUpClientGame() {
 		state = State.START;
 		// TODO Move to CameraControl
-		Vector3 mainCameraPosition = new Vector3(40,30,120);
+		Vector3 mainCameraPosition = new Vector3(40,30,104);
 		Vector3 mainCameraRotation = new Vector3(50,180,0);
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
@@ -223,15 +225,15 @@ public class GameControl : MonoBehaviour {
 	
 	void Update() {
 		// TODO Do this properly
-		if(state != State.PREGAME && gridControl.Map[16][4].Unit != null && gridControl.Map[20][46].Unit != null) {
+		if(state != State.PREGAME && gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit != null && gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit != null) {
 			Unit myBase = null;
 			Unit enemyBase = null;
 			if(!PhotonNetwork.isNonMasterClientInRoom) {
-				 myBase = gridControl.Map[16][4].Unit;
-				 enemyBase = gridControl.Map[20][46].Unit;
+				 myBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit;
+				 enemyBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit;
 			} else {
-				enemyBase = gridControl.Map[16][4].Unit;
-				myBase = gridControl.Map[20][46].Unit;
+				enemyBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit;
+				myBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit;
 			}
 			if(thisPlayer.Base == null) {
 				thisPlayer.Base = myBase;

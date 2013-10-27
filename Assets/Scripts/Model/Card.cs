@@ -15,7 +15,17 @@ public abstract class Card
 	public List<StandardSpecial> StandardSpecials { get; set; }
 	public abstract string PrefabPath { get; }
 	
-	public abstract void OnPlay(StateObject s);
+	public virtual void OnPlay(StateObject s) {
+		StandardOnPlay(s);
+	}
+	
+	public virtual void OnAttack() {
+	}
+	
+	public virtual bool OnAttacked() {
+		return StandardOnAttacked();
+	}
+	
 	public static Hashtable cardTable = new Hashtable();
 	
 	public Card() {
@@ -27,47 +37,30 @@ public abstract class Card
 	}
 	
 	public static List<Card> RandomDeck() {
+		new CowCard();
+		new CruiserCard();
+		new DestroyerCard();
+		new ExplorerCard();
+		new FighterSquadCard();
 		List<Card> result = new List<Card>();
-		result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());result.Add(new CowCard());
-		result.Add(new CowCard());
-		
+		List<Card> cards = new List<Card>();
+		foreach(System.Object v in cardTable.Values) {
+			cards.Add((Card) v);
+		}
+		cards.RemoveAll(c => c.Name == "Mothership");
+		for(int i = 0; i < 60; i++) {
+			result.Add(cards[Random.Range(0,cards.Count)]);
+		}
 		return result;
+	}
+	
+	protected bool StandardOnAttacked() {
+		foreach(StandardSpecial ss in StandardSpecials) {
+			if(ss.GetType() == typeof(StandardSpecial.Defenseless)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	protected void StandardOnPlay(StateObject s) {

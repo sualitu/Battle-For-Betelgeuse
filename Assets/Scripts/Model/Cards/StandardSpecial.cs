@@ -9,5 +9,15 @@ public class StandardSpecial
 			Amount = i;
 		}
 	}
+	
+	public class Ranged : StandardSpecial {
+		public int Range { get; set; }
+		public Ranged(int i) {
+			Range = i;
+		}
+	}
+	
+	public class Defenseless : StandardSpecial {
+	}
 }
 
