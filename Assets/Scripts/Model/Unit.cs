@@ -46,9 +46,6 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void ResetStats() {
-		if(damageTaken > 0) {
-			damageTaken -= 1;
-		}
 		moved = 0;
 	}
 	

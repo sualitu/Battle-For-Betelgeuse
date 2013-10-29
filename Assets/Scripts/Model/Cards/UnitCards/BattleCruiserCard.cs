@@ -1,23 +1,23 @@
 using UnityEngine;
 using System.Collections;
 
-public class FighterSquadCard : UnitCard
+public class BattleCruiserCard : UnitCard
 {
 	public override int Attack {
 		get {
-			return 2;
+			return 15;
 		}
 	}
 
 	public override int Cost {
 		get {
-			return 2;
+			return 12;
 		}
 	}
 
 	public override int Health {
 		get {
-			return 2;
+			return 10;
 		}
 	}
 
@@ -29,34 +29,42 @@ public class FighterSquadCard : UnitCard
 
 	public override string Name {
 		get {
-			return "Fighter Squad";
+			return "Battle Cruiser";
 		}
 	}
 
 	public override string PrefabPath {
 		get {
-			return "Units/fighter_squad";
+			return "Units/battlecruiser";
 		}
 	}
 
 	public override int id {
 		get {
-			return 2;
+			return 5;
 		}
 	}
 	
-	public FighterSquadCard() {
-		StandardSpecials.Add(new StandardSpecial.Boost(3));
+	public BattleCruiserCard() {
+		StandardSpecials.Add(new StandardSpecial.Ranged(2));
 		setCardText();
 	}
 
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);
-		return;
 	}
-	
-	
+
+	public override void OnAttack ()
+	{
+		base.OnAttack ();
+	}
+
+	public override bool OnAttacked ()
+	{
+		return base.OnAttacked ();
+	}
+
 	public override string Projectile {
 		get {
 			return "missiles";

@@ -54,6 +54,7 @@ public abstract class Card
 		new DestroyerCard();
 		new ExplorerCard();
 		new FighterSquadCard();
+		new BattleCruiserCard();
 		List<Card> result = new List<Card>();
 		List<Card> cards = new List<Card>();
 		foreach(System.Object v in cardTable.Values) {

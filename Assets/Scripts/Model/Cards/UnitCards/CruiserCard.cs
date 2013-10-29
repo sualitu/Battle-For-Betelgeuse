@@ -23,7 +23,7 @@ public class CruiserCard : UnitCard
 
 	public override int Movement {
 		get {
-			return 3;
+			return 5;
 		}
 	}
 

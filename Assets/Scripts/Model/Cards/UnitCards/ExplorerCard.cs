@@ -23,7 +23,7 @@ public class ExplorerCard : UnitCard
 
 	public override int Movement {
 		get {
-			return 10;
+			return 7;
 		}
 	}
 
