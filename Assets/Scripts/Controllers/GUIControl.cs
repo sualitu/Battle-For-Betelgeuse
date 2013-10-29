@@ -9,10 +9,16 @@ public class GUIControl : MonoBehaviour {
 	public GUIText attackLabel;
 	public GUIText healthLabel;
 	public GUIText movementLabel;
-	public GameObject textPrefab;
+	public GUIText SmallTextSplashPrefab;
 	public GUIText TextSplashPrefab;
 	private GameControl gameControl;
 	private Texture2D texture;
+	public GUIText cardNameLabel;
+	public GUIText cardAttackLabel;
+	public GUIText cardHealthLabel;
+	public GUIText cardMovementLabel;
+	public GUIText cardCostLabel;
+	public GUIText cardTextLabel;
 
 	public void setUnitGUI(Unit unit) {
 		if(unit != null) {
@@ -22,6 +28,17 @@ public class GUIControl : MonoBehaviour {
 			movementLabel.text = (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
 		} else {
 			clearUnitGui();
+		}
+	}
+	
+	public void setCardGui(Card card) {
+		if(card != null) {
+			cardNameLabel.text = card.Name;
+			cardAttackLabel.text = card.Attack.ToString();
+			cardCostLabel.text = card.Cost.ToString();
+			cardHealthLabel.text = card.Health.ToString();
+			cardMovementLabel.text = card.Movement.ToString();
+			cardTextLabel.text = card.CardText;
 		}
 	}
 		
@@ -35,27 +52,22 @@ public class GUIControl : MonoBehaviour {
 		healthLabel.text = "";
 		movementLabel.text = "";
 	}
-		
-	public void ShowFloatingText(string s, Transform tar) {
-		GameObject text = (GameObject) Instantiate(textPrefab, new Vector3(tar.position.x + 1, 1, tar.position.z+1), Quaternion.Euler(new Vector3(50f,0f,0f)));
-		TextMesh tm = text.GetComponent<TextMesh>();
-		if(GameControl.IsMulti && !PhotonNetwork.isMasterClient) {
-			// Fixme: Rotate properly
-		}
-		tm.text = s;
-		tm.fontSize = 10;
-	}
-	
+			
 	public void UpdateGUI() {
 		setUnitGUI(gameControl.mouseControl.selectedUnit);
 	}
 	
 	public bool MouseIsOverGUI() {
-		return false;	
+		return gameControl.et.IsMouseOver || gameControl.thisPlayer.GuiHand.Exists(g => g.IsMouseOver);
 	}
 	
 	public void ShowSplashText(string s) {
 		TextSplashPrefab.text = s;
 		Instantiate (TextSplashPrefab);
+	}
+	
+	public void ShowSmallSplashText(string s) {
+		SmallTextSplashPrefab.text = s;
+		Instantiate (SmallTextSplashPrefab);
 	}
 }

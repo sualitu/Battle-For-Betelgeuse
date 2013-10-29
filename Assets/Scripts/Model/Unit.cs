@@ -26,7 +26,7 @@ public class Unit : MonoBehaviour {
 	
 	// Unity 
 	public Transform explosion;
-	public GameObject MissilePrefab;
+	public GameObject ProjectilePrefab;
 	
 	
 	public void Damage(int i) {
@@ -92,7 +92,7 @@ public class Unit : MonoBehaviour {
 		for(int j = 0; j < i; j++) {
 			AudioControl.PlayAudioFileAt("Missiles/ManyMissiles", new Vector3(transform.position.x, transform.position.y+1f,transform.position.z));		
 			Hex hex = (Hex) args[1];
-			GameObject missile = (GameObject) Instantiate(MissilePrefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), transform.localRotation);
+			GameObject missile = (GameObject) Instantiate(ProjectilePrefab, new Vector3(transform.position.x, transform.position.y+1f,transform.position.z), transform.localRotation);
 			projectiles.Add(missile);
 			Vector3 targetPos = new Vector3(hex.transform.position.x+Random.Range (-0.5f, 0.5f), hex.transform.position.y+1f, hex.transform.position.z+Random.Range (-0.5f, 0.5f));
 			float deltaX = Mathf.Abs(missile.transform.position.x - targetPos.x)/3;
@@ -108,7 +108,7 @@ public class Unit : MonoBehaviour {
 				"orienttopath", true,
 				"easetype", "easeInQuad",
 				"time", 2,
-				"delay", 0.5f*j,
+				"delay", (Random.Range (0.3f, 0.7f))*j,
 				"oncomplete", "Hit",
 				"oncompleteparams", this));
 		}
@@ -131,9 +131,7 @@ public class Unit : MonoBehaviour {
 				AttackTarget(hex, delay);
 			}
 		} else {
-			if(GameControl.IsMulti) {
-				GameControl.gameControl.guiControl.ShowFloatingText(Dictionary.cannotMoveThereError, transform);			
-			}
+			GameControl.gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);		
 		}
 		
 	}
@@ -176,6 +174,7 @@ public class Unit : MonoBehaviour {
 		MaxHealth = card.Health;
 		MaxMovement = card.Movement;
 		UnitName = card.Name;
+		ProjectilePrefab = card.ProjectilePrefab;
 	}
 		
 	void Update () {

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class AudioControl : MonoBehaviour
 {
+	public AudioClip newTurnSound;
+	public AudioClip errorSound;
 
 	public static void PlayAudioFile(string file) {
 		var clip = (AudioClip) Resources.Load("Sounds/" + file);
@@ -13,6 +15,10 @@ public class AudioControl : MonoBehaviour
 	public static void PlayAudioFileAt(string file, Vector3 position) {
 		var clip = (AudioClip) Resources.Load("Sounds/" + file);
 		AudioSource.PlayClipAtPoint(clip, position);
+	}
+	
+	public void PlayNewTurnSound() {
+		Camera.main.audio.PlayOneShot(newTurnSound);
 	}
 }
 

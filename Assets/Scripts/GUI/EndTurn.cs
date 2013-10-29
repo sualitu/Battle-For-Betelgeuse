@@ -15,7 +15,10 @@ public class EndTurn : MonoBehaviour {
 		position = new Rect (Screen.width - 400, Screen.height - 200,x,y);
 	}
 	
+	public bool IsMouseOver = false;
+	
 	public void OnGUI() {
+		IsMouseOver = position.Contains(Event.current.mousePosition);
 		GUI.skin = skin;
 		if(GUI.Button(position, title)) {
 			gameControl.EndTurnClicked();

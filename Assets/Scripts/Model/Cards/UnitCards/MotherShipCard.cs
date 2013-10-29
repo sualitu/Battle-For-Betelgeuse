@@ -54,5 +54,12 @@ public class MothershipCard : UnitCard
 		StandardOnPlay(s);
 		return;
 	}
+	
+	
+	public override string Projectile {
+		get {
+			return "missiles";
+		}
+	}
 }
 

@@ -35,7 +35,7 @@ public class DestroyerCard : UnitCard
 
 	public override string PrefabPath {
 		get {
-			return "Units/destroyer";
+			return "Units/Destroyer";
 		}
 	}
 
@@ -49,6 +49,13 @@ public class DestroyerCard : UnitCard
 	{
 		StandardOnPlay(s);
 		return;
+	}
+	
+	
+	public override string Projectile {
+		get {
+			return "missiles";
+		}
 	}
 }
 

@@ -47,12 +47,20 @@ public class FighterSquadCard : UnitCard
 	
 	public FighterSquadCard() {
 		StandardSpecials.Add(new StandardSpecial.Boost(3));
+		setCardText();
 	}
 
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);
 		return;
+	}
+	
+	
+	public override string Projectile {
+		get {
+			return "missiles";
+		}
 	}
 }
 

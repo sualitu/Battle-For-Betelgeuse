@@ -49,5 +49,12 @@ public class ExplorerCard : UnitCard
 	{
 		StandardOnPlay(s);
 	}
+	
+	
+	public override string Projectile {
+		get {
+			return "missiles";
+		}
+	}
 }
 

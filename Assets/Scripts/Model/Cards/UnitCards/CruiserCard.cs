@@ -47,12 +47,19 @@ public class CruiserCard : UnitCard
 	
 	public CruiserCard() {
 		StandardSpecials.Add(new StandardSpecial.Ranged(1));
+		setCardText();
 	}
 
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);
 		return;
+	}
+	
+	public override string Projectile {
+		get {
+			return "missiles";
+		}
 	}
 }
 

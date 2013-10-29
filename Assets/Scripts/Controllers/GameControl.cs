@@ -27,10 +27,11 @@ public class GameControl : MonoBehaviour {
 	public MouseControl mouseControl { get; set; }
 	public HandControl handControl {get; set; }
 	public NetworkControl networkControl { get; set; }
+	public AudioControl audioControl { get; set; }
 	AIControl aiController;
 	
 	// TODO Move to GUIController
-	EndTurn et;
+	public EndTurn et;
 	
 	// TODO Consider Booleans
 	public static bool IsMulti = false;
@@ -79,6 +80,7 @@ public class GameControl : MonoBehaviour {
 		mouseControl = GetComponent<MouseControl>();
 		handControl = GetComponent<HandControl>();	
 		networkControl = GetComponent<NetworkControl>();
+		audioControl = GetComponent<AudioControl>();
 	}
 	#endregion Init
 		
@@ -102,6 +104,7 @@ public class GameControl : MonoBehaviour {
 				break;
 			case State.ENEMYTURN:
 				if(!IsMulti) {
+					aiController.DoTurn();
 					enemyPlayer.DrawCard();
 					enemyPlayer.MaxMana++;
 					enemyPlayer.ManaSpend = 0;
@@ -196,6 +199,7 @@ public class GameControl : MonoBehaviour {
 		thisPlayer.DrawCard();
 		thisPlayer.MaxMana++;
 		thisPlayer.ManaSpend = 0;
+		audioControl.PlayNewTurnSound();
 		guiControl.ShowSplashText(Dictionary.yourTurn);
 		DoGameLoop();
 	}

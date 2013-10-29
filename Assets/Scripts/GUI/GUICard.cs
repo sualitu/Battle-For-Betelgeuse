@@ -30,11 +30,14 @@ public class GUICard : MonoBehaviour
 		i = 300;
 	}
 	
+	public bool IsMouseOver = false;
+	
 	public void ForcePlaceCard(int x, int y) {
 		position = new Rect(x, y, 186,300);
 	}
 	
 	public void OnGUI() {
+		IsMouseOver = position.Contains(Event.current.mousePosition);
 		if(card != null) {
 			GUI.skin = skin;
 			
@@ -42,6 +45,7 @@ public class GUICard : MonoBehaviour
 				position = iTween.RectUpdate(position, new Rect (x,y-100,186,300), 4);
 				r = iTween.FloatUpdate(r,Rotation,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
+				GameControl.gameControl.guiControl.setCardGui(card);
 			} else {
 				position = iTween.RectUpdate(position, new Rect (x,y,186,300), 4);	
 				r = iTween.FloatUpdate(r,Rotation,1);	

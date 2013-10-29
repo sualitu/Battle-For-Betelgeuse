@@ -10,6 +10,10 @@ public class AIControl : MonoBehaviour
 	List<Hex> unitTargets = new List<Hex>();
 	int attempts;
 	
+	public void DoTurn() {
+		attempts = 0;
+	}
+	
 	public AIControl SetAI(Player player, GameControl gameControl) {
 		player.Ai = true;
 		this.player = player;
@@ -48,7 +52,6 @@ public class AIControl : MonoBehaviour
 		player.SpendMana(card.Cost);
 		player.Hand.Remove(card);
 		MoveUnits();
-		attempts = 0;
 		return true;
 	}
 	
@@ -95,7 +98,6 @@ public class AIControl : MonoBehaviour
 		targetHex = unitTargets.Find(h => h.Unit != null && h.Unit.Team != player.Team);
 		if(targetHex == null) {
 			if(unitTargets.Count > 1) {
-				
 				unitTargets.ForEach(h => targetHex = (targetHex == null || GetDist(unit.Hex, targetHex) < GetDist(unit.Hex, h)) ? h : targetHex);
 			} else if(unitTargets.Count == 1) {
 				targetHex = unitTargets[0];
@@ -103,7 +105,6 @@ public class AIControl : MonoBehaviour
 				return false;
 			}
 		}
-		attempts = 0;
 		unit.PrepareMove(targetHex);
 		return true;
 	}
@@ -115,12 +116,12 @@ public class AIControl : MonoBehaviour
 	
 	void Update() {
 		if(MyTurn() && !MovesInProgress()) {
+			attempts++;
 			if(!PlayCard() && !MoveUnits()) {
 				EndTurn();
 			} else {
-				attempts++;
 			}
-			if(attempts > 100) {
+			if(attempts > 1000) {
 				EndTurn();
 			}
 		}
