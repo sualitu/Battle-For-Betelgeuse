@@ -120,6 +120,7 @@ public class GameControl : MonoBehaviour {
 			switch(state) {
 			case State.MYTURN:
 				if(state == State.MYTURN) {
+					et.title = Dictionary.EnemyTurnInProgress;
 					if(IsMulti) {
 						networkControl.EndNetworkTurn();
 					}
@@ -172,10 +173,12 @@ public class GameControl : MonoBehaviour {
 		Vector3 mainCameraRotation = new Vector3(50,0,0);
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
 			"delay", 0.5f,
+			"easetype", "easeInQuad",
 			"time", 5));
 		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
 			"delay", 0.5f,
-			"time", 4));
+			"easetype", "easeInQuad",
+			"time", 5));
 	}
 		
 	public void SetUpClientGame() {
@@ -190,11 +193,12 @@ public class GameControl : MonoBehaviour {
 		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
 			"delay", 0.5f,
 			"easetype", "easeInQuad",
-			"time", 4));
+			"time", 5));
 	}
 	#endregion SetUp
 	
 	public void EnemeyEndTurn() {
+		et.title = Dictionary.endTurn;
 		state = State.MYTURN;
 		thisPlayer.DrawCard();
 		thisPlayer.MaxMana++;
@@ -257,6 +261,7 @@ public class GameControl : MonoBehaviour {
 	// TODO Do this properly
 	void OnGUI() {
 		GUILayout.Label ("Mana left: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana);
+		
 	}
 	
 	

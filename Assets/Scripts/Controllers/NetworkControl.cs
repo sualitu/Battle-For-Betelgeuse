@@ -16,6 +16,11 @@ public class NetworkControl : Photon.MonoBehaviour {
 		}
 	}
 	
+	public void QuitGame() {
+		if(PhotonNetwork.connected) {
+			PhotonNetwork.Disconnect();
+		}
+	}
 	
 	void OnJoinedLobby() {
 		PhotonNetwork.JoinRandomRoom();
@@ -34,6 +39,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	
 	void OnCreatedRoom() {	
 		gameControl.guiControl.ShowSplashText("Waiting for an opponent...");
+		PhotonNetwork.room.open = true;
 	}
 	
 	[RPC]

@@ -131,7 +131,10 @@ public class Unit : MonoBehaviour {
 				AttackTarget(hex, delay);
 			}
 		} else {
-			GameControl.gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);		
+			if(GameControl.gameControl.state == State.MYTURN) {
+				GameControl.gameControl.audioControl.PlayErrorSound();
+				GameControl.gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);		
+			}
 		}
 		
 	}

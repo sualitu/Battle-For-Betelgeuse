@@ -20,5 +20,10 @@ public class AudioControl : MonoBehaviour
 	public void PlayNewTurnSound() {
 		Camera.main.audio.PlayOneShot(newTurnSound);
 	}
+	
+	public void PlayErrorSound() {
+		Camera.main.audio.PlayOneShot(errorSound);
+	}
+	
 }
 

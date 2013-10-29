@@ -7,4 +7,5 @@ public class Dictionary {
 	public const string endTurn = "End Turn";
 	public const string endGame = "End Game";
 	public const string yourTurn = "Your Turn";
+	public const string EnemyTurnInProgress = "Enemy Turn in Progress";
 }
