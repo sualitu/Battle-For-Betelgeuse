@@ -124,6 +124,8 @@ public class GameControl : MonoBehaviour {
 					if(IsMulti) {
 						networkControl.EndNetworkTurn();
 					}
+					thisPlayer.DeselectCard();
+					mouseControl.deselectHex();
 					state = State.ENEMYTURN;
 					DoGameLoop();
 				}
@@ -134,6 +136,10 @@ public class GameControl : MonoBehaviour {
 				} else {
 					StartGame();
 				}
+				break;
+			case State.GAMEOVER:
+				networkControl.QuitGame();
+				Application.LoadLevel (0);
 				break;
 			default:
 				break;
@@ -148,6 +154,7 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	private void EndGame() {
+		state = State.GAMEOVER;
 		et.title = Dictionary.endGame;	
 	}
 	
@@ -249,12 +256,20 @@ public class GameControl : MonoBehaviour {
 				thisPlayer.Base = myBase;
 				myBase.Hex.Adjacent(gridControl.Map).ForEach(h => h.Unit = myBase);
 				myBase.Team = 1;
-			} else if(enemyPlayer.Base == null) {
+			} 
+			if(enemyPlayer.Base == null) {
 				enemyPlayer.Base = enemyBase;
 				enemyBase.Hex.Adjacent(gridControl.Map).ForEach(h => h.Unit = enemyBase);
 				enemyBase.Team = 2;
 			}
-
+		}
+		
+		if(state > State.PREGAME && thisPlayer.Base == null) {
+			guiControl.ShowSplashText("You lost!");
+			EndGame();
+		} else if(state > State.PREGAME && enemyPlayer.Base == null) {
+			guiControl.ShowSplashText("You won!");
+			EndGame();
 		}
 	}
 	
@@ -267,4 +282,4 @@ public class GameControl : MonoBehaviour {
 	
 }
 
-public enum State { PREGAME, START, PRETURN, MYTURN, ENEMYTURN, }
+public enum State { PREGAME, START, PRETURN, MYTURN, ENEMYTURN, GAMEOVER}

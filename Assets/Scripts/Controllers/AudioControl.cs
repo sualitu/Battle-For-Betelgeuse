@@ -5,6 +5,7 @@ public class AudioControl : MonoBehaviour
 {
 	public AudioClip newTurnSound;
 	public AudioClip errorSound;
+	public AudioClip endTurnSound;
 
 	public static void PlayAudioFile(string file) {
 		var clip = (AudioClip) Resources.Load("Sounds/" + file);
@@ -23,6 +24,10 @@ public class AudioControl : MonoBehaviour
 	
 	public void PlayErrorSound() {
 		Camera.main.audio.PlayOneShot(errorSound);
+	}
+	
+	public void PlayEndTurnSound() {
+		Camera.main.audio.PlayOneShot(endTurnSound);
 	}
 	
 }

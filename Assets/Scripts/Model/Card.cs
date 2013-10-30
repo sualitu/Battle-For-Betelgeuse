@@ -49,21 +49,42 @@ public abstract class Card
 	
 	
 	public static List<Card> RandomDeck() {
-		new CarrierCard();
-		new CruiserCard();
-		new DestroyerCard();
-		new ExplorerCard();
-		new FighterSquadCard();
-		new BattleCruiserCard();
 		List<Card> result = new List<Card>();
-		List<Card> cards = new List<Card>();
-		foreach(System.Object v in cardTable.Values) {
-			cards.Add((Card) v);
-		}
-		cards.RemoveAll(c => c.Name == "Mothership");
-		for(int i = 0; i < 60; i++) {
-			result.Add(cards[Random.Range(0,cards.Count)]);
-		}
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new ExplorerCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new BattleCruiserCard());
+		result.Add(new BattleCruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CarrierCard());
+		result.Add(new CarrierCard());
+		result.Add(new CarrierCard());
+		result.Add(new CarrierCard());
+		result.Add(new DestroyerCard());
+		result.Add(new DestroyerCard());
+		result.Add(new DestroyerCard());
+		result.Add(new DestroyerCard());
+		result.Add(new DestroyerCard());
 		return result;
 	}
 	

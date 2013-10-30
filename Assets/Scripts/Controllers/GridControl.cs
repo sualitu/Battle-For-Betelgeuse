@@ -55,49 +55,45 @@ public class GridControl : MonoBehaviour
 		return boolMap;
 	}
 	
+	public string ReverseString( string s )
+	{
+	    char[] charArray = s.ToCharArray();
+	    System.Array.Reverse( charArray );
+	    return new string( charArray );
+	}
+	
 	List<List<bool>> BuildBoolMap() {
 		boolMap = new List<List<bool>>();		
-		string mapstring = mapfile.text;		
-		using (StringReader reader = new StringReader(mapstring))
-		{
-		    string line;
-			int z = 0;
-		    while ((line = reader.ReadLine()) != null)
-		    {
-		        string[] tokens = line.Split(" "[0]);
-				
-				List<bool> row = new List<bool>();
-				
-				for(int i = 0; i < tokens.Length; i++) {
-					string s = tokens[i];
-					if(s.Length > 0) {
-						int type = int.Parse(s);
-						Debug.Log(type);
-						if(type == 2) {
-							Base1 = new Vector2(z, i);
-							Debug.Log(Base1);
-						} else if (type == 3) {
-							Base2 = new Vector2(z, i);
-							Debug.Log(Base2);
-						}
-						row.Add(type > 0);
-					}
+		string file = mapfile.text;
+		var lines = file.Split("\n"[0]);
+		System.Array.Reverse(lines);
+		int z = 0;
+		int i;
+		foreach(string line in lines) {
+			i = 0;
+			List<bool> row = new List<bool>();
+			var types = line.Split(" "[0]);
+			foreach(string s in types) {
+				int type = int.Parse(s);
+				// TODO Prettify
+				if(type == 2) {
+					Base1 = new Vector2(i, z);
+				} else if (type == 3) {
+					Base2 = new Vector2(i, z);
 				}
-				
-				boolMap.Add(row);
-				z++;
-		    }
-			return boolMap;
+				row.Add(type > 0);
+				i++;
+			}
+			z++;
+			boolMap.Add(row);
 		}
+		MapSize = new Vector2(boolMap[0].Count,boolMap.Count);
+		return boolMap;
 	}
 	
 	// Inspired by FX_HexGrid
 	void GenerateMap() {
-		try {
-			boolMap = BuildFromExtFile();
-		} catch {
-			boolMap = BuildBoolMap();
-		}
+		boolMap = BuildBoolMap();
 		Map = new List<List<Hex>>();
 		for (int k = 0; k < MapSize.x; k++){
 			List<Hex> row = new List<Hex>();

@@ -15,7 +15,7 @@ public class GUICard : MonoBehaviour
 	float r = 0;
 	int i = 0;
 	
-	private bool selected = false;
+	public bool selected = false;
 	void Start() {
 	}
 	
@@ -42,7 +42,7 @@ public class GUICard : MonoBehaviour
 			GUI.skin = skin;
 			
 			if(position.Contains(Event.current.mousePosition)) {
-				position = iTween.RectUpdate(position, new Rect (x,y-100,186,300), 4);
+				position = iTween.RectUpdate(position, new Rect (x,y-50,186,300), 4);
 				r = iTween.FloatUpdate(r,Rotation,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
 				GameControl.gameControl.guiControl.setCardGui(card);
@@ -53,12 +53,12 @@ public class GUICard : MonoBehaviour
 			}
 			if(GUI.Button(position, card.Name)){
 				if(!selected) {
-					selected = true;
-					y -= 100;
+					
 					Owner.SelectCard(this);
 				} else {
+					Owner.DeselectCard();
 					selected = false;
-					y += 100;
+					y += 50;
 				}
 			}
 		}

@@ -96,7 +96,7 @@ public class MouseControl : MonoBehaviour {
 						mouseOverHex.renderer.material.color = Color.red;
 					} else if (mouseOverHex.GridPosition != hex.GridPosition) {
 						if(gameControl.thisPlayer.targets.Contains(mouseOverHex)) {
-							mouseOverHex.renderer.material.color = Color.yellow;
+							mouseOverHex.renderer.material.color = Color.green;
 						} else {
 							mouseOverHex.renderer.material.color = Color.white;
 						}

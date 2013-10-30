@@ -1,12 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Model\Cards\UnitCards\BattleCruiserCard.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\GameControl.cs">
     <Files>
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\BattleCruiserCard.cs" Line="10" Column="3" />
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\ExplorerCard.cs" Line="26" Column="12" />
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\FighterSquadCard.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\CruiserCard.cs" Line="28" Column="3" />
-      <File FileName="Assets\Scripts\Model\Card.cs" Line="56" Column="26" />
+      <File FileName="Assets\Scripts\Controllers\GameControl.cs" Line="46" Column="24" />
+      <File FileName="Assets\Scripts\Dictionary.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GUI\GUICard.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Model\Player.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\MouseControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\CameraControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\LoadingScreen.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GUI\Menu\Menu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GUI\Menu\MenuBox.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\AudioControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\GridControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Controllers\KeyboardControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Model\Cards\UnitCards\ExplorerCard.cs" Line="26" Column="11" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

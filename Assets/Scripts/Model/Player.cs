@@ -13,7 +13,7 @@ public class Player
 	public bool Ai { get; set; }
 	public Card selectedCard;
 	public GUICard selectedGUICard;
-	public List<Hex> targets;
+	public List<Hex> targets = new List<Hex>();
 	
 	public int MaxMana = 0;
 	public int ManaSpend = 0;
@@ -66,12 +66,26 @@ public class Player
 		card.Played();
 		gameControl.mouseControl.PlayModeOn = true;
 		targets.ForEach(h => h.renderer.material.color = Color.white);
-		targets = null;
+		targets = new List<Hex>();
 		SortCards ();
 	}
 	
+	public void DeselectCard() {
+		targets.ForEach(h => h.renderer.material.color = Color.white);
+		targets = new List<Hex>();
+		selectedGUICard = null;
+		selectedCard = null;
+	}
+	
 	public void SelectCard(GUICard card) {
+		if(selectedGUICard != null) {
+			selectedGUICard.y += 50;
+			selectedGUICard.selected = false;
+			DeselectCard();
+		}
 		if(card.card.Cost <= ManaLeft()) {
+			card.selected = true;
+			card.y -= 50;
 			selectedGUICard = card;
 			selectedCard = card.card;
 			targets = new List<Hex>();
@@ -79,6 +93,9 @@ public class Player
 			targets.RemoveAll(h => h.Unit != null);
 			targets.ForEach(h => h.renderer.material.color = Color.green);
 			gameControl.mouseControl.PlayModeOn = false;
+		} else {
+			gameControl.audioControl.PlayErrorSound();
+			gameControl.guiControl.ShowSmallSplashText(Dictionary.NotEnoughMana);
 		}
 	}
 	

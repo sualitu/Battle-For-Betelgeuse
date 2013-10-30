@@ -8,4 +8,5 @@ public class Dictionary {
 	public const string endGame = "End Game";
 	public const string yourTurn = "Your Turn";
 	public const string EnemyTurnInProgress = "Enemy Turn in Progress";
+	public const string NotEnoughMana = "You don't have enough mana to do that";
 }

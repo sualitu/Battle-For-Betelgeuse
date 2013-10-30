@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class MenuBox : MonoBehaviour {
 	
+	public AudioClip HoverSound;
 	Menu parent;
 	public int index = -1;
 	List<Vector3> positions = new List<Vector3>();
@@ -23,7 +24,14 @@ public class MenuBox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+	}
 	
+	void OnMouseEnter() {
+		
+		if(clicked || index == 0 || moving) {
+		} else {
+			Camera.main.audio.PlayOneShot(HoverSound);
+		}	
 	}
 	
 	void OnMouseOver() {
@@ -36,6 +44,7 @@ public class MenuBox : MonoBehaviour {
 	void OnMouseExit() {
 		if(clicked || index == 0|| moving) {
 		} else {
+			Camera.main.audio.PlayOneShot(HoverSound);	
 			iTween.MoveTo (gameObject, iTween.Hash ("x", positions[index].x,"islocal", true));
 		}
 	}

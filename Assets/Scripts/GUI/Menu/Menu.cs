@@ -4,6 +4,10 @@ using System.Collections;
 public class Menu : MonoBehaviour {
 	
 	MenuOption currentMenu;
+	public AudioClip MenuClick;
+	public AudioClip MenuUp;
+	public AudioClip MenuDown;
+	
 	// Use this for initialization
 	void Start () {
 		MenuOption main = new MenuOption("Main", null, null);
@@ -41,7 +45,7 @@ public class Menu : MonoBehaviour {
 
 	
 	public void Clicked(int i) {
-		
+		Camera.main.audio.PlayOneShot(MenuClick);
 		int j = 1;
 		currentMenu = currentMenu.Children[i-1];
 		if(currentMenu.Title == "Quit") { Application.Quit(); return; }
@@ -51,6 +55,9 @@ public class Menu : MonoBehaviour {
 		else if(currentMenu.Title == "Random Opponent") { GameControl.IsMulti = true; LoadingScreen.show (); iTween.Stop(); Application.LoadLevel(1); return; }
 		else if(currentMenu.Title == "Single Player") { GameControl.IsMulti = false; LoadingScreen.show (); iTween.Stop(); Application.LoadLevel(1); return; }
 		foreach(Transform child in transform.transform) {
+			
+			Camera.main.audio.PlayOneShot(MenuDown);
+			Camera.main.audio.PlayDelayed(1.3f);
 			MenuBox menu = child.gameObject.GetComponent<MenuBox>();
 			if(!menu.clicked) {
 				
