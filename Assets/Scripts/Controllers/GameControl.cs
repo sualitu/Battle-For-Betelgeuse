@@ -215,7 +215,7 @@ public class GameControl : MonoBehaviour {
 		DoGameLoop();
 	}
 	
-	public void PlayCardOnHex(Card card, Hex hex, string id) {
+	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
 
 		GameObject go = (GameObject) Instantiate(unitPreFab, Vector3.zero, Quaternion.identity);
 		Unit unit = go.GetComponent<Unit>();
@@ -231,6 +231,7 @@ public class GameControl : MonoBehaviour {
 			// TODO Find a better way to sort this
 			thisPlayer.PlayCard();
 		}
+		return unit;
 	}
 	
 	public void EnemyCardPlayed(Card card) {

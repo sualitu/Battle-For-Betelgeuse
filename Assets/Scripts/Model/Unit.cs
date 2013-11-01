@@ -49,18 +49,18 @@ public class Unit : MonoBehaviour {
 		moved = 0;
 	}
 	
-	public void AttackTarget(Hex hex, int delay) {
+	public void AttackTarget(Unit unit, int delay) {
 		Card.OnAttack();
-		if(hex.Unit == null) return;
+		if(unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
-		args[1] = hex;
+		args[1] = unit.Hex;
 		Move (int.MinValue);
-		iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
+		iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(unit.Hex.renderer.bounds.center.x, 0f, unit.Hex.renderer.bounds.center.z),
 			"time", 1,
 			"delay", delay,
 			"onstart", "Attacked",
-			"onstarttarget", hex.Unit.gameObject,
+			"onstarttarget", unit.gameObject,
 			"onstartparams", this,
 			"oncomplete", "FireMissiles",
 			"oncompleteparams", args));
@@ -125,7 +125,7 @@ public class Unit : MonoBehaviour {
 					MoveBy(path);
 				} 
 				attacking = hex.Unit;
-				AttackTarget(hex, delay);
+				AttackTarget(hex.Unit, delay);
 			}
 		} else {
 			if(GameControl.gameControl.state == State.MYTURN) {

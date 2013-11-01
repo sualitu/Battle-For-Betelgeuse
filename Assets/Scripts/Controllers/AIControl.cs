@@ -1,17 +1,37 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class AIControl : MonoBehaviour
 {
 	Player player;
 	GameControl gameControl;
 	
+	public List<Hex> knownHex = new List<Hex>();
+	public Dictionary<Unit, List<Hex>> unitMoves = new Dictionary<Unit, List<Hex>>();
+	public Dictionary<Unit, List<Hex>> unitBlacklist = new Dictionary<Unit, List<Hex>>();
+	
 	List<Hex> unitTargets = new List<Hex>();
 	int attempts;
 	
+	Hex currentHex;
+	bool tableBuild = false;
+	
 	public void DoTurn() {
 		attempts = 0;
+	}
+	
+	public int CalculateHexValue(Hex hex) {
+		if(hex.Unit != null) {
+			if(hex.Unit.Team == player.Team) {
+				return int.MinValue;
+			} else {
+				return int.MaxValue - hex.Unit.Attack;
+			}
+		} else {
+			return 10000 - Mathf.FloorToInt(GetDist(hex, gameControl.thisPlayer.Base.Hex));
+		}
 	}
 	
 	public AIControl SetAI(Player player, GameControl gameControl) {
@@ -30,7 +50,7 @@ public class AIControl : MonoBehaviour
 	}
 	
 	bool PlayCard() {
-		
+		// TODO When adding different card types, improve this.
 		// Choose a card
 		Card card = player.Hand.Find(c => c.Cost <= player.ManaLeft());
 		if(card == null) { return false; }
@@ -48,10 +68,11 @@ public class AIControl : MonoBehaviour
 		}
 		// Play card
 		gameControl.EnemyCardPlayed(card);
-		gameControl.PlayCardOnHex(card, targetHex, System.Guid.NewGuid().ToString());
+		Unit unit = gameControl.PlayCardOnHex(card, targetHex, System.Guid.NewGuid().ToString());
 		player.SpendMana(card.Cost);
 		player.Hand.Remove(card);
-		MoveUnits();
+		unitMoves[unit] = StandardList();
+		unitBlacklist[unit] = new List<Hex>();
 		return true;
 	}
 	
@@ -60,10 +81,8 @@ public class AIControl : MonoBehaviour
 	}
 	
 	List<Hex> getAllPossibleMovesForUnit(Unit unit) {
-		int i = unit.MovementLeft();
-		List<Hex> targets = new List<Hex>();
-		getMoves(unit.Hex, i, targets);
-		return targets;
+		//TODO Implement
+		return null;
 	}
 	
 	void getMoves(Hex hex, int i, List<Hex> acc) {
@@ -82,31 +101,35 @@ public class AIControl : MonoBehaviour
 		
 	bool MoveUnits() {
 		// Find a unit
-		List<Unit> unitsWithMoves = MyUnits().FindAll(u => u.MovementLeft() > 0);
-		Unit unit = null;
-		if(unitsWithMoves.Count > 1) {
-			unit = unitsWithMoves[Random.Range(0, unitsWithMoves.Count-1)];
-		} else if(unitsWithMoves.Count == 1) {
-			unit = unitsWithMoves[0];
+        List<Unit> unitsWithMoves = MyUnits().FindAll(u => u.MovementLeft() > 0);
+        Unit unit = null;
+        if(unitsWithMoves.Count > 1) {
+                unit = unitsWithMoves[Random.Range(0, unitsWithMoves.Count-1)];
+        } else if(unitsWithMoves.Count == 1) {
+                unit = unitsWithMoves[0];
+        } else {
+                return false;
+        }
+        // Move unit
+        Hex targetHex = null;
+        unitMoves[unit] = SortHexList(unitMoves[unit]);
+		if(unitMoves[unit].Count > 0) {
+			int i = 0;
+			try {
+				while(PathFinder.DepthFirstSearch(unit.Hex, unitMoves[unit][i], gameControl.gridControl.Map, unit.MovementLeft()).Count < 1) {
+					i++;
+				}
+			} catch {
+				return false;
+			}
+			targetHex = unitMoves[unit][i];
 		} else {
 			return false;
 		}
-		// Move unit
-		Hex targetHex = null;
-		unitTargets = new List<Hex>();
-		unitTargets = getAllPossibleMovesForUnit(unit);
-		targetHex = unitTargets.Find(h => h.Unit != null && h.Unit.Team != player.Team);
-		if(targetHex == null) {
-			if(unitTargets.Count > 1) {
-				unitTargets.ForEach(h => targetHex = (targetHex == null || GetDist(unit.Hex, targetHex) < GetDist(unit.Hex, h)) ? h : targetHex);
-			} else if(unitTargets.Count == 1) {
-				targetHex = unitTargets[0];
-			} else {
-				return false;
-			}
-		}
-		unit.PrepareMove(targetHex);
-		return true;
+		unitBlacklist[unit] = new List<Hex>();
+		unitMoves[unit] = StandardList();
+        unit.PrepareMove(targetHex);
+        return true;
 	}
 	
 	
@@ -114,14 +137,64 @@ public class AIControl : MonoBehaviour
 		gameControl.EnemeyEndTurn();
 	}
 	
-	void Update() {
-		if(MyTurn() && !MovesInProgress()) {
-			attempts++;
-			if(!PlayCard() && !MoveUnits()) {
-				EndTurn();
+	Hex GetNextHex() {
+		int x;
+		int y;
+		if(currentHex == null) {
+			x = 0;
+			y = 0;
+		} else {
+			x = (int) currentHex.GridPosition.x;
+			y = (int) currentHex.GridPosition.y;
+		}
+		while(!gameControl.gridControl.boolMap[x][y]) {
+			if(x < gameControl.gridControl.MapSize.x) {
+				x++;
 			} else {
+				x = 0;
+				y++;
 			}
-			if(attempts > 1000) {
+		}
+		return gameControl.gridControl.Map[x][y];
+	}
+	
+	List<Hex> SortHexList(List<Hex> hexs) {
+		IEnumerable<Hex> k = from h in hexs
+				orderby CalculateHexValue(h) descending
+				select h;
+		return new List<Hex>(k);
+	}
+	
+	List<Hex> StandardList() {
+		List<Hex> returnList = new List<Hex>();
+		foreach(List<Hex> row in gameControl.gridControl.Map) {
+			foreach(Hex h in row) {
+				if(h != null) {
+					returnList.Add(h);
+				}
+			}
+		}
+		return SortHexList(returnList);
+	}
+	
+	void Update() {
+		currentHex = GetNextHex();
+		foreach(Unit unit in MyUnits()) {
+			if(!unitMoves.ContainsKey(unit)) {
+				unitMoves[unit] = new List<Hex>();
+				unitBlacklist[unit] = new List<Hex>();
+			}
+			if(!unitMoves[unit].Contains(currentHex)) {
+				List<Hex> path = PathFinder.DepthFirstSearch(unit.Hex, currentHex, gameControl.gridControl.Map, unit.MovementLeft());
+				if(path.Count > 0) {
+					unitMoves[unit].Add(currentHex);
+				} else {
+					unitBlacklist[unit].Add(currentHex);	
+				}
+			}
+		}
+		if(MyTurn() && !MovesInProgress()) {
+			if(!PlayCard() && !MoveUnits()) {
 				EndTurn();
 			}
 		}
