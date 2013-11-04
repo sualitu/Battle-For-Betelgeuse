@@ -6,15 +6,16 @@ using System.Collections.Generic;
 public class HandControl : MonoBehaviour
 {
 	public List<List<List<int>>> handPositions = new List<List<List<int>>>();
+	float ratio = Screen.width/Settings.NativeResolution.x;
 	
 	void Start() {
 		MakeHandPositions();
 	}	
 	
 	void MakeHandPositions() {
-		int x = Screen.width/2-100;
-		int y = Screen.height-200;
-		int cardWidth = 150;
+		int x = Mathf.FloorToInt(Screen.width/2-100*ratio);
+		int y = Mathf.FloorToInt(Screen.height-200*ratio);
+		int cardWidth = Mathf.FloorToInt(150*ratio);
 		// One card
 		List<List<int>> cards = new List<List<int>>();
 		List<int> cardsOne = new List<int>();

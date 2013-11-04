@@ -3,11 +3,17 @@ using System.Collections;
 
 public class GUICard : MonoBehaviour
 {
+	public System.Guid uniqueId;
 	public GUISkin skin = null;
 	
 	public Card card;
 	Rect position;
 	public Player Owner;
+	
+	float height = 300f;
+	float width = 186f;
+	float sizeRatio = 186f/300f;
+	float size = Screen.width/Settings.NativeResolution.x;
 	
 	public int x = Screen.width;
 	public int y = Screen.height;
@@ -17,6 +23,7 @@ public class GUICard : MonoBehaviour
 	
 	public bool selected = false;
 	void Start() {
+		uniqueId = System.Guid.NewGuid();
 	}
 	
 	public void SetCard(Card c) {
@@ -33,25 +40,33 @@ public class GUICard : MonoBehaviour
 	public bool IsMouseOver = false;
 	
 	public void ForcePlaceCard(int x, int y) {
-		position = new Rect(x, y, 186,300);
+		position = new Rect(x, y, width,height);
+	}
+	
+	string ConstructCardText(Card card) {
+		return card.Name + "\nAttack: " + card.Attack + 
+			" Health: " + card.Health + 
+				"\nMovement: " + card.Movement +
+				"\nCost: " + card.Cost +
+				"\n" + card.CardText;
 	}
 	
 	public void OnGUI() {
+		size = Screen.width/Settings.NativeResolution.x;
 		IsMouseOver = position.Contains(Event.current.mousePosition);
 		if(card != null) {
 			GUI.skin = skin;
 			
 			if(position.Contains(Event.current.mousePosition)) {
-				position = iTween.RectUpdate(position, new Rect (x,y-50,186,300), 4);
+				position = iTween.RectUpdate(position, new Rect (x,y-50,width,height), 4);
 				r = iTween.FloatUpdate(r,Rotation,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
-				GameControl.gameControl.guiControl.setCardGui(card);
 			} else {
-				position = iTween.RectUpdate(position, new Rect (x,y,186,300), 4);	
+				position = iTween.RectUpdate(position, new Rect (x,y,width,height), 4);	
 				r = iTween.FloatUpdate(r,Rotation,1);	
 				GUIUtility.RotateAroundPivot(r, position.center);
 			}
-			if(GUI.Button(position, card.Name)){
+			if(GUI.Button(position, ConstructCardText(card))){
 				if(!selected) {
 					
 					Owner.SelectCard(this);

@@ -15,7 +15,7 @@ public class MouseControl : MonoBehaviour {
 	public bool PlayModeOn = true;
 	
 	private Hex selHex;
-	private Hex mouseOverHex;
+	public Hex mouseOverHex;
 	private Ray ray;
 	private RaycastHit rayHit;
 	private List<Hex> moves;
@@ -30,7 +30,6 @@ public class MouseControl : MonoBehaviour {
 			selHex.renderer.material.color = Color.white;
 			selHex = null;
 			selectedUnit = null;
-			gameControl.guiControl.clearUnitGui();
 			if(moves != null) {
 				moves.ForEach(t => t.renderer.material.color = Color.white);
 			}
@@ -45,7 +44,6 @@ public class MouseControl : MonoBehaviour {
 		selHex = hex;
 		hex.IsSelected = true;
 		selectedUnit = hex.Unit;
-		gameControl.guiControl.setUnitGUI(selectedUnit);
 	}
 	
 
@@ -75,7 +73,7 @@ public class MouseControl : MonoBehaviour {
 					}
 					
 					if(Input.GetMouseButtonDown(0)){
-						if(selectedUnit == null) {
+						if(selectedUnit == null || (hex.Unit != null && selectedUnit.Team == hex.Unit.Team)) {
 							selectHex(hex);
 						} else if(!gameControl.guiControl.MouseIsOverGUI() && gameControl.state == State.MYTURN) {
 							if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.state == State.MYTURN) {								

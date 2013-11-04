@@ -10,8 +10,11 @@ public class EndTurn : MonoBehaviour {
 	int y = 75;
 	GameControl gameControl;
 	
+	float sizeRatio = 175f/75f;
+	float ratio = Screen.width/Settings.NativeResolution.x;
+	
 	void Start() {
-		gameControl = GameObject.Find("GameManager").GetComponent<GameControl>();
+		gameControl = GameControl.gameControl;
 		position = new Rect (Screen.width - 400, Screen.height - 200,x,y);
 	}
 	

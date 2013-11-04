@@ -5,6 +5,7 @@ public class Settings
 {
 	// Constants
 	public const string version = "alpha 0.1";
+	public static Vector2 NativeResolution = new Vector2(1920, 1080);
 	//// User Settings
 	// Camera Settings
 	public static int ScrollSpeed = 25;

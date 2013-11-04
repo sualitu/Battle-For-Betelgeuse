@@ -1,12 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Model\Unit.cs">
-    <Files>
-      <File FileName="Assets\Scripts\Dictionary.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Controllers\AIControl.cs" Line="176" Column="4" />
-      <File FileName="Assets\Scripts\Model\Unit.cs" Line="118" Column="26" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

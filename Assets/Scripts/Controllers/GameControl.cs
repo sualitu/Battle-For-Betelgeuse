@@ -276,7 +276,8 @@ public class GameControl : MonoBehaviour {
 	
 	// TODO Do this properly
 	void OnGUI() {
-		GUILayout.Label ("Mana left: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana);
+		GUI.skin = guiControl.skin;
+		GUILayout.Label ("Mana status: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana + "\nEnemy Stats:" + "\nCards: " + enemyPlayer.Hand.Count + "\nMana: " + enemyPlayer.ManaLeft() + " / " + enemyPlayer.MaxMana);
 		
 	}
 	
