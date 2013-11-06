@@ -24,6 +24,12 @@ public class GridControl : MonoBehaviour
 		Destroy(Inst);
 	}	
 	
+	/// <summary>
+	/// Builds boolean map from external file.
+	/// </summary>
+	/// <returns>
+	/// The boolean map.
+	/// </returns>
 	List<List<bool>> BuildFromExtFile() {
 		StreamReader reader = new StreamReader(Application.dataPath + "/../map.txt");
 		string file = reader.ReadToEnd();
@@ -55,13 +61,19 @@ public class GridControl : MonoBehaviour
 		return boolMap;
 	}
 	
-	public string ReverseString( string s )
+	string ReverseString( string s )
 	{
 	    char[] charArray = s.ToCharArray();
 	    System.Array.Reverse( charArray );
 	    return new string( charArray );
 	}
 	
+	/// <summary>
+	/// Builds boolean map.
+	/// </summary>
+	/// <returns>
+	/// The bool map.
+	/// </returns>
 	List<List<bool>> BuildBoolMap() {
 		boolMap = new List<List<bool>>();		
 		string file = mapfile.text;
@@ -124,7 +136,6 @@ public class GridControl : MonoBehaviour
 	{		
 		GetHexProperties();
 		GenerateMap();
-		//gameControl = GetComponent<GameControl>();
 	}
 }
 

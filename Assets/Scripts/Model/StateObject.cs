@@ -12,4 +12,3 @@ public class StateObject
 		TargetUnit = targetUnit;
 	}
 }
-

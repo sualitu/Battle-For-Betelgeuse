@@ -5,19 +5,15 @@ public class GUICard : MonoBehaviour
 {
 	public System.Guid uniqueId;
 	public GUISkin skin = null;
+	public Card Card { get; set; }
+	public float Rotation = 0;
 	
-	public Card card;
-	Rect position;
-	public Player Owner;
-	
+	Player Owner;
+	Rect position;	
 	float height = 300f;
 	float width = 186f;
-	float sizeRatio = 186f/300f;
-	float size = Screen.width/Settings.NativeResolution.x;
-	
-	public int x = Screen.width;
-	public int y = Screen.height;
-	public float Rotation = 0;
+	int x = Screen.width;
+	int y = Screen.height;
 	float r = 0;
 	int i = 0;
 	
@@ -26,8 +22,32 @@ public class GUICard : MonoBehaviour
 		uniqueId = System.Guid.NewGuid();
 	}
 	
-	public void SetCard(Card c) {
-		card = c;
+	public void SetPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	void MoveHorizontally(int i) {
+		y += i;
+	}
+	
+	void MoveVertically(int i) {
+		x += i;
+	}
+	
+	public void Select() {
+		selected = true;
+		MoveHorizontally(-50);
+	}
+	
+	public void Deselect() {
+		MoveHorizontally(50);
+		selected = false;
+	}
+	
+	public void SetInfo(Card card, Player owner) {
+		Card = card;
+		Owner = owner;
 	}
 	
 	public void Played() {
@@ -52,34 +72,35 @@ public class GUICard : MonoBehaviour
 	}
 	
 	public void OnGUI() {
-		size = Screen.width/Settings.NativeResolution.x;
 		IsMouseOver = position.Contains(Event.current.mousePosition);
-		if(card != null) {
+		if(Card != null) {
 			GUI.skin = skin;
 			
 			if(position.Contains(Event.current.mousePosition)) {
-				position = iTween.RectUpdate(position, new Rect (x,y-50,width,height), 4);
+				position = iTween.RectUpdate(position, new Rect (x,y-height*1/2,width,height), 4);
 				r = iTween.FloatUpdate(r,Rotation,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
+				
 			} else {
 				position = iTween.RectUpdate(position, new Rect (x,y,width,height), 4);	
 				r = iTween.FloatUpdate(r,Rotation,1);	
 				GUIUtility.RotateAroundPivot(r, position.center);
 			}
-			if(GUI.Button(position, ConstructCardText(card))){
+			if(GUI.Button(position, ConstructCardText(Card))){
+				
 				if(!selected) {
 					
 					Owner.SelectCard(this);
 				} else {
 					Owner.DeselectCard();
 					selected = false;
-					y += 50;
+					MoveHorizontally(50);;
 				}
 			}
 		}
 		if(i > 0) {
 			if(i == 100) {
-				x = -300;
+				MoveVertically(-(Screen.width/2+300));
 				Rotation = 90;
 			}
 			if(i == 1) {

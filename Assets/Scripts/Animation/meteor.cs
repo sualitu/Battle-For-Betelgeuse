@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class meteor : MonoBehaviour {
+public class Meteor : MonoBehaviour {
 	
 	Transform trans;
 	float rot;

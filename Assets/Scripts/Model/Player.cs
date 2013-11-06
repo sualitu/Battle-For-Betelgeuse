@@ -51,19 +51,18 @@ public class Player
 		Hand.Add(card);
 		if(!Ai) {
 			GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
-			guiCard.SetCard(card);
-			guiCard.Owner = this;
+			guiCard.SetInfo(card, this);
 			GuiHand.Add(guiCard);
 			SortCards();
 		}
 	}
 	
 	public void PlayCard() {
-		GUICard card = selectedGUICard;
-		SpendMana(card.card.Cost);
-		Hand.Remove(card.card);
-		GuiHand.Remove(card);
-		card.Played();
+		GUICard guiCard = selectedGUICard;
+		SpendMana(guiCard.Card.Cost);
+		Hand.Remove(guiCard.Card);
+		GuiHand.Remove(guiCard);
+		guiCard.Played();
 		gameControl.mouseControl.PlayModeOn = true;
 		targets.ForEach(h => h.renderer.material.color = Color.white);
 		targets = new List<Hex>();
@@ -75,21 +74,24 @@ public class Player
 		targets = new List<Hex>();
 		selectedGUICard = null;
 		selectedCard = null;
+		gameControl.mouseControl.PlayModeOn = true;
 	}
 	
-	public void SelectCard(GUICard card) {
+	public void SelectCard(GUICard guiCard) {
 		if(selectedGUICard != null) {
-			selectedGUICard.y += 50;
-			selectedGUICard.selected = false;
+			selectedGUICard.Deselect();
 			DeselectCard();
 		}
-		if(card.card.Cost <= ManaLeft()) {
-			card.selected = true;
-			card.y -= 50;
-			selectedGUICard = card;
-			selectedCard = card.card;
+		if(guiCard.Card.Cost <= ManaLeft()) {
+			guiCard.Select();
+			selectedGUICard = guiCard;
+			selectedCard = guiCard.Card;
 			targets = new List<Hex>();
 			Base.Hex.Adjacent(gameControl.gridControl.Map).ForEach(h => h.Adjacent(gameControl.gridControl.Map).ForEach(he => targets.Add(he)));
+			if(typeof(UnitCard).IsAssignableFrom(guiCard.Card.GetType())) {
+			} else {
+				targets = PathFinder.BreadthFirstSearch(Base.Hex, gameControl.gridControl.Map, 4);
+			}
 			targets.RemoveAll(h => h.Unit != null);
 			targets.ForEach(h => h.renderer.material.color = Color.green);
 			gameControl.mouseControl.PlayModeOn = false;
@@ -103,8 +105,7 @@ public class Player
 		int c = Hand.Count;
 		List<List<int>> positions = gameControl.handControl.handPositions[c-1];
 		for(int i = 0; i < c; i++) {
-			GuiHand[i].x = positions[i][0];
-			GuiHand[i].y = positions[i][1];
+			GuiHand[i].SetPosition(positions[i][0], positions[i][1]);
 			GuiHand[i].Rotation = positions[i][2];
 		}
 	}

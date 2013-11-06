@@ -7,22 +7,23 @@ public class AIControl : MonoBehaviour
 {
 	Player player;
 	GameControl gameControl;
-	
-	public List<Hex> knownHex = new List<Hex>();
-	public Dictionary<Unit, List<Hex>> unitMoves = new Dictionary<Unit, List<Hex>>();
-	public Dictionary<Unit, List<Hex>> unitBlacklist = new Dictionary<Unit, List<Hex>>();
-	
-	List<Hex> unitTargets = new List<Hex>();
-	int attempts;
-	
+	Dictionary<Unit, List<Hex>> unitMoves = new Dictionary<Unit, List<Hex>>();
+	Dictionary<Unit, List<Hex>> unitBlacklist = new Dictionary<Unit, List<Hex>>();	
 	Hex currentHex;
-	bool tableBuild = false;
 	
 	public void DoTurn() {
-		attempts = 0;
 	}
 	
-	public int CalculateHexValue(Hex hex) {
+	/// <summary>
+	/// Calculates the hex value.
+	/// </summary>
+	/// <returns>
+	/// The hex value.
+	/// </returns>
+	/// <param name='hex'>
+	/// Hex.
+	/// </param>
+	int CalculateHexValue(Hex hex) {
 		if(hex.Unit != null) {
 			if(hex.Unit.Team == player.Team) {
 				return int.MinValue;
@@ -30,10 +31,22 @@ public class AIControl : MonoBehaviour
 				return int.MaxValue - hex.Unit.Attack;
 			}
 		} else {
-			return 10000 - Mathf.FloorToInt(GetDist(hex, gameControl.thisPlayer.Base.Hex));
+			return 10000 - Mathf.FloorToInt(hex.Distance(gameControl.thisPlayer.Base.Hex));
 		}
 	}
 	
+	/// <summary>
+	/// Sets AI.
+	/// </summary>
+	/// <returns>
+	/// The AIControl for the player.
+	/// </returns>
+	/// <param name='player'>
+	/// Player.
+	/// </param>
+	/// <param name='gameControl'>
+	/// Game control.
+	/// </param>
 	public AIControl SetAI(Player player, GameControl gameControl) {
 		player.Ai = true;
 		this.player = player;
@@ -41,12 +54,27 @@ public class AIControl : MonoBehaviour
 		return this;
 	}
 	
+	
 	bool MyTurn() {
 		return gameControl.state == State.ENEMYTURN;
 	}
 	
 	bool MovesInProgress() {
-		return iTween.tweens.Count > 1;
+		return iTween.tweens.Count > 2;
+	}
+	
+	List<Unit> MyUnits() {
+		return gameControl.units.FindAll(u => u.Team == player.Team);
+	}
+	
+	void getMoves(Hex hex, int i, List<Hex> acc) {
+		if(i < 1) {
+			return;
+		} else {
+			List<Hex> adj = hex.Adjacent(gameControl.gridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || h.Unit.Team != player.Team));
+			acc.AddRange(adj);
+			adj.ForEach(h => getMoves(h, --i, acc));
+		}
 	}
 	
 	bool PlayCard() {
@@ -74,29 +102,6 @@ public class AIControl : MonoBehaviour
 		unitMoves[unit] = StandardList();
 		unitBlacklist[unit] = new List<Hex>();
 		return true;
-	}
-	
-	List<Unit> MyUnits() {
-		return gameControl.units.FindAll(u => u.Team == player.Team);
-	}
-	
-	List<Hex> getAllPossibleMovesForUnit(Unit unit) {
-		//TODO Implement
-		return null;
-	}
-	
-	void getMoves(Hex hex, int i, List<Hex> acc) {
-		if(i < 1) {
-			return;
-		} else {
-			List<Hex> adj = hex.Adjacent(gameControl.gridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || h.Unit.Team != player.Team));
-			acc.AddRange(adj);
-			adj.ForEach(h => getMoves(h, --i, acc));
-		}
-	}
-	
-	float GetDist(Hex source, Hex sink) {
-		return Mathf.Sqrt(Mathf.Pow(source.GridPosition.x-sink.GridPosition.x,2)+Mathf.Pow(source.GridPosition.y-sink.GridPosition.y,2));
 	}
 		
 	bool MoveUnits() {

@@ -28,15 +28,15 @@ public class GameControl : MonoBehaviour {
 	public HandControl handControl {get; set; }
 	public NetworkControl networkControl { get; set; }
 	public AudioControl audioControl { get; set; }
+	public CameraControl cameraControl { get; set; }
 	AIControl aiController;
 	
 	// TODO Move to GUIController
-	public EndTurn et;
 	
-	// TODO Consider Booleans
 	public static bool IsMulti = false;
 	
 	void Start () {
+		
 		InitGame();
 		InitPlayers();
 		InitControllers();	
@@ -50,8 +50,6 @@ public class GameControl : MonoBehaviour {
 	void InitGame() {
 		new MothershipCard();
 		state = State.PREGAME;
-		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
-		et.title = Dictionary.startGame;
 	}
 	
 	void InitPlayers() {
@@ -81,6 +79,7 @@ public class GameControl : MonoBehaviour {
 		handControl = GetComponent<HandControl>();	
 		networkControl = GetComponent<NetworkControl>();
 		audioControl = GetComponent<AudioControl>();
+		cameraControl = GetComponent<CameraControl>();
 	}
 	#endregion Init
 		
@@ -92,14 +91,15 @@ public class GameControl : MonoBehaviour {
 					state = State.MYTURN;
 				} else {
 					state = State.ENEMYTURN;
-				}
+				}	
 				DoGameLoop();
 				break;
 			case State.MYTURN:
-				et.title = Dictionary.endTurn;
+				guiControl.SetButton(Dictionary.endTurn);
 				units.RemoveAll(u => u == null);
 				foreach(Unit u in units) {
 					u.ResetStats();
+					u.OnNewTurn(new StateObject(units, u));
 				}
 				break;
 			case State.ENEMYTURN:
@@ -120,12 +120,12 @@ public class GameControl : MonoBehaviour {
 			switch(state) {
 			case State.MYTURN:
 				if(state == State.MYTURN) {
-					et.title = Dictionary.EnemyTurnInProgress;
+					guiControl.SetButton(Dictionary.EnemyTurnInProgress);
 					if(IsMulti) {
 						networkControl.EndNetworkTurn();
 					}
 					thisPlayer.DeselectCard();
-					mouseControl.deselectHex();
+					mouseControl.DeselectHex();
 					state = State.ENEMYTURN;
 					DoGameLoop();
 				}
@@ -155,7 +155,7 @@ public class GameControl : MonoBehaviour {
 	
 	private void EndGame() {
 		state = State.GAMEOVER;
-		et.title = Dictionary.endGame;	
+		guiControl.SetButton(Dictionary.endGame);
 	}
 	
 	public static bool GameStarted() {
@@ -175,37 +175,17 @@ public class GameControl : MonoBehaviour {
 		}
 		thisPlayer.MaxMana++;
 		state = State.START;
-		// TODO Move to CameraControl
-		Vector3 mainCameraPosition = new Vector3(40,30,-14);
-		Vector3 mainCameraRotation = new Vector3(50,0,0);
-		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
-			"delay", 0.5f,
-			"easetype", "easeInQuad",
-			"time", 5));
-		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
-			"delay", 0.5f,
-			"easetype", "easeInQuad",
-			"time", 5));
+		cameraControl.SetPlayerCamera(true);
 	}
 		
 	public void SetUpClientGame() {
 		state = State.START;
-		// TODO Move to CameraControl
-		Vector3 mainCameraPosition = new Vector3(40,30,104);
-		Vector3 mainCameraRotation = new Vector3(50,180,0);
-		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", mainCameraPosition,
-			"delay", 0.5f,
-			"easetype", "easeInQuad",
-			"time", 5));
-		iTween.RotateTo(Camera.main.gameObject, iTween.Hash("rotation", mainCameraRotation,
-			"delay", 0.5f,
-			"easetype", "easeInQuad",
-			"time", 5));
+		cameraControl.SetPlayerCamera(false);
 	}
 	#endregion SetUp
 	
 	public void EnemeyEndTurn() {
-		et.title = Dictionary.endTurn;
+		guiControl.SetButton(Dictionary.endTurn);
 		state = State.MYTURN;
 		thisPlayer.DrawCard();
 		thisPlayer.MaxMana++;
@@ -216,7 +196,6 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
-
 		GameObject go = (GameObject) Instantiate(unitPreFab, Vector3.zero, Quaternion.identity);
 		Unit unit = go.GetComponent<Unit>();
 		unit.Id = id;
@@ -236,7 +215,7 @@ public class GameControl : MonoBehaviour {
 	
 	public void EnemyCardPlayed(Card card) {
 		GUICard guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
-		guiCard.SetCard(card);
+		guiCard.SetInfo(card, enemyPlayer);
 		guiCard.ForcePlaceCard(Screen.width, -300);
 		guiCard.Played();		
 	}

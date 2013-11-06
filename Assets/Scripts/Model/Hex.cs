@@ -34,6 +34,10 @@ public class Hex : MonoBehaviour
 		return resultList;
 	}
 	
+	public float Distance(Hex sink) {
+		return Mathf.Sqrt(Mathf.Pow(this.GridPosition.x-sink.GridPosition.x,2)+Mathf.Pow(this.GridPosition.y-sink.GridPosition.y,2));
+	}
+	
 	List<Hex> AddHex(int x, int y, List<Hex> list, List<List<Hex>> map) {
 		try {
 			Hex hex = map[x][y];

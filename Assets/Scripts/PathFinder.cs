@@ -10,13 +10,31 @@ public class PathFinder
 		return null;
 	}
 	
+	public static List<Hex> BreadthFirstSearch(Hex source, List<List<Hex>> map, int moves) {
+		Queue<Hex> queue = new Queue<Hex>();
+		List<Hex> found = new List<Hex>();
+		List<Hex> visited = new List<Hex>();
+		source.Adjacent(map).ForEach(h => queue.Enqueue(h));
+		Hex current = null;
+		
+		while(queue.Count > 0) {
+			current = queue.Dequeue();
+			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (current.Unit == null || current.Unit.Team == 2)) {
+				found.Add(current);
+				current.Adjacent(map).ForEach(h => queue.Enqueue(h));
+			}
+			visited.Add(current);
+		}
+		
+		return found;
+	}
+	
 	public static  List<Hex> DepthFirstSearch(Hex fromHex, Hex toHex, List<List<Hex>> map, int moves) {
 		targetTile = toHex;
 		List<Hex> resultList = DFS (fromHex, toHex, map, moves, new List<Hex>());
 		if(toHex.Unit != null && fromHex.Unit.Team == toHex.Unit.Team) {
 			return resultList;
 		}
-		resultList.ForEach(h => h.renderer.material.color = Color.green);
 		return resultList;
 	}
 	

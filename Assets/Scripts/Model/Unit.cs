@@ -13,14 +13,15 @@ public class Unit : MonoBehaviour {
 	public int MaxHealth { get; set; }
 	public int MaxMovement { get; set; }
 	public Card Card { get; set; }
-		
+	public List<Hex> movable = new List<Hex>();
+			
 	GameObject model;
 	int i = 0;
 		
 	// Fields
 	private int damageTaken;
 	private int moved;
-	private Unit attacking = null;
+	public Unit attacking = null;
 	private bool activelyAttacking = false;
 	List<GameObject> projectiles = new List<GameObject>();
 	
@@ -28,6 +29,9 @@ public class Unit : MonoBehaviour {
 	public Transform explosion;
 	public GameObject ProjectilePrefab;
 	
+	public void OnNewTurn(StateObject s) {
+		Card.OnNewTurn(s);
+	}
 	
 	public void Damage(int i) {
 		damageTaken += i;
@@ -115,13 +119,22 @@ public class Unit : MonoBehaviour {
 		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
 		path.ForEach(h => h.renderer.material.color = Color.white);
 		if(path.Count > 0 && (hex.Unit == null || Team != hex.Unit.Team)) {
-			if(hex.Unit == null) {
+			movable.ForEach(h => h.renderer.material.color = Color.white);
+			movable = new List<Hex>();
+			GameControl.gameControl.mouseControl.DeselectHex();
+			if(hex.Unit == null) {				
 				MoveBy(path);
+				if(Team == GameControl.gameControl.thisPlayer.Team) {
+					GameControl.gameControl.mouseControl.SelectHex(hex);
+				}
 			} else {
 				int delay = 0;
 				if(path.Count > 1) {
 					path.RemoveAt(path.Count-1);
 					delay = path.Count;
+					if(Team == GameControl.gameControl.thisPlayer.Team) {
+						GameControl.gameControl.mouseControl.SelectHex(path[path.Count-1]);
+					}
 					MoveBy(path);
 				} 
 				attacking = hex.Unit;
@@ -178,7 +191,9 @@ public class Unit : MonoBehaviour {
 	}
 		
 	void Update () {
-		
+		if(GameControl.gameControl.mouseControl.selectedUnit == this) {
+			movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.mouseControl.mouseOverHex == h ? Color.red : Color.green);	
+		}
 		if(CurrentHealth() < 1) {
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
 			Destroy(gameObject);
@@ -192,11 +207,14 @@ public class Unit : MonoBehaviour {
 		} else {
 			i = 0;
 		}
-		
+		// TODO Do this properly
 		if(attacking != null && activelyAttacking) {
 			projectiles.RemoveAll(p => p == null);
 			if(projectiles.Count < 1) {
 				GameControl.gameControl.combatControl.Combat(this, attacking);
+				attacking.activelyAttacking = false;
+				attacking.attacking = null;
+				activelyAttacking = false;
 				attacking = null;
 			}
 		}

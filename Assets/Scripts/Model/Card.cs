@@ -18,6 +18,10 @@ public abstract class Card
 	public abstract string PrefabPath { get; }
 	public string CardText = "";
 	
+	public virtual void OnNewTurn(StateObject s) {
+		
+	}
+	
 	public virtual void OnPlay(StateObject s) {
 		StandardOnPlay(s);
 	}
@@ -85,6 +89,16 @@ public abstract class Card
 		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
 		return result;
 	}
 	

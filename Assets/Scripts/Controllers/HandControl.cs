@@ -13,6 +13,8 @@ public class HandControl : MonoBehaviour
 	}	
 	
 	void MakeHandPositions() {
+		
+		// TODO Do this properly
 		int x = Mathf.FloorToInt(Screen.width/2-100*ratio);
 		int y = Mathf.FloorToInt(Screen.height-200*ratio);
 		int cardWidth = Mathf.FloorToInt(150*ratio);
