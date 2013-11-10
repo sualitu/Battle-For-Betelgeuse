@@ -18,7 +18,7 @@ public class TurretCard : BuildingCard
 
 	public override int Health {
 		get {
-			return 5;
+			return 3;
 		}
 	}
 
@@ -47,11 +47,17 @@ public class TurretCard : BuildingCard
 	public override void OnNewTurn (StateObject s)
 	{
 		List<Unit> targets = new List<Unit>();
-		targets.AddRange(s.TargetUnit.Hex.Adjacent(GameControl.gameControl.gridControl.Map).FindAll(h => h.Unit != null && h.Unit.Team != s.TargetUnit.Team).ConvertAll<Unit>(h => h.Unit));
+		targets = PathFinder.BreadthFirstSearch(s.TargetUnit.Hex, GameControl.gameControl.gridControl.Map, 2, s.TargetUnit.Team).ConvertAll<Unit>(h => h.Unit);
+		targets = targets.FindAll(u => u != null);
+		targets = targets.FindAll(u => u.Team != s.TargetUnit.Team);
 		if(targets.Count > 0) {
 			s.TargetUnit.attacking = targets[0];
 			s.TargetUnit.AttackTarget(targets[0], 0);
 		}
+	}
+	
+	public TurretCard() {
+		CardText += "At the beginning of your turn this building will attack a random unit within two tiles";
 	}
 
 	public override void OnPlay (StateObject s)

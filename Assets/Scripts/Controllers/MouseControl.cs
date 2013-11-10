@@ -44,7 +44,7 @@ public class MouseControl : MonoBehaviour {
 		hex.IsSelected = true;
 		selectedUnit = hex.Unit;
 		if(selectedUnit != null) {
-			hex.Unit.movable = PathFinder.BreadthFirstSearch(hex, gameControl.gridControl.Map, hex.Unit.MovementLeft());
+			hex.Unit.movable = PathFinder.BreadthFirstSearch(hex, gameControl.gridControl.Map, hex.Unit.MovementLeft(), hex.Unit.Team);
 		}
 	}
 	
@@ -82,6 +82,7 @@ public class MouseControl : MonoBehaviour {
 							} else {
 								gameControl.PlayCardOnHex(gameControl.thisPlayer.selectedCard, hex, System.Guid.NewGuid().ToString());
 							}
+							DeselectHex();
 							gameControl.thisPlayer.DeselectCard();
 						} else {
 							gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);
@@ -99,66 +100,6 @@ public class MouseControl : MonoBehaviour {
 					}
 				}
 			}
-		} 
-		/*
-		ray = Camera.main.ScreenPointToRay ( Input.mousePosition );
-		if (Physics.Raycast (ray, out rayHit, Mathf.Infinity)) {
-			try {
-				Vector2 coords = rayHit.collider.GetComponent<Hex>().GridPosition;
-				Hex hex = gameControl.gridControl.Map[Mathf.FloorToInt(coords.x)][Mathf.FloorToInt(coords.y)];
-				if(PlayModeOn) {
-					if(mouseOverHex == null) {
-						mouseOverHex = hex;
-						mouseOverHex.renderer.material.color = Color.red;
-					} else if (mouseOverHex.GridPosition != hex.GridPosition) {
-						mouseOverHex.renderer.material.color = Color.white;
-						mouseOverHex = hex;
-						hex.renderer.material.color = Color.red;
-					}
-					
-					if(Input.GetMouseButtonDown(0)){
-						if(selectedUnit == null || (hex.Unit != null && selectedUnit.Team == hex.Unit.Team)) {
-							SelectHex(hex);
-						} else if(!gameControl.guiControl.MouseIsOverGUI() && gameControl.state == State.MYTURN) {
-							if(selectedUnit.Team == gameControl.thisPlayer.Team && gameControl.state == State.MYTURN) {								
-								if(GameControl.IsMulti) {
-									gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);
-								} else {
-									selectedUnit.PrepareMove (hex);
-								}
-							}
-						} 
-						gameControl.guiControl.UpdateGUI();	
-					} else if( Input.GetMouseButtonDown(1) ) {
-						DeselectHex();
-					}
-				} else {
-					if(mouseOverHex == null) {
-						mouseOverHex = hex;
-						mouseOverHex.renderer.material.color = Color.red;
-					} else if (mouseOverHex.GridPosition != hex.GridPosition) {
-						if(gameControl.thisPlayer.targets.Contains(mouseOverHex)) {
-							mouseOverHex.renderer.material.color = Color.green;
-						} else {
-							mouseOverHex.renderer.material.color = Color.white;
-						}
-						mouseOverHex = hex;
-						hex.renderer.material.color = Color.red;
-					}
-					if(Input.GetMouseButton(0)) {
-						if(!gameControl.guiControl.MouseIsOverGUI() && gameControl.thisPlayer.targets.Contains(hex) && gameControl.state == State.MYTURN) {
-							// Play Card
-							if(GameControl.IsMulti) {
-								gameControl.networkControl.PlayNetworkCardOn(gameControl.thisPlayer.selectedCard, hex);
-							} else {
-								gameControl.PlayCardOnHex(gameControl.thisPlayer.selectedCard, hex, System.Guid.NewGuid().ToString());
-							}
-						}
-					}
-				}
-			} catch  {
-			}
-		}*/
-		
+		} 		
 	}
 }

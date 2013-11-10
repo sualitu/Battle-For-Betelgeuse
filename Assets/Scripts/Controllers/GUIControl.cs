@@ -41,7 +41,7 @@ public class GUIControl : MonoBehaviour {
 	}
 	
 	string ConstructMouseOverString(Unit unit) {
-		return ((unit.Team == gameControl.thisPlayer.Team) ? "Your " : "Enemey ") + unit.UnitName + "\nAttack: " + unit.Attack + 
+		return ((unit.Team == gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + unit.UnitName + "\nAttack: " + unit.Attack + 
 			"\nHealth: " + (unit.CurrentHealth() < 1 ? "0" : (unit.CurrentHealth()).ToString()) + " / " + unit.MaxHealth.ToString() + 
 				"\nMovement: " + (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
 	}

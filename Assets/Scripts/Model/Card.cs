@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public abstract class Card
 {
+	public CardType cardType;
 	public GameObject Prefab { get; set; }
 	public GameObject ProjectilePrefab { get; set; }
 	public abstract string Name { get; }
@@ -54,37 +55,23 @@ public abstract class Card
 	
 	public static List<Card> RandomDeck() {
 		List<Card> result = new List<Card>();
+		
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
+		
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
+		result.Add(new CarrierCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new CruiserCard());
 		result.Add(new CruiserCard());
 		result.Add(new CruiserCard());
 		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
@@ -93,12 +80,19 @@ public abstract class Card
 		result.Add(new TurretCard());
 		result.Add(new TurretCard());
 		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
+		
+		result.Add(new MajorReconstructionCard());
+		result.Add(new MajorReconstructionCard());
+		result.Add(new MajorReconstructionCard());
+		result.Add(new MajorReconstructionCard());	
+		result.Add(new MinorReconstructionCard());
+		result.Add(new MinorReconstructionCard());
+		result.Add(new MinorReconstructionCard());
+		result.Add(new MinorReconstructionCard());	
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
 		return result;
 	}
 	
@@ -119,3 +113,5 @@ public abstract class Card
 		}
 	}
 }
+
+public enum CardType { UNIT, BUILDING, SPELL }

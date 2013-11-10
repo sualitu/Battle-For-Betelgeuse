@@ -98,11 +98,20 @@ public class GameControl : MonoBehaviour {
 				guiControl.SetButton(Dictionary.endTurn);
 				units.RemoveAll(u => u == null);
 				foreach(Unit u in units) {
-					u.ResetStats();
-					u.OnNewTurn(new StateObject(units, u));
+					if(u.Team == thisPlayer.Team) {
+						u.ResetStats();
+						u.OnNewTurn(new StateObject(units, u, thisPlayer, enemyPlayer));
+					}
 				}
 				break;
 			case State.ENEMYTURN:
+				units.RemoveAll(u => u == null);
+				foreach(Unit u in units) {
+					if(u.Team != thisPlayer.Team) {
+						u.ResetStats();
+						u.OnNewTurn(new StateObject(units, u, enemyPlayer, thisPlayer));
+					}
+				}
 				if(!IsMulti) {
 					aiController.DoTurn();
 					enemyPlayer.DrawCard();
@@ -196,21 +205,31 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
-		GameObject go = (GameObject) Instantiate(unitPreFab, Vector3.zero, Quaternion.identity);
-		Unit unit = go.GetComponent<Unit>();
-		unit.Id = id;
-		unit.FromCard(card);
-		unit.Hex = hex;
-		unit.transform.position = hex.transform.position;
-		hex.Unit = unit;
-		units.Add(unit);
-		unit.Team = state == State.MYTURN ? 1 : 2;
-		card.OnPlay(new StateObject(units, unit));
-		if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
-			// TODO Find a better way to sort this
-			thisPlayer.PlayCard();
+		// TODO Clean up this method to better handle multiple card types.
+		if(!typeof(SpellCard).IsAssignableFrom(card.GetType())) {
+			GameObject go = (GameObject) Instantiate(unitPreFab, Vector3.zero, Quaternion.identity);
+			Unit unit = go.GetComponent<Unit>();
+			unit.Id = id;
+			unit.FromCard(card);
+			unit.Hex = hex;
+			unit.transform.position = hex.transform.position;
+			hex.Unit = unit;
+			units.Add(unit);
+			unit.Team = state == State.MYTURN ? 1 : 2;
+			card.OnPlay(new StateObject(units, unit, thisPlayer, enemyPlayer));
+			if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
+				// TODO Find a better way to sort this
+				thisPlayer.PlayCard();
+			}
+			return unit;
+		} else {
+			card.OnPlay(new StateObject(units, hex.Unit, thisPlayer, enemyPlayer));
+			if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
+				// TODO Find a better way to sort this
+				thisPlayer.PlayCard();
+			}
+			return null;
 		}
-		return unit;
 	}
 	
 	public void EnemyCardPlayed(Card card) {

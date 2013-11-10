@@ -9,7 +9,6 @@ public class AIControl : MonoBehaviour
 	GameControl gameControl;
 	Dictionary<Unit, List<Hex>> unitMoves = new Dictionary<Unit, List<Hex>>();
 	Dictionary<Unit, List<Hex>> unitBlacklist = new Dictionary<Unit, List<Hex>>();	
-	Hex currentHex;
 	
 	public void DoTurn() {
 	}
@@ -82,6 +81,7 @@ public class AIControl : MonoBehaviour
 		// Choose a card
 		Card card = player.Hand.Find(c => c.Cost <= player.ManaLeft());
 		if(card == null) { return false; }
+		if(typeof(SpellCard).IsAssignableFrom(card.GetType())) { return false; }
 		// Choose a tile
 		Hex targetHex = null;
 		List<Hex> targets = new List<Hex>();
@@ -142,27 +142,6 @@ public class AIControl : MonoBehaviour
 		gameControl.EnemeyEndTurn();
 	}
 	
-	Hex GetNextHex() {
-		int x;
-		int y;
-		if(currentHex == null) {
-			x = 0;
-			y = 0;
-		} else {
-			x = (int) currentHex.GridPosition.x;
-			y = (int) currentHex.GridPosition.y;
-		}
-		while(!gameControl.gridControl.boolMap[x][y]) {
-			if(x < gameControl.gridControl.MapSize.x) {
-				x++;
-			} else {
-				x = 0;
-				y++;
-			}
-		}
-		return gameControl.gridControl.Map[x][y];
-	}
-	
 	List<Hex> SortHexList(List<Hex> hexs) {
 		IEnumerable<Hex> k = from h in hexs
 				orderby CalculateHexValue(h) descending
@@ -183,21 +162,7 @@ public class AIControl : MonoBehaviour
 	}
 	
 	void Update() {
-		currentHex = GetNextHex();
-		foreach(Unit unit in MyUnits()) {
-			if(!unitMoves.ContainsKey(unit)) {
-				unitMoves[unit] = new List<Hex>();
-				unitBlacklist[unit] = new List<Hex>();
-			}
-			if(!unitMoves[unit].Contains(currentHex)) {
-				List<Hex> path = PathFinder.DepthFirstSearch(unit.Hex, currentHex, gameControl.gridControl.Map, unit.MovementLeft());
-				if(path.Count > 0) {
-					unitMoves[unit].Add(currentHex);
-				} else {
-					unitBlacklist[unit].Add(currentHex);	
-				}
-			}
-		}
+		
 		if(MyTurn() && !MovesInProgress()) {
 			if(!PlayCard() && !MoveUnits()) {
 				EndTurn();

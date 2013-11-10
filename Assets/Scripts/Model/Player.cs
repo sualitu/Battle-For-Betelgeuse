@@ -77,6 +77,22 @@ public class Player
 		gameControl.mouseControl.PlayModeOn = true;
 	}
 	
+	public void SetTargetsForCard(Card card) {
+		targets = new List<Hex>();
+		if(!typeof(SpellCard).IsAssignableFrom(card.GetType())) {
+			Base.Hex.Adjacent(gameControl.gridControl.Map).ForEach(h => h.Adjacent(gameControl.gridControl.Map).ForEach(he => targets.Add(he)));
+			if(!typeof(UnitCard).IsAssignableFrom(card.GetType())) {
+				HashSet<Hex> hsTargets = new HashSet<Hex>(targets);
+				foreach(Hex hex in hsTargets) {
+					targets.AddRange(PathFinder.BreadthFirstSearch(hex, gameControl.gridControl.Map, 4, Team));
+				}	
+			}
+			targets.RemoveAll(h => h.Unit != null);
+		} else {
+			targets = ((SpellCard) card).Targets(new StateObject(gameControl.units, null, this, (gameControl.thisPlayer == this) ? gameControl.enemyPlayer : gameControl.thisPlayer));
+		}
+	}
+	
 	public void SelectCard(GUICard guiCard) {
 		if(selectedGUICard != null) {
 			selectedGUICard.Deselect();
@@ -86,15 +102,9 @@ public class Player
 			guiCard.Select();
 			selectedGUICard = guiCard;
 			selectedCard = guiCard.Card;
-			targets = new List<Hex>();
-			Base.Hex.Adjacent(gameControl.gridControl.Map).ForEach(h => h.Adjacent(gameControl.gridControl.Map).ForEach(he => targets.Add(he)));
-			if(typeof(UnitCard).IsAssignableFrom(guiCard.Card.GetType())) {
-			} else {
-				targets = PathFinder.BreadthFirstSearch(Base.Hex, gameControl.gridControl.Map, 4);
-			}
-			targets.RemoveAll(h => h.Unit != null);
-			targets.ForEach(h => h.renderer.material.color = Color.green);
+			SetTargetsForCard(guiCard.Card);
 			gameControl.mouseControl.PlayModeOn = false;
+			targets.ForEach(h => h.renderer.material.color = Color.green);
 		} else {
 			gameControl.audioControl.PlayErrorSound();
 			gameControl.guiControl.ShowSmallSplashText(Dictionary.NotEnoughMana);

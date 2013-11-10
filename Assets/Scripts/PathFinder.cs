@@ -10,7 +10,7 @@ public class PathFinder
 		return null;
 	}
 	
-	public static List<Hex> BreadthFirstSearch(Hex source, List<List<Hex>> map, int moves) {
+	public static List<Hex> BreadthFirstSearch(Hex source, List<List<Hex>> map, int moves, int team) {
 		Queue<Hex> queue = new Queue<Hex>();
 		List<Hex> found = new List<Hex>();
 		List<Hex> visited = new List<Hex>();
@@ -19,7 +19,7 @@ public class PathFinder
 		
 		while(queue.Count > 0) {
 			current = queue.Dequeue();
-			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (current.Unit == null || current.Unit.Team == 2)) {
+			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1))) {
 				found.Add(current);
 				current.Adjacent(map).ForEach(h => queue.Enqueue(h));
 			}
@@ -32,9 +32,9 @@ public class PathFinder
 	public static  List<Hex> DepthFirstSearch(Hex fromHex, Hex toHex, List<List<Hex>> map, int moves) {
 		targetTile = toHex;
 		List<Hex> resultList = DFS (fromHex, toHex, map, moves, new List<Hex>());
-		if(toHex.Unit != null && fromHex.Unit.Team == toHex.Unit.Team) {
+		/*if(toHex.Unit != null && fromHex.Unit.Team == toHex.Unit.Team) {
 			return resultList;
-		}
+		}*/
 		return resultList;
 	}
 	

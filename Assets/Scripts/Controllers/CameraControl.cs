@@ -4,10 +4,10 @@ public class CameraControl : MonoBehaviour
 	public void SetPlayerCamera(bool isPlayerOne) {
 		Vector3 position, rotation;
 		if(isPlayerOne) {
-			position = new Vector3(40,30,-14);
+			position = new Vector3(22,30,-14);
 			rotation = new Vector3(50,0,0);
 		} else {
-			position = new Vector3(40,30,104);
+			position = new Vector3(22,30,40);
 			rotation = new Vector3(50,180,0);
 		}
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", position,

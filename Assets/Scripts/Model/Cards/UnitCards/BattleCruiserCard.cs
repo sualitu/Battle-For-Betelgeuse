@@ -41,7 +41,7 @@ public class BattleCruiserCard : UnitCard
 
 	public override int id {
 		get {
-			return 5;
+			return 7;
 		}
 	}
 	
