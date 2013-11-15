@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class ReinforceCard : SpellCard {
-	
+public class MindControlCard : SpellCard
+{
 	public override int Attack {
 		get {
 			throw new System.NotImplementedException ();
@@ -12,7 +11,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int Cost {
 		get {
-			return 4;
+			return 10;
 		}
 	}
 
@@ -24,7 +23,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int id {
 		get {
-			return 10;
+			return 12;
 		}
 	}
 
@@ -36,10 +35,11 @@ public class ReinforceCard : SpellCard {
 
 	public override string Name {
 		get {
-			return "Reinforce";
+			return "Mind Control";
 		}
 	}
 
+	
 
 	public override void OnNewTurn (StateObject s)
 	{
@@ -48,18 +48,9 @@ public class ReinforceCard : SpellCard {
 
 	public override void OnPlay (StateObject s)
 	{
-		s.TargetUnit.MaxHealth += 3;
-
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
+		s.TargetUnit.Team = s.Caster.Team;
 	}
 
-	public override MockUnit MockOnPlay (MockUnit mo)
-	{
-		mo.CurrentHealth += 3;
-		mo.MaxHealth += 3;
-		return mo;
-	}
-	
 	public override string PrefabPath {
 		get {
 			return "Effects/Heal";
@@ -71,14 +62,15 @@ public class ReinforceCard : SpellCard {
 			return "missiles";
 		}
 	}
-	
-	public override List<Hex> Targets (StateObject s)
+
+	public override System.Collections.Generic.List<Hex> Targets (StateObject s)
 	{
-		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
-		return result;
+		return s.Units.FindAll(u => u.Team != s.Caster.Team && u != s.Opponent.Base).ConvertAll<Hex>(u => u.Hex);
 	}
 	
-	public ReinforceCard() {
-		CardText += "Increases a units health by three.";
+	
+	public MindControlCard() {
+		CardText += "Take control over an enemy unit or building.";
 	}
 }
+

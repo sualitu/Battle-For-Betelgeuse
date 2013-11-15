@@ -15,7 +15,9 @@ public class CombatControl : MonoBehaviour
 	/// </param>
 	public void Combat(Unit attacker, Unit defender) {
 		defender.Damage(attacker.Attack);
-		attacker.Damage(defender.Attack);
+		if(!attacker.IsRanged()) {
+			attacker.Damage(defender.Attack);
+		}
 		attacker.Move(attacker.MovementLeft());
 	}
 }

@@ -40,15 +40,6 @@ public class MajorReconstructionCard : SpellCard {
 		}
 	}
 
-	public override void OnAttack ()
-	{
-		base.OnAttack ();
-	}
-
-	public override bool OnAttacked ()
-	{
-		return base.OnAttacked ();
-	}
 
 	public override void OnNewTurn (StateObject s)
 	{
@@ -67,6 +58,18 @@ public class MajorReconstructionCard : SpellCard {
 		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
 	}
 
+	public override MockUnit MockOnPlay (MockUnit mo)
+	{
+		if(mo.CurrentHealth < mo.MaxHealth) {
+			if(mo.MaxHealth - mo.CurrentHealth < 5) {
+				mo.CurrentHealth = mo.MaxHealth;
+			} else {
+				mo.CurrentHealth += 5;
+			}
+		}
+		return mo;
+	}
+
 	public override string PrefabPath {
 		get {
 			return "Effects/Heal";
@@ -82,11 +85,11 @@ public class MajorReconstructionCard : SpellCard {
 	public override List<Hex> Targets (StateObject s)
 	{
 		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
-		result.ForEach(h => h.renderer.material.color = Color.green);
 		return result;
 	}
 	
 	public MajorReconstructionCard() {
 		CardText += "Heals target unit or building for five.";
 	}
+
 }

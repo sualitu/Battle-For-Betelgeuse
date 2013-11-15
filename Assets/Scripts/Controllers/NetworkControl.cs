@@ -33,7 +33,6 @@ public class NetworkControl : Photon.MonoBehaviour {
 	void OnJoinedRoom() {
 		if(PhotonNetwork.isNonMasterClientInRoom) {
 			NetworkPhoton.RPC ("Joined", PhotonTargets.MasterClient, null);
-			gameControl.SetUpClientGame();
 		}
 	}
 	
@@ -45,8 +44,19 @@ public class NetworkControl : Photon.MonoBehaviour {
 	[RPC]
 	void Joined() {
 		gameControl.guiControl.ShowSplashText("Opponent found!");
-		gameControl.SetUpMasterGame();
 		PhotonNetwork.room.open = false;
+	}
+	
+	public void DeckChosen() {
+		if(PhotonNetwork.isNonMasterClientInRoom) {
+			NetworkPhoton.RPC ("OpponentDeckChosen", PhotonTargets.MasterClient, null);
+			gameControl.SetUpClientGame();
+		}
+	}
+	
+	[RPC]
+	void OpponentDeckChosen() {
+		gameControl.SetUpMasterGame();
 	}
 
 	

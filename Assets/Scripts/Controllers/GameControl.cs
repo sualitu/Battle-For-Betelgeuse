@@ -17,8 +17,9 @@ public class GameControl : MonoBehaviour {
 	public Player enemyPlayer;	
 	
 	public List<Unit> units = new List<Unit>();	
-	public GameObject unitPreFab;
+	public GameObject unitPrefab;
 	public GameObject CardPrefab;
+	public GameObject DeckButtonPrefab;
 	
 	// Controllers
 	public GridControl gridControl { get; set; }
@@ -35,14 +36,59 @@ public class GameControl : MonoBehaviour {
 	
 	public static bool IsMulti = false;
 	
-	void Start () {
-		
-		InitGame();
-		InitPlayers();
-		InitControllers();	
+	List<Card> deckFromInt(int i) {
+		switch(i) {
+		case 0: return Card.GoodDeck(); 
+		case 1: return Card.NeutralDeck();
+		case 2: return Card.EvilDeck();
+		default: return Card.NeutralDeck();
+		}
+	}
+	
+	public void ChooseDeck(int i) {
+		InitPlayers(deckFromInt (i));
 		if(!IsMulti) {
 			InitSinglePlayer();
+		} else {
+			guiControl.SetButton("Waiting for opponents");
 		}
+		HideOptions();
+	}
+	
+	List<DeckOption> dos = new List<DeckOption>();
+	
+	void HideOptions() {
+		networkControl.DeckChosen();
+		dos.ForEach(Destroy);
+	}
+	
+	void ShowDeckOptions() {
+		DeckOption doZero = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
+		doZero.index = 0;
+		doZero.h = -1000;
+		doZero.title = "Good Deck";
+		
+		DeckOption doOne = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
+		doOne.index = 1;
+		doOne.h = -800;
+		doOne.title = "Neutral Deck";
+		
+		DeckOption doTwo = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
+		doTwo.index = 2;
+		doTwo.h = -600;
+		doTwo.title = "Evil Deck";
+		
+		dos.Add(doZero);
+		dos.Add(doOne);
+		dos.Add(doTwo);
+	}
+	
+	void Start () {
+		InitGame();
+		InitControllers();	
+		ShowDeckOptions();
+		InitPlayers(deckFromInt(Random.Range(0, 2)));
+		
 		LoadingScreen.hide();
 	}
 	#region Init
@@ -52,18 +98,23 @@ public class GameControl : MonoBehaviour {
 		state = State.PREGAME;
 	}
 	
-	void InitPlayers() {
-		thisPlayer = new Player(Card.RandomDeck());
+	void InitPlayers(List<Card> deck) {
+		thisPlayer = new Player(deck);
 		thisPlayer.Ai = false;
 		thisPlayer.Team = 1;
 		thisPlayer.gameControl = this;
-		enemyPlayer = new Player(Card.RandomDeck());
+		if(IsMulti) {
+			enemyPlayer = new Player(deck);
+		} else {
+			enemyPlayer = new Player(Card.AIDeck());
+		}
 		enemyPlayer.Ai = !IsMulti;
 		enemyPlayer.Team = 2;
 		enemyPlayer.gameControl = this;
 	}
 	
 	void InitSinglePlayer() {
+		guiControl.SetButton(Dictionary.startGame);
 		gameObject.AddComponent<AIControl>();
 		aiController = GetComponent<AIControl>().SetAI(enemyPlayer, this);
 		enemyPlayer.DrawHand();
@@ -125,38 +176,54 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public void EndTurnClicked () {
-		if(state >= State.START) {
-			switch(state) {
-			case State.MYTURN:
-				if(state == State.MYTURN) {
-					guiControl.SetButton(Dictionary.EnemyTurnInProgress);
-					if(IsMulti) {
-						networkControl.EndNetworkTurn();
-					}
-					thisPlayer.DeselectCard();
-					mouseControl.DeselectHex();
-					state = State.ENEMYTURN;
-					DoGameLoop();
-				}
-				break;
-			case State.START:
+		switch(state) {
+		case State.MYTURN:
+			if(state == State.MYTURN) {
+				guiControl.SetButton(Dictionary.EnemyTurnInProgress);
 				if(IsMulti) {
-					networkControl.StartNetworkGame();
-				} else {
-					StartGame();
+					networkControl.EndNetworkTurn();
 				}
-				break;
-			case State.GAMEOVER:
-				networkControl.QuitGame();
-				Application.LoadLevel (0);
-				break;
-			default:
-				break;
+				thisPlayer.DeselectCard();
+				mouseControl.DeselectHex();
+				state = State.ENEMYTURN;
+				DoGameLoop();
 			}
+			break;
+		case State.START:
+			HideOptions();
+			if(IsMulti) {
+				networkControl.StartNetworkGame();
+			} else {
+				StartGame();
+			}
+			break;
+		case State.GAMEOVER:
+			networkControl.QuitGame();
+			Application.LoadLevel (0);
+			break;
+		case State.ENEMYTURN:
+			if(!IsMulti) {
+				aiController.EndTurn();
+			}
+			break;
+		case State.PREGAME:
+			HideOptions();
+			guiControl.SetButton(Dictionary.startGame);
+			if(!IsMulti) {
+				InitSinglePlayer();
+			} 
+			break;
+		default:
+			break;
 		}
 	}
 	
 	public void StartGame() {
+		if(PhotonNetwork.isNonMasterClientInRoom) {
+			guiControl.SetButton(Dictionary.EnemyTurnInProgress);
+		} else {
+			guiControl.SetButton(Dictionary.endTurn);
+		}
 		thisPlayer.DrawHand();
 		state = State.PRETURN;
 		DoGameLoop();
@@ -188,6 +255,7 @@ public class GameControl : MonoBehaviour {
 	}
 		
 	public void SetUpClientGame() {
+		guiControl.SetButton("Waiting for opponent");
 		state = State.START;
 		cameraControl.SetPlayerCamera(false);
 	}
@@ -207,7 +275,7 @@ public class GameControl : MonoBehaviour {
 	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
 		// TODO Clean up this method to better handle multiple card types.
 		if(!typeof(SpellCard).IsAssignableFrom(card.GetType())) {
-			GameObject go = (GameObject) Instantiate(unitPreFab, Vector3.zero, Quaternion.identity);
+			GameObject go = (GameObject) Instantiate(unitPrefab, Vector3.zero, Quaternion.identity);
 			Unit unit = go.GetComponent<Unit>();
 			unit.Id = id;
 			unit.FromCard(card);

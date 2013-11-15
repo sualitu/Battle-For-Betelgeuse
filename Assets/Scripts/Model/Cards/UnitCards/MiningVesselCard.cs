@@ -1,64 +1,65 @@
 using UnityEngine;
 using System.Collections;
 
-public class CarrierCard : UnitCard
+public class MiningVesselCard : UnitCard
 {
 	public override int Attack {
 		get {
-			return 5;
+			return 1;
 		}
 	}
 
 	public override int Cost {
 		get {
-			return 10;
+			return 2;
 		}
 	}
 
 	public override int Health {
 		get {
-			return 13;
+			return 2;
 		}
 	}
 
 	public override int Movement {
 		get {
-			return 5;
+			return 4;
 		}
 	}
 
 	public override string Name {
 		get {
-			return "Carrier";
+			return "Mining Vessel";
 		}
 	}
 
 	public override string PrefabPath {
 		get {
-			return "Units/carrier";
+			return "Units/mining_vessel";
 		}
 	}
 
 	public override int id {
 		get {
-			return 5;
+			return 21;
 		}
 	}
 	
-	public CarrierCard() {
-		StandardSpecials.Add(new StandardSpecial.Boost(5));
-		setCardText();
+	public MiningVesselCard() {
+		CardText += "When this card is played, draw one card.";
 	}
 
 	public override void OnPlay (StateObject s)
 	{
-		StandardOnPlay(s);
+		s.Caster.DrawCard();
+		
 	}
+
 
 
 	public override string Projectile {
 		get {
-			return "suiciders";
+			return "missiles";
 		}
 	}
 }

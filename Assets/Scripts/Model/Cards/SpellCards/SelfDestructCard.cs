@@ -1,9 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class ReinforceCard : SpellCard {
-	
+public class SelfDestructCard : SpellCard
+{
 	public override int Attack {
 		get {
 			throw new System.NotImplementedException ();
@@ -24,7 +23,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int id {
 		get {
-			return 10;
+			return 17;
 		}
 	}
 
@@ -36,9 +35,10 @@ public class ReinforceCard : SpellCard {
 
 	public override string Name {
 		get {
-			return "Reinforce";
+			return "Self-Destruct";
 		}
 	}
+
 
 
 	public override void OnNewTurn (StateObject s)
@@ -48,18 +48,16 @@ public class ReinforceCard : SpellCard {
 
 	public override void OnPlay (StateObject s)
 	{
-		s.TargetUnit.MaxHealth += 3;
-
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
+		int damage = s.TargetUnit.CurrentHealth();
+		foreach(Hex h in s.TargetUnit.Hex.Adjacent(GameControl.gameControl.gridControl.Map)) {
+			if(h.Unit != null) {
+				h.Unit.Damage(damage);
+			}
+		}
+		
+		s.TargetUnit.Damage(int.MaxValue);		
 	}
 
-	public override MockUnit MockOnPlay (MockUnit mo)
-	{
-		mo.CurrentHealth += 3;
-		mo.MaxHealth += 3;
-		return mo;
-	}
-	
 	public override string PrefabPath {
 		get {
 			return "Effects/Heal";
@@ -71,14 +69,14 @@ public class ReinforceCard : SpellCard {
 			return "missiles";
 		}
 	}
-	
-	public override List<Hex> Targets (StateObject s)
+
+	public override System.Collections.Generic.List<Hex> Targets (StateObject s)
 	{
-		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
-		return result;
+		return s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
 	}
 	
-	public ReinforceCard() {
-		CardText += "Increases a units health by three.";
+	public SelfDestructCard() {
+		CardText += "Blows up the unit dealing damage equal to its remaining health to all adjacent units.";
 	}
 }
+

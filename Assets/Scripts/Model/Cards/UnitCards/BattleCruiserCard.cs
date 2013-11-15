@@ -55,15 +55,6 @@ public class BattleCruiserCard : UnitCard
 		StandardOnPlay(s);
 	}
 
-	public override void OnAttack ()
-	{
-		base.OnAttack ();
-	}
-
-	public override bool OnAttacked ()
-	{
-		return base.OnAttacked ();
-	}
 
 	public override string Projectile {
 		get {

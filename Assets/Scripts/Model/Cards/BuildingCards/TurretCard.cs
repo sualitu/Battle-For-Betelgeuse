@@ -34,16 +34,6 @@ public class TurretCard : BuildingCard
 		}
 	}
 
-	public override void OnAttack ()
-	{
-		base.OnAttack ();
-	}
-
-	public override bool OnAttacked ()
-	{
-		return base.OnAttacked ();
-	}
-
 	public override void OnNewTurn (StateObject s)
 	{
 		List<Unit> targets = new List<Unit>();

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ReinforceCard : SpellCard {
+public class ImproveThrustersCard : SpellCard {
 	
 	public override int Attack {
 		get {
@@ -24,7 +24,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int id {
 		get {
-			return 10;
+			return 15;
 		}
 	}
 
@@ -36,7 +36,7 @@ public class ReinforceCard : SpellCard {
 
 	public override string Name {
 		get {
-			return "Reinforce";
+			return "Improve Thrusters";
 		}
 	}
 
@@ -48,18 +48,10 @@ public class ReinforceCard : SpellCard {
 
 	public override void OnPlay (StateObject s)
 	{
-		s.TargetUnit.MaxHealth += 3;
+		s.TargetUnit.MaxMovement *= 2;
 
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
 	}
 
-	public override MockUnit MockOnPlay (MockUnit mo)
-	{
-		mo.CurrentHealth += 3;
-		mo.MaxHealth += 3;
-		return mo;
-	}
-	
 	public override string PrefabPath {
 		get {
 			return "Effects/Heal";
@@ -74,11 +66,12 @@ public class ReinforceCard : SpellCard {
 	
 	public override List<Hex> Targets (StateObject s)
 	{
-		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
+		List<Hex> result = s.Units.ConvertAll<Hex>(u => u.Hex);
 		return result;
 	}
 	
-	public ReinforceCard() {
-		CardText += "Increases a units health by three.";
+	public ImproveThrustersCard() {
+		CardText += "Doubles target unit's movement.";
 	}
+
 }

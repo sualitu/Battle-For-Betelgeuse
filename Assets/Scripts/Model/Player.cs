@@ -48,6 +48,7 @@ public class Player
 		} else if(cardsLeft == 1) {
 			card = Deck[0];
 		}
+		Deck.Remove(card);
 		Hand.Add(card);
 		if(!Ai) {
 			GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
@@ -103,6 +104,14 @@ public class Player
 			selectedGUICard = guiCard;
 			selectedCard = guiCard.Card;
 			SetTargetsForCard(guiCard.Card);
+			if(targets.Count < 1) {
+				// TODO Do this properly. This should be centralized.
+				if(GameControl.IsMulti) {
+					gameControl.networkControl.PlayNetworkCardOn(selectedCard, Base.Hex);
+				} else {
+					gameControl.PlayCardOnHex(selectedCard, Base.Hex, System.Guid.NewGuid().ToString());
+				}
+			}
 			gameControl.mouseControl.PlayModeOn = false;
 			targets.ForEach(h => h.renderer.material.color = Color.green);
 		} else {
@@ -113,10 +122,12 @@ public class Player
 	
 	public void SortCards() {
 		int c = Hand.Count;
-		List<List<int>> positions = gameControl.handControl.handPositions[c-1];
-		for(int i = 0; i < c; i++) {
-			GuiHand[i].SetPosition(positions[i][0], positions[i][1]);
-			GuiHand[i].Rotation = positions[i][2];
+		if(c > 0) {
+			List<List<int>> positions = gameControl.handControl.handPositions[c-1];
+			for(int i = 0; i < c; i++) {
+				GuiHand[i].SetPosition(positions[i][0], positions[i][1]);
+				GuiHand[i].Rotation = positions[i][2];
+			}
 		}
 	}
 }

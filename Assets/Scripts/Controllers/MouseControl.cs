@@ -48,8 +48,17 @@ public class MouseControl : MonoBehaviour {
 		}
 	}
 	
+	bool clickedLastSec = false;
+	int i = 0;
+	
 	void Update () {
-		
+		if(clickedLastSec) {
+			i++;
+			if(i > 24) {
+				clickedLastSec = false;
+				i = 0;
+			}
+		}
 		if(!gameControl.guiControl.MouseIsOverGUI()) {
 			if(Input.GetMouseButton(1)) {
 				// Right click
@@ -72,7 +81,8 @@ public class MouseControl : MonoBehaviour {
 				}
 				hex.renderer.material.color = Color.red;
 				
-				if(Input.GetMouseButton(0) && gameControl.state == State.MYTURN) {
+				if(!clickedLastSec && Input.GetMouseButton(0) && gameControl.state == State.MYTURN) {
+					clickedLastSec = true;
 					// Left click
 					if(gameControl.thisPlayer.selectedCard != null) {
 						// A card is selected

@@ -16,7 +16,7 @@ public class GUIControl : MonoBehaviour {
 	void Start() {
 		gameControl = GetComponent<GameControl>();
 		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
-		et.title = Dictionary.startGame;
+		et.title = "Random Deck";
 	}
 	
 	public void SetButton(string s) {
@@ -27,7 +27,7 @@ public class GUIControl : MonoBehaviour {
 	}
 	
 	public bool MouseIsOverGUI() {
-		return et.IsMouseOver || gameControl.thisPlayer.GuiHand.Exists(g => g.IsMouseOver);
+		return gameControl.state > State.PREGAME &&  (et.IsMouseOver || gameControl.thisPlayer.GuiHand.Exists(g => g.IsMouseOver));
 	}
 	
 	public void ShowSplashText(string s) {

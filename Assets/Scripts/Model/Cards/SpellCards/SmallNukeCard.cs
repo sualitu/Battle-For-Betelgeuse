@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ReinforceCard : SpellCard {
+public class SmallNukeCard : SpellCard {
 	
 	public override int Attack {
 		get {
@@ -12,7 +12,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int Cost {
 		get {
-			return 4;
+			return 3;
 		}
 	}
 
@@ -24,7 +24,7 @@ public class ReinforceCard : SpellCard {
 
 	public override int id {
 		get {
-			return 10;
+			return 16;
 		}
 	}
 
@@ -36,7 +36,7 @@ public class ReinforceCard : SpellCard {
 
 	public override string Name {
 		get {
-			return "Reinforce";
+			return "Small Nuke";
 		}
 	}
 
@@ -48,16 +48,20 @@ public class ReinforceCard : SpellCard {
 
 	public override void OnPlay (StateObject s)
 	{
-		s.TargetUnit.MaxHealth += 3;
+		List<Hex> targets = new List<Hex>();
+		if(s.TargetUnit != s.Caster.Base && s.TargetUnit != s.Opponent.Base) {
+			targets.Add(s.TargetUnit.Hex);
+		}
+		
+		s.TargetUnit.Hex.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(h => targets.Add(h));
+		
+		foreach(Hex h in targets) {
+			if(h.Unit != null && h.Unit != s.Caster.Base && h.Unit != s.Opponent.Base) {
+				h.Unit.Damage(2);
+			}
+		}
 
 		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
-	}
-
-	public override MockUnit MockOnPlay (MockUnit mo)
-	{
-		mo.CurrentHealth += 3;
-		mo.MaxHealth += 3;
-		return mo;
 	}
 	
 	public override string PrefabPath {
@@ -74,11 +78,12 @@ public class ReinforceCard : SpellCard {
 	
 	public override List<Hex> Targets (StateObject s)
 	{
-		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
+		List<Hex> result = s.Units.ConvertAll<Hex>(u => u.Hex);
+		
 		return result;
 	}
 	
-	public ReinforceCard() {
-		CardText += "Increases a units health by three.";
+	public SmallNukeCard() {
+		CardText += "Deals 2 damage to target unit and all adjacent units. Does not affect motherships.";
 	}
 }

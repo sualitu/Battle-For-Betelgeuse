@@ -54,7 +54,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void AttackTarget(Unit unit, int delay) {
-		Card.OnAttack();
+		Card.OnAttack(new StateObject(GameControl.gameControl.units, this, null, null));
 		if(unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
@@ -72,7 +72,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void Attacked(Unit attacker) {
-		bool defend = Card.OnAttacked();
+		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.units, this, null, null));
 		if(defend && !attacker.Card.StandardSpecials.Exists(s => s is StandardSpecial.Ranged)) {
 			Hex hex = attacker.Hex;
 			System.Object[] args = new System.Object[2];
@@ -149,6 +149,10 @@ public class Unit : MonoBehaviour {
 		
 	}
 	
+	public bool IsRanged() {
+		return Card.StandardSpecials.Exists( ss => ss.GetType() == typeof(StandardSpecial.Ranged));
+	}
+	
 	void MoveBy(List<Hex> path) {
 		Move (path.Count);
 		Hex prevHex = Hex;
@@ -196,6 +200,7 @@ public class Unit : MonoBehaviour {
 		}
 		if(CurrentHealth() < 1) {
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
+			GameControl.gameControl.units.Remove(this);
 			Destroy(gameObject);
 		}
 		if(i <= 7500) {		
