@@ -11,6 +11,7 @@ public class GridControl : MonoBehaviour
 	public TextAsset mapfile;
 	public Vector2 Base1;
 	public Vector2 Base2;
+	public Dictionary<Vector2, int> flags = new Dictionary<Vector2, int>();
 	
 	public List<List<Hex>> Map { get; set; }
 	public List<List<bool>> boolMap;
@@ -46,10 +47,12 @@ public class GridControl : MonoBehaviour
 			foreach(string s in types) {
 				int type = int.Parse(s);
 				// TODO Prettify
-				if(type == 2) {
-					Base1 = new Vector2(i, z);
-				} else if (type == 3) {
-					Base2 = new Vector2(i, z);
+				switch(type) {
+				case 2: Base1 = new Vector2(i, z); break;
+				case 3: Base2 = new Vector2(i, z); break;
+				case 4: flags.Add(new Vector2(i,z), 1); break;
+				case 5: flags.Add(new Vector2(i,z), 2); break;
+				case 6: flags.Add(new Vector2(i,z), 0); break;
 				}
 				row.Add(type > 0);
 				i++;
@@ -88,10 +91,12 @@ public class GridControl : MonoBehaviour
 			foreach(string s in types) {
 				int type = int.Parse(s);
 				// TODO Prettify
-				if(type == 2) {
-					Base1 = new Vector2(i, z);
-				} else if (type == 3) {
-					Base2 = new Vector2(i, z);
+				switch(type) {
+				case 2: Base1 = new Vector2(i, z); break;
+				case 3: Base2 = new Vector2(i, z); break;
+				case 4: flags.Add(new Vector2(i,z), 1); break;
+				case 5: flags.Add(new Vector2(i,z), 2); break;
+				case 6: flags.Add(new Vector2(i,z), 0); break;
 				}
 				row.Add(type > 0);
 				i++;

@@ -8,14 +8,14 @@ public class Unit : MonoBehaviour {
 	public int Attack { get; set; }
 	public string UnitName { get; set; }
 	public string Id { get; set; }
-	public int Team { get; set; }
+	public virtual int Team { get; set; }
 	public Hex Hex { get; set; }
 	public int MaxHealth { get; set; }
 	public int MaxMovement { get; set; }
-	public Card Card { get; set; }
+	public EntityCard Card { get; set; }
 	public List<Hex> movable = new List<Hex>();
 			
-	GameObject model;
+	protected GameObject model;
 	int i = 0;
 		
 	// Fields
@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour {
 	public Transform explosion;
 	public GameObject ProjectilePrefab;
 	
-	public void OnNewTurn(StateObject s) {
+	public virtual void OnNewTurn(StateObject s) {
 		Card.OnNewTurn(s);
 	}
 	
@@ -110,16 +110,15 @@ public class Unit : MonoBehaviour {
 				"easetype", "easeInQuad",
 				"time", 2,
 				"delay", (Random.Range (0.3f, 0.7f))*j,
-				"oncomplete", "Hit",
-				"oncompleteparams", this));
+				"oncomplete", "Hit"));
 		}
 	}
 	
 	public void PrepareMove(Hex hex) {
 		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
-		path.ForEach(h => h.renderer.material.color = Color.white);
-		if(path.Count > 0 && (hex.Unit == null || Team != hex.Unit.Team)) {
-			movable.ForEach(h => h.renderer.material.color = Color.white);
+		path.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
+		if(path.Count > 0 && (hex.Unit == null || (Team != hex.Unit.Team && hex.Unit.Team != 0))) {
+			movable.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 			movable = new List<Hex>();
 			GameControl.gameControl.mouseControl.DeselectHex();
 			if(hex.Unit == null) {				
@@ -153,6 +152,12 @@ public class Unit : MonoBehaviour {
 		return Card.StandardSpecials.Exists( ss => ss.GetType() == typeof(StandardSpecial.Ranged));
 	}
 	
+	public virtual string ConstructTooltip() {
+		return ((Team == GameControl.gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + UnitName + "\nAttack: " + Attack + 
+			"\nHealth: " + (CurrentHealth() < 1 ? "0" : (CurrentHealth()).ToString()) + " / " + MaxHealth.ToString() + 
+				"\nMovement: " + (MovementLeft() < 1 ? "0" : (MovementLeft()).ToString()) + " / " + MaxMovement.ToString();
+	}
+	
 	void MoveBy(List<Hex> path) {
 		Move (path.Count);
 		Hex prevHex = Hex;
@@ -183,7 +188,7 @@ public class Unit : MonoBehaviour {
 		gameObject.GetComponent<AudioSource>().Stop();
 	}
 	
-	public void FromCard (Card card) {
+	public virtual void FromCard (EntityCard card) {
 		Card = card;
 		model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x+card.Prefab.transform.position.x, transform.position.y+card.Prefab.transform.position.y,transform.position.z+card.Prefab.transform.position.z), card.Prefab.transform.localRotation);
 		model.transform.parent = transform;
@@ -196,7 +201,7 @@ public class Unit : MonoBehaviour {
 		
 	void Update () {
 		if(GameControl.gameControl.mouseControl.selectedUnit == this) {
-			movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.mouseControl.mouseOverHex == h ? Color.red : Color.green);	
+			movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.mouseControl.mouseOverHex == h ? Settings.MouseOverTileColour : Settings.MovableTileColour);	
 		}
 		if(CurrentHealth() < 1) {
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);

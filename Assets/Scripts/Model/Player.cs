@@ -15,6 +15,8 @@ public class Player
 	public GUICard selectedGUICard;
 	public List<Hex> targets = new List<Hex>();
 	
+	public int Points { get; set; }
+	
 	public int MaxMana = 0;
 	public int ManaSpend = 0;
 	
@@ -65,13 +67,13 @@ public class Player
 		GuiHand.Remove(guiCard);
 		guiCard.Played();
 		gameControl.mouseControl.PlayModeOn = true;
-		targets.ForEach(h => h.renderer.material.color = Color.white);
+		targets.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 		targets = new List<Hex>();
 		SortCards ();
 	}
 	
 	public void DeselectCard() {
-		targets.ForEach(h => h.renderer.material.color = Color.white);
+		targets.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 		targets = new List<Hex>();
 		selectedGUICard = null;
 		selectedCard = null;
@@ -79,19 +81,7 @@ public class Player
 	}
 	
 	public void SetTargetsForCard(Card card) {
-		targets = new List<Hex>();
-		if(!typeof(SpellCard).IsAssignableFrom(card.GetType())) {
-			Base.Hex.Adjacent(gameControl.gridControl.Map).ForEach(h => h.Adjacent(gameControl.gridControl.Map).ForEach(he => targets.Add(he)));
-			if(!typeof(UnitCard).IsAssignableFrom(card.GetType())) {
-				HashSet<Hex> hsTargets = new HashSet<Hex>(targets);
-				foreach(Hex hex in hsTargets) {
-					targets.AddRange(PathFinder.BreadthFirstSearch(hex, gameControl.gridControl.Map, 4, Team));
-				}	
-			}
-			targets.RemoveAll(h => h.Unit != null);
-		} else {
-			targets = ((SpellCard) card).Targets(new StateObject(gameControl.units, null, this, (gameControl.thisPlayer == this) ? gameControl.enemyPlayer : gameControl.thisPlayer));
-		}
+		targets = card.Targets(new StateObject(gameControl.units, null, this, (gameControl.thisPlayer == this) ? gameControl.enemyPlayer : gameControl.thisPlayer));
 	}
 	
 	public void SelectCard(GUICard guiCard) {
@@ -113,7 +103,7 @@ public class Player
 				}
 			}
 			gameControl.mouseControl.PlayModeOn = false;
-			targets.ForEach(h => h.renderer.material.color = Color.green);
+			targets.ForEach(h => h.renderer.material.color = Settings.MovableTileColour);
 		} else {
 			gameControl.audioControl.PlayErrorSound();
 			gameControl.guiControl.ShowSmallSplashText(Dictionary.NotEnoughMana);

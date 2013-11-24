@@ -16,14 +16,12 @@ public class StandardSpecial
 	}
 	
 	public class Ranged : StandardSpecial {
-		public int Range { get; set; }
-		public Ranged(int i) {
-			Range = i;
+		public Ranged() {
 		}
 		
 		public override string ToString ()
 		{
-			return "Ranged " + Range;
+			return "Ranged";
 		}
 	}
 	

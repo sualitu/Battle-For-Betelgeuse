@@ -4,21 +4,10 @@ using System.Collections.Generic;
 
 public class ReinforceCard : SpellCard {
 	
-	public override int Attack {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int Cost {
 		get {
 			return 4;
-		}
-	}
-
-	public override int Health {
-		get {
-			throw new System.NotImplementedException ();
 		}
 	}
 
@@ -28,29 +17,10 @@ public class ReinforceCard : SpellCard {
 		}
 	}
 
-	public override int Movement {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Reinforce";
 		}
-	}
-
-
-	public override void OnNewTurn (StateObject s)
-	{
-		base.OnNewTurn (s);
-	}
-
-	public override void OnPlay (StateObject s)
-	{
-		s.TargetUnit.MaxHealth += 3;
-
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
 	}
 
 	public override MockUnit MockOnPlay (MockUnit mo)
@@ -58,18 +28,6 @@ public class ReinforceCard : SpellCard {
 		mo.CurrentHealth += 3;
 		mo.MaxHealth += 3;
 		return mo;
-	}
-	
-	public override string PrefabPath {
-		get {
-			return "Effects/Heal";
-		}
-	}
-
-	public override string Projectile {
-		get {
-			return "missiles";
-		}
 	}
 	
 	public override List<Hex> Targets (StateObject s)
@@ -80,5 +38,10 @@ public class ReinforceCard : SpellCard {
 	
 	public ReinforceCard() {
 		CardText += "Increases a units health by three.";
+	}
+
+	public override void SpellEffect (StateObject s)
+	{
+		s.TargetUnit.MaxHealth += 3;
 	}
 }

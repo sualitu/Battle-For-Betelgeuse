@@ -17,7 +17,7 @@ public class MothershipCard : UnitCard
 
 	public override int Health {
 		get {
-			return 20;
+			return 100;
 		}
 	}
 

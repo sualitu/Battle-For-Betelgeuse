@@ -40,10 +40,8 @@ public class GUIControl : MonoBehaviour {
 		Instantiate (SmallTextSplashPrefab);
 	}
 	
-	string ConstructMouseOverString(Unit unit) {
-		return ((unit.Team == gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + unit.UnitName + "\nAttack: " + unit.Attack + 
-			"\nHealth: " + (unit.CurrentHealth() < 1 ? "0" : (unit.CurrentHealth()).ToString()) + " / " + unit.MaxHealth.ToString() + 
-				"\nMovement: " + (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
+	string GetMouseOverString(Unit unit) {
+		return unit.ConstructTooltip();
 	}
 	
 	void OnGUI() {
@@ -54,7 +52,7 @@ public class GUIControl : MonoBehaviour {
 				popUp.y = -(Camera.main.WorldToScreenPoint(oldHex.transform.position).y-Screen.height);
 			}
 			GUI.skin = skin;
-			GUI.Box (new Rect(popUp.x+30, popUp.y-30, 150, 100), ConstructMouseOverString(gameControl.mouseControl.mouseOverHex.Unit));
+			GUI.Box (new Rect(popUp.x+30, popUp.y-30, 150, 100), GetMouseOverString(gameControl.mouseControl.mouseOverHex.Unit));
 		}
 	}
 	

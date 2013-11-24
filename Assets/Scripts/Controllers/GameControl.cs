@@ -16,10 +16,12 @@ public class GameControl : MonoBehaviour {
 	public Player thisPlayer;
 	public Player enemyPlayer;	
 	
+	public List<Flag> flags = new List<Flag>();
 	public List<Unit> units = new List<Unit>();	
 	public GameObject unitPrefab;
 	public GameObject CardPrefab;
 	public GameObject DeckButtonPrefab;
+	public GameObject flagPrefab;
 	
 	// Controllers
 	public GridControl gridControl { get; set; }
@@ -134,6 +136,19 @@ public class GameControl : MonoBehaviour {
 	}
 	#endregion Init
 		
+	int[] pointValues = {0, 5, 20, 31, 50, 100};
+	
+	void CalculatePoints() {
+		int thisPlayerFlags = 0;
+		int enemyPlayerFlags = 0;
+		foreach(Flag flag in flags) {
+			if(flag.OwnerTeam == thisPlayer.Team) thisPlayerFlags++;
+			if(flag.OwnerTeam == enemyPlayer.Team) enemyPlayerFlags++;
+		}
+		thisPlayer.Points += pointValues[thisPlayerFlags];
+		enemyPlayer.Points += pointValues[enemyPlayerFlags];
+	}
+	
 	void DoGameLoop () {
 		guiControl.UpdateGUI();
 		switch(state) {
@@ -146,6 +161,8 @@ public class GameControl : MonoBehaviour {
 				DoGameLoop();
 				break;
 			case State.MYTURN:
+				flags.ForEach(f => f.OnNewTurn(null));
+				CalculatePoints();
 				guiControl.SetButton(Dictionary.endTurn);
 				units.RemoveAll(u => u == null);
 				foreach(Unit u in units) {
@@ -156,6 +173,8 @@ public class GameControl : MonoBehaviour {
 				}
 				break;
 			case State.ENEMYTURN:
+				flags.ForEach(f => f.OnNewTurn(null));
+				CalculatePoints();
 				units.RemoveAll(u => u == null);
 				foreach(Unit u in units) {
 					if(u.Team != thisPlayer.Team) {
@@ -175,10 +194,14 @@ public class GameControl : MonoBehaviour {
 			}
 	}
 	
+	public bool MyTurn() {
+		return state == State.MYTURN;
+	}
+	
 	public void EndTurnClicked () {
 		switch(state) {
 		case State.MYTURN:
-			if(state == State.MYTURN) {
+			if(MyTurn()) {
 				guiControl.SetButton(Dictionary.EnemyTurnInProgress);
 				if(IsMulti) {
 					networkControl.EndNetworkTurn();
@@ -240,7 +263,7 @@ public class GameControl : MonoBehaviour {
 	
 	#region SetUp
 	public void SetUpMasterGame() {
-		
+		SetUpFlags();
 		Card baseCard = new MothershipCard();
 		if(IsMulti) {
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)]);
@@ -259,6 +282,21 @@ public class GameControl : MonoBehaviour {
 		state = State.START;
 		cameraControl.SetPlayerCamera(false);
 	}
+	
+	public void SetUpFlags() {
+		foreach(Vector2 v in gridControl.flags.Keys) {
+			Hex hex = gridControl.Map[Mathf.FloorToInt(v.x)][Mathf.FloorToInt(v.y)];
+			GameObject go = (GameObject) Instantiate(flagPrefab, Vector3.zero, Quaternion.identity);
+			Flag flag = go.GetComponent<Flag>();
+			flag.Id = System.Guid.NewGuid().ToString();
+			flag.FromCard(null);
+			flag.Hex = hex;
+			hex.Unit = flag;
+			flag.OwnerTeam = gridControl.flags[v];
+			flags.Add(flag);
+			flag.transform.position = hex.transform.position;
+		}
+	}
 	#endregion SetUp
 	
 	public void EnemeyEndTurn() {
@@ -274,25 +312,26 @@ public class GameControl : MonoBehaviour {
 	
 	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
 		// TODO Clean up this method to better handle multiple card types.
-		if(!typeof(SpellCard).IsAssignableFrom(card.GetType())) {
+		if(typeof(EntityCard).IsAssignableFrom(card.GetType())) {
+			EntityCard eCard = (EntityCard) card;
 			GameObject go = (GameObject) Instantiate(unitPrefab, Vector3.zero, Quaternion.identity);
 			Unit unit = go.GetComponent<Unit>();
 			unit.Id = id;
-			unit.FromCard(card);
+			unit.FromCard(eCard);
 			unit.Hex = hex;
 			unit.transform.position = hex.transform.position;
 			hex.Unit = unit;
 			units.Add(unit);
-			unit.Team = state == State.MYTURN ? 1 : 2;
+			unit.Team = MyTurn() ? 1 : 2;
 			card.OnPlay(new StateObject(units, unit, thisPlayer, enemyPlayer));
-			if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
+			if(MyTurn() && thisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();
 			}
 			return unit;
 		} else {
-			card.OnPlay(new StateObject(units, hex.Unit, thisPlayer, enemyPlayer));
-			if(state == State.MYTURN && thisPlayer.Hand.Count != 0) {
+			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
+			if(MyTurn() && thisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();
 			}
@@ -331,10 +370,10 @@ public class GameControl : MonoBehaviour {
 			}
 		}
 		
-		if(state > State.PREGAME && thisPlayer.Base == null) {
+		if(state > State.PREGAME && (thisPlayer.Base == null || enemyPlayer.Points >= 1000)) {
 			guiControl.ShowSplashText("You lost!");
 			EndGame();
-		} else if(state > State.PREGAME && enemyPlayer.Base == null) {
+		} else if(state > State.PREGAME && (enemyPlayer.Base == null || thisPlayer.Points >= 1000)) {
 			guiControl.ShowSplashText("You won!");
 			EndGame();
 		}
@@ -343,7 +382,7 @@ public class GameControl : MonoBehaviour {
 	// TODO Do this properly
 	void OnGUI() {
 		GUI.skin = guiControl.skin;
-		GUILayout.Label ("Mana status: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana + "\nEnemy Stats:" + "\nCards: " + enemyPlayer.Hand.Count + "\nMana: " + enemyPlayer.ManaLeft() + " / " + enemyPlayer.MaxMana);
+		GUILayout.Label ("Mana status: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana + "\nEnemy Stats:" + "\nCards: " + enemyPlayer.Hand.Count + "\nMana: " + enemyPlayer.ManaLeft() + " / " + enemyPlayer.MaxMana + "\nYour points: " + thisPlayer.Points + "/1000\nEnemy points: " + enemyPlayer.Points + "/1000");
 		
 	}
 	

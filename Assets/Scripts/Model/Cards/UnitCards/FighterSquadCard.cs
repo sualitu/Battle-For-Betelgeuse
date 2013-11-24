@@ -47,7 +47,7 @@ public class FighterSquadCard : UnitCard
 	
 	public FighterSquadCard() {
 		StandardSpecials.Add(new StandardSpecial.Boost(3));
-		setCardText();
+		setStandardCardText();
 	}
 
 	public override void OnPlay (StateObject s)

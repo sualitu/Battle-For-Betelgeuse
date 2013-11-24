@@ -4,11 +4,6 @@ using System.Collections.Generic;
 
 public class MajorReconstructionCard : SpellCard {
 	
-	public override int Attack {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int Cost {
 		get {
@@ -16,11 +11,6 @@ public class MajorReconstructionCard : SpellCard {
 		}
 	}
 
-	public override int Health {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int id {
 		get {
@@ -28,34 +18,11 @@ public class MajorReconstructionCard : SpellCard {
 		}
 	}
 
-	public override int Movement {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override string Name {
 		get {
 			return "Major Reconstruction";
 		}
-	}
-
-
-	public override void OnNewTurn (StateObject s)
-	{
-		base.OnNewTurn (s);
-	}
-
-	public override void OnPlay (StateObject s)
-	{
-		if(s.TargetUnit.CurrentHealth() < s.TargetUnit.MaxHealth) {
-			if(s.TargetUnit.MaxHealth - s.TargetUnit.CurrentHealth() < 5) {
-				s.TargetUnit.Damage(-(s.TargetUnit.MaxHealth - s.TargetUnit.CurrentHealth()));
-			} else {
-				s.TargetUnit.Damage(-5);
-			}
-		}
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
 	}
 
 	public override MockUnit MockOnPlay (MockUnit mo)
@@ -69,18 +36,6 @@ public class MajorReconstructionCard : SpellCard {
 		}
 		return mo;
 	}
-
-	public override string PrefabPath {
-		get {
-			return "Effects/Heal";
-		}
-	}
-
-	public override string Projectile {
-		get {
-			return "missiles";
-		}
-	}
 	
 	public override List<Hex> Targets (StateObject s)
 	{
@@ -92,4 +47,15 @@ public class MajorReconstructionCard : SpellCard {
 		CardText += "Heals target unit or building for five.";
 	}
 
+	public override void SpellEffect (StateObject s)
+	{
+		
+		if(s.TargetUnit.CurrentHealth() < s.TargetUnit.MaxHealth) {
+			if(s.TargetUnit.MaxHealth - s.TargetUnit.CurrentHealth() < 5) {
+				s.TargetUnit.Damage(-(s.TargetUnit.MaxHealth - s.TargetUnit.CurrentHealth()));
+			} else {
+				s.TargetUnit.Damage(-5);
+			}
+		}
+	}
 }

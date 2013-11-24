@@ -3,22 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class ImproveThrustersCard : SpellCard {
-	
-	public override int Attack {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int Cost {
 		get {
 			return 4;
-		}
-	}
-
-	public override int Health {
-		get {
-			throw new System.NotImplementedException ();
 		}
 	}
 
@@ -28,39 +16,9 @@ public class ImproveThrustersCard : SpellCard {
 		}
 	}
 
-	public override int Movement {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Improve Thrusters";
-		}
-	}
-
-
-	public override void OnNewTurn (StateObject s)
-	{
-		base.OnNewTurn (s);
-	}
-
-	public override void OnPlay (StateObject s)
-	{
-		s.TargetUnit.MaxMovement *= 2;
-
-	}
-
-	public override string PrefabPath {
-		get {
-			return "Effects/Heal";
-		}
-	}
-
-	public override string Projectile {
-		get {
-			return "missiles";
 		}
 	}
 	
@@ -74,4 +32,8 @@ public class ImproveThrustersCard : SpellCard {
 		CardText += "Doubles target unit's movement.";
 	}
 
+	public override void SpellEffect (StateObject s)
+	{
+		s.TargetUnit.MaxMovement *= 2;
+	}
 }

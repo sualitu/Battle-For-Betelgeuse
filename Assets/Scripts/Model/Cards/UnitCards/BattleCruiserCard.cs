@@ -46,8 +46,8 @@ public class BattleCruiserCard : UnitCard
 	}
 	
 	public BattleCruiserCard() {
-		StandardSpecials.Add(new StandardSpecial.Ranged(2));
-		setCardText();
+		StandardSpecials.Add(new StandardSpecial.Ranged());
+		setStandardCardText();
 	}
 
 	public override void OnPlay (StateObject s)

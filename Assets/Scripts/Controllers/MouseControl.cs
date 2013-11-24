@@ -9,7 +9,6 @@ public class MouseControl : MonoBehaviour {
 	public Transform selection;
 	
 	public Unit selectedUnit;
-	Color initColor;
 	GameControl gameControl;
 	public GameObject terrain;
 	public bool PlayModeOn = true;
@@ -26,10 +25,10 @@ public class MouseControl : MonoBehaviour {
 	public void DeselectHex() {
 		if(selHex != null) {
 			if(selectedUnit != null) {
-				selectedUnit.movable.ForEach(t => t.renderer.material.color = Color.white);
+				selectedUnit.movable.ForEach(t => t.renderer.material.color = Settings.StandardTileColour);
 			}
 			selHex.IsSelected = false;
-			selHex.renderer.material.color = Color.white;
+			selHex.renderer.material.color = Settings.StandardTileColour;
 			selHex = null;
 			selectedUnit = null;
 		}
@@ -37,7 +36,7 @@ public class MouseControl : MonoBehaviour {
 	
 	public void SelectHex(Hex hex) {
 		if( selHex != null ) {
-			selHex.renderer.material.color = Color.white;
+			selHex.renderer.material.color = Settings.StandardTileColour;
 			selHex.IsSelected = false;
 		}
 		selHex = hex;
@@ -52,6 +51,7 @@ public class MouseControl : MonoBehaviour {
 	int i = 0;
 	
 	void Update () {
+		gameControl.flags.ForEach(f => f.ColourizeHexs());
 		if(clickedLastSec) {
 			i++;
 			if(i > 24) {
@@ -74,12 +74,12 @@ public class MouseControl : MonoBehaviour {
 					mouseOverHex = hex;
 				} else if (mouseOverHex.GridPosition != hex.GridPosition) {
 					if(gameControl.thisPlayer.targets.Contains(mouseOverHex))
-						mouseOverHex.renderer.material.color = Color.green;
+						mouseOverHex.renderer.material.color = Settings.MovableTileColour;
 					else
-						mouseOverHex.renderer.material.color = Color.white;
+						mouseOverHex.renderer.material.color = Settings.StandardTileColour;
 					mouseOverHex = hex;
 				}
-				hex.renderer.material.color = Color.red;
+				hex.renderer.material.color = Settings.MouseOverTileColour;
 				
 				if(!clickedLastSec && Input.GetMouseButton(0) && gameControl.state == State.MYTURN) {
 					clickedLastSec = true;

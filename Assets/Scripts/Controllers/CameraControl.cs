@@ -70,7 +70,7 @@ public class CameraControl : MonoBehaviour
 		// Keep camera within level and zoom area
 		if(GameControl.GameStarted()) {
             var desiredPosition = Camera.main.transform.position + translation;
-            if (desiredPosition.x < 15 || Settings.LevelArea < desiredPosition.x)
+            if (desiredPosition.x < 15 || Settings.LevelArea+15 < desiredPosition.x)
             {
                 translation.x = 0;
             }

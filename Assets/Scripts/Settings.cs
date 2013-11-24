@@ -9,7 +9,7 @@ public class Settings
 	//// User Settings
 	// Camera Settings
 	public static int ScrollSpeed = 25;
-	public static int LevelArea = 30;
+	public static int LevelArea = 40;
 	public static int ScrollArea = 25;
     public static int DragSpeed = 80;
 	public static int ZoomMax = 40;
@@ -21,6 +21,14 @@ public class Settings
 	// Gameplay Settings
 	public static int StartingHandCount = 3;
 	public static int MaxHandCount = 5;	
+	// Tile Colours
+	public static Color MouseOverTileColour = Color.magenta;
+	public static Color MovableTileColour = Color.cyan;
+	public static Color OwnedFlagTileColour = Color.green;
+	public static Color EnemyFlagTileColour = Color.red;
+	public static Color NeutralFlagTileColour = Color.gray;
+	public static Color StandardTileColour = Color.white;
+	public static Color SelectedTileColour = Color.magenta;
 	// Temp	
 }
 

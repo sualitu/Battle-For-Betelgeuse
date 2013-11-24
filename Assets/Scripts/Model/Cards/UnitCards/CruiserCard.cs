@@ -46,8 +46,8 @@ public class CruiserCard : UnitCard
 	}
 	
 	public CruiserCard() {
-		StandardSpecials.Add(new StandardSpecial.Ranged(1));
-		setCardText();
+		StandardSpecials.Add(new StandardSpecial.Ranged());
+		setStandardCardText();
 	}
 
 	public override void OnPlay (StateObject s)

@@ -27,7 +27,7 @@ public class AIControl : MonoBehaviour
 	/// </param>
 	int CalculateHexValue(Hex hex) {
 		if(hex.Unit != null) {
-			if(hex.Unit.Team == player.Team) {
+			if(hex.Unit.Team == player.Team || hex.Unit.Team == 0) {
 				return int.MinValue;
 			} else {
 				return int.MaxValue - hex.Unit.Attack;
@@ -73,7 +73,7 @@ public class AIControl : MonoBehaviour
 		if(i < 1) {
 			return;
 		} else {
-			List<Hex> adj = hex.Adjacent(gameControl.gridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || h.Unit.Team != player.Team));
+			List<Hex> adj = hex.Adjacent(gameControl.gridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || (h.Unit.Team != 0 && h.Unit.Team != player.Team)));
 			acc.AddRange(adj);
 			adj.ForEach(h => getMoves(h, --i, acc));
 		}
@@ -193,7 +193,7 @@ public class AIControl : MonoBehaviour
 		return SortHexList(returnList);
 	}
 	
-	int UnitCardValue(Card card) {
+	int UnitCardValue(EntityCard card) {
 		return card.Attack + card.Health/2 + card.Movement/2 + card.StandardSpecials.Count*2;
 	}
 	
@@ -215,9 +215,10 @@ public class AIControl : MonoBehaviour
 	int ValuateCard(Card card) {
 		int v = 0;
 		if(typeof(UnitCard).IsAssignableFrom(card.GetType())) {
-			v = UnitCardValue(card);
+			v = UnitCardValue((UnitCard) card);
 		} else if(typeof(BuildingCard).IsAssignableFrom(card.GetType())) {
-			v = card.Attack + card.Health + card.StandardSpecials.Count + 2;
+			// TODO Find a better way of calculating buildingvalues
+			v = UnitCardValue((BuildingCard) card);
 		} else if(typeof(SpellCard).IsAssignableFrom(card.GetType())) {
 			SpellCard sCard = (SpellCard) card;
 			player.SetTargetsForCard(card);
@@ -277,9 +278,7 @@ public class AIControl : MonoBehaviour
 	void Update() {
 		if(iTween.tweens.Count == 1 && MyTurn()) {
 			antiStuck++;
-			Debug.Log(antiStuck);
 			if(antiStuck > 1000) {
-				Debug.Log("ANTI STUCK MECHANISM ENGAGED.");
 				iTween.Stop();
 				EndTurn();
 				antiStuck = 0;

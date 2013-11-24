@@ -63,14 +63,6 @@ public class GUICard : MonoBehaviour
 		position = new Rect(x, y, width,height);
 	}
 	
-	string ConstructCardText(Card card) {
-		return card.Name + "\nAttack: " + card.Attack + 
-			" Health: " + card.Health + 
-				"\nMovement: " + card.Movement +
-				"\nCost: " + card.Cost +
-				"\n" + card.CardText;
-	}
-	
 	public void OnGUI() {
 		IsMouseOver = position.Contains(Event.current.mousePosition);
 		if(Card != null) {
@@ -102,15 +94,16 @@ public class GUICard : MonoBehaviour
 			}
 			GUI.Label (new Rect(position.x+123, position.y+13, width , height), Card.Cost.ToString());
 			GUI.Label (new Rect(position.x+35, position.y+height/2+10, width/2+30 , height), Card.CardText);
-			if(typeof(UnitCard).IsAssignableFrom(Card.GetType())) {
-				GUI.Label (new Rect(position.x+50, position.y+13, width , height), "Unit");
-				GUI.Label (new Rect(position.x+140, position.y+265, width , height), Card.Attack + " / " + Card.Health);
-				GUI.Label (new Rect(position.x+20, position.y+265, width , height), Card.Movement.ToString());
+			if(typeof(EntityCard).IsAssignableFrom(Card.GetType())) {
+				EntityCard eCard = (EntityCard) Card;
+				GUI.Label (new Rect(position.x+140, position.y+265, width , height), eCard.Attack + " / " + eCard.Health);
+				if(typeof(UnitCard).IsAssignableFrom(eCard.GetType())) {
+					GUI.Label (new Rect(position.x+50, position.y+13, width , height), "Unit");
+					GUI.Label (new Rect(position.x+20, position.y+265, width , height), ((UnitCard) Card).Movement.ToString());
+				} else {
+					GUI.Label (new Rect(position.x+50, position.y+13, width , height), "Building");
+				}
 			}	
-			if(typeof(BuildingCard).IsAssignableFrom(Card.GetType())) {
-				GUI.Label (new Rect(position.x+50, position.y+13, width , height), "Building");
-				GUI.Label (new Rect(position.x+140, position.y+265, width , height), Card.Attack + " / " + Card.Health);
-			}
 			if(typeof(SpellCard).IsAssignableFrom(Card.GetType())) {
 				GUI.Label (new Rect(position.x+50, position.y+13, width , height), "Spell");
 			}

@@ -20,7 +20,7 @@ public class PathFinder
 		
 		while(queue.Count > 0) {
 			current = queue.Dequeue();
-			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1))) {
+			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (team == 0 || (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1)))) {
 				found.Add(current);
 				current.Adjacent(map).ForEach(h => queue.Enqueue(h));
 			}
@@ -72,10 +72,10 @@ public class PathFinder
 	
 	public static IEnumerable<IEnumerable<T>> GetPowerSet<T>(List<T> list) {
 	    return from m in Enumerable.Range(0, 1 << list.Count)
-	                  select
-	                      from i in Enumerable.Range(0, list.Count)
-	                      where (m & (1 << i)) != 0
-	                      select list[i];
+               select
+               from i in Enumerable.Range(0, list.Count)
+               where (m & (1 << i)) != 0
+               select list[i];
 	}
 }
 

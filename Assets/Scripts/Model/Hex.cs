@@ -16,7 +16,7 @@ public class Hex : MonoBehaviour
 	void Update ()
 	{
 		if(IsSelected) {
-			renderer.material.color = Color.blue;
+			renderer.material.color = Settings.SelectedTileColour;
 		}
 	}
 	

@@ -5,48 +5,39 @@ using System.Collections.Generic;
 public abstract class Card
 {
 	public CardType cardType;
-	public GameObject Prefab { get; set; }
-	public GameObject ProjectilePrefab { get; set; }
+	public string CardText = "";
 	public abstract string Name { get; }
-	public abstract string Projectile { get; }
-	public abstract int Attack { get; }
-	public abstract int Health { get; }
-	public abstract int Movement { get; }
 	public abstract int Cost { get; }
 	public abstract int id { get; }
+		
 	public delegate void SpecialAbility(StateObject s);
 	public List<StandardSpecial> StandardSpecials { get; set; }
-	public abstract string PrefabPath { get; }
-	public string CardText = "";
 	
-	public virtual void OnNewTurn(StateObject s) {
-		
-	}
+	public abstract List<Hex> Targets(StateObject s);
 	
 	public virtual void OnPlay(StateObject s) {
 		StandardOnPlay(s);
-	}
+	}	
 	
-	public virtual void OnAttack(StateObject s) {
-	}
-	
-	public virtual bool OnAttacked(StateObject s) {
-		return StandardOnAttacked();
+	protected void StandardOnPlay(StateObject s) {
+		foreach(StandardSpecial ss in StandardSpecials) {
+			if(ss.GetType() == typeof(StandardSpecial.Boost)) {
+				s.TargetUnit.Move(-((StandardSpecial.Boost) ss).Amount);
+			}
+		}
 	}
 	
 	public static Hashtable cardTable = new Hashtable();
 	
 	public Card() {
-		Prefab = (GameObject) Resources.Load(PrefabPath);
-		ProjectilePrefab = (GameObject) Resources.Load("Projectiles/"+Projectile);
 		if(!cardTable.Contains(id)) {
 			Card.cardTable.Add(id, this);
 		}
 		StandardSpecials = new List<StandardSpecial>();
-		setCardText();
+		setStandardCardText();
 	}
 	
-	public void setCardText() {
+	public void setStandardCardText() {
 		foreach(StandardSpecial sp in StandardSpecials) {
 			CardText += sp.ToString() + "\n";
 		}
@@ -54,6 +45,7 @@ public abstract class Card
 	
 	public static List<Card> GoodDeck() {
 		List<Card> result = new List<Card>();
+		
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
@@ -267,22 +259,7 @@ public abstract class Card
 		return result;
 	}
 	
-	protected bool StandardOnAttacked() {
-		foreach(StandardSpecial ss in StandardSpecials) {
-			if(ss.GetType() == typeof(StandardSpecial.Defenseless)) {
-				return false;
-			}
-		}
-		return true;
-	}
 	
-	protected void StandardOnPlay(StateObject s) {
-		foreach(StandardSpecial ss in StandardSpecials) {
-			if(ss.GetType() == typeof(StandardSpecial.Boost)) {
-				s.TargetUnit.Move(-((StandardSpecial.Boost) ss).Amount);
-			}
-		}
-	}
 }
 
 public enum CardType { UNIT, BUILDING, SPELL }

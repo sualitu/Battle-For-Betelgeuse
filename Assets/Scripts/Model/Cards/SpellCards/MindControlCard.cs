@@ -3,11 +3,6 @@ using System.Collections;
 
 public class MindControlCard : SpellCard
 {
-	public override int Attack {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int Cost {
 		get {
@@ -15,51 +10,10 @@ public class MindControlCard : SpellCard
 		}
 	}
 
-	public override int Health {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int id {
 		get {
 			return 12;
-		}
-	}
-
-	public override int Movement {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
-
-	public override string Name {
-		get {
-			return "Mind Control";
-		}
-	}
-
-	
-
-	public override void OnNewTurn (StateObject s)
-	{
-		base.OnNewTurn (s);
-	}
-
-	public override void OnPlay (StateObject s)
-	{
-		s.TargetUnit.Team = s.Caster.Team;
-	}
-
-	public override string PrefabPath {
-		get {
-			return "Effects/Heal";
-		}
-	}
-
-	public override string Projectile {
-		get {
-			return "missiles";
 		}
 	}
 
@@ -71,6 +25,17 @@ public class MindControlCard : SpellCard
 	
 	public MindControlCard() {
 		CardText += "Take control over an enemy unit or building.";
+	}
+
+	public override string Name {
+		get {
+			return "Mind Control";
+		}
+	}
+
+	public override void SpellEffect (StateObject s)
+	{
+		s.TargetUnit.Team = s.Caster.Team;
 	}
 }
 

@@ -47,7 +47,7 @@ public class CarrierCard : UnitCard
 	
 	public CarrierCard() {
 		StandardSpecials.Add(new StandardSpecial.Boost(5));
-		setCardText();
+		setStandardCardText();
 	}
 
 	public override void OnPlay (StateObject s)

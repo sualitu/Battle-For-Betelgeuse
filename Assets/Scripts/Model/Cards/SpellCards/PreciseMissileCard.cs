@@ -3,22 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class PreciseMissileCard : SpellCard {
-	
-	public override int Attack {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
 
 	public override int Cost {
 		get {
 			return 2;
-		}
-	}
-
-	public override int Health {
-		get {
-			throw new System.NotImplementedException ();
 		}
 	}
 
@@ -28,46 +16,16 @@ public class PreciseMissileCard : SpellCard {
 		}
 	}
 
-	public override int Movement {
-		get {
-			throw new System.NotImplementedException ();
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Precise Missile";
 		}
 	}
 
-
-	public override void OnNewTurn (StateObject s)
-	{
-		base.OnNewTurn (s);
-	}
-
-	public override void OnPlay (StateObject s)
-	{
-		s.TargetUnit.Damage(3);
-
-		Object.Instantiate(Prefab, s.TargetUnit.transform.position, Quaternion.identity);
-	}
-
 	public override MockUnit MockOnPlay (MockUnit mo)
 	{
 		mo.CurrentHealth -= 3;
 		return mo;
-	}
-	public override string PrefabPath {
-		get {
-			return "Effects/Heal";
-		}
-	}
-
-	public override string Projectile {
-		get {
-			return "missiles";
-		}
 	}
 	
 	public override List<Hex> Targets (StateObject s)
@@ -79,5 +37,31 @@ public class PreciseMissileCard : SpellCard {
 	
 	public PreciseMissileCard() {
 		CardText += "Deals 3 damage to target unit or building.";
+	}
+
+	public override void SpellAnimation (StateObject s)
+	{	
+		Hex hex = s.TargetUnit.Hex;
+		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
+		Vector3 targetPos = new Vector3(hex.transform.position.x+Random.Range (-0.5f, 0.5f), hex.transform.position.y+1f, hex.transform.position.z+Random.Range (-0.5f, 0.5f));
+		Vector3[] t = new Vector3[2];
+		t[0] = new Vector3(targetPos.x+s.Caster.Base.transform.localPosition.x/2,s.Caster.Base.Hex.Distance(s.TargetUnit.Hex),targetPos.z+s.Caster.Base.transform.localPosition.z/2);
+		t[1] = targetPos;
+		missile.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+		System.Object[] args = new System.Object[2];
+		args[0] = missile;
+		args[1] = s;
+		DoDelayedEffect(s, s.Caster.Base.Hex.Distance(s.TargetUnit.Hex)/2);
+		iTween.MoveTo(missile.gameObject, iTween.Hash ("path", t,
+			"islocal", true,
+			"orienttopath", true,
+			"easetype", "easeInQuad",
+			"time", s.Caster.Base.Hex.Distance(s.TargetUnit.Hex)/2,
+			"oncomplete", "Hit"));
+	}
+	
+	public override void SpellEffect (StateObject s)
+	{
+		s.TargetUnit.Damage(3);
 	}
 }
