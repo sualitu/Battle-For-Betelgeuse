@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Flag : Unit
 {
+	public string prefabString = "";
 	List<Hex> hexs;
 	public override int Team {
 		get {
@@ -17,11 +18,19 @@ public class Flag : Unit
 	{
 	}
 	
-	
-	
 	// Update is called once per frame
 	void Update ()
 	{
+		Hex.renderer.material.color = Color.clear;
+		if(i <= 7500) {		
+			transform.position = new Vector3(transform.position.x, transform.position.y + (i < 3750 ? 0.000001f*(1+i) : 0.000001f*(7501-i)) , transform.position.z);
+			i += 100;
+		} else if (i <= 15000) {
+			transform.position = new Vector3(transform.position.x, transform.position.y - (i < 11250 ? 0.000001f*(1+i-7500) : 0.000001f*(15001-i)), transform.position.z);
+			i += 100;
+		} else {
+			i = 0;
+		}
 	}
 	
 	public void ColourizeHexs() {
@@ -54,7 +63,7 @@ public class Flag : Unit
 	}
 	
 	public override void FromCard(EntityCard card) {
-		model = (GameObject) Instantiate((GameObject) Resources.Load("Units/cow"));
+		model = (GameObject) Instantiate((GameObject) Resources.Load(prefabString));
 		model.transform.parent = transform;
 	}
 

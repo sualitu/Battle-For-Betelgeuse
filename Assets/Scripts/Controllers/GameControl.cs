@@ -284,10 +284,12 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public void SetUpFlags() {
+		int i = 1;
 		foreach(Vector2 v in gridControl.flags.Keys) {
 			Hex hex = gridControl.Map[Mathf.FloorToInt(v.x)][Mathf.FloorToInt(v.y)];
 			GameObject go = (GameObject) Instantiate(flagPrefab, Vector3.zero, Quaternion.identity);
 			Flag flag = go.GetComponent<Flag>();
+			flag.prefabString = "Buildings/Flag" + i;
 			flag.Id = System.Guid.NewGuid().ToString();
 			flag.FromCard(null);
 			flag.Hex = hex;
@@ -295,6 +297,7 @@ public class GameControl : MonoBehaviour {
 			flag.OwnerTeam = gridControl.flags[v];
 			flags.Add(flag);
 			flag.transform.position = hex.transform.position;
+			i++;
 		}
 	}
 	#endregion SetUp

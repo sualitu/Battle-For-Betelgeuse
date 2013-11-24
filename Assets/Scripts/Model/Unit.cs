@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour {
 	public List<Hex> movable = new List<Hex>();
 			
 	protected GameObject model;
-	int i = 0;
+	protected int i = 0;
 		
 	// Fields
 	private int damageTaken;

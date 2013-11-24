@@ -22,13 +22,13 @@ public class Settings
 	public static int StartingHandCount = 3;
 	public static int MaxHandCount = 5;	
 	// Tile Colours
-	public static Color MouseOverTileColour = Color.magenta;
-	public static Color MovableTileColour = Color.cyan;
-	public static Color OwnedFlagTileColour = Color.green;
-	public static Color EnemyFlagTileColour = Color.red;
+	public static Color MouseOverTileColour = Color.red;
+	public static Color MovableTileColour = Color.green;
+	public static Color OwnedFlagTileColour = Color.cyan;
+	public static Color EnemyFlagTileColour = Color.magenta;
 	public static Color NeutralFlagTileColour = Color.gray;
 	public static Color StandardTileColour = Color.white;
-	public static Color SelectedTileColour = Color.magenta;
+	public static Color SelectedTileColour = Color.red;
 	// Temp	
 }
 
