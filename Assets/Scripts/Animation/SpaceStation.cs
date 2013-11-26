@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class spacestation : MonoBehaviour {
+public class SpaceStation : MonoBehaviour {
 
 	Transform trans;
 	float rot;
@@ -14,8 +14,7 @@ public class spacestation : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {	
 		trans.RotateAround(center, new Vector3(0.2f,1f,0.2f), rot*0.01f);
 	}
 }

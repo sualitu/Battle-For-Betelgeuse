@@ -259,7 +259,30 @@ public abstract class Card
 		return result;
 	}
 	
-	
+	public static void InitCards() {
+		new TurretCard();
+		new FaultyLaunchersCard();
+		new FaultyThrustersCard();
+		new FinalSacrificeCard();
+		new GreatNukeCard();
+		new ImproveThrustersCard();
+		new MadScientistCard();
+		new MajorReconstructionCard();
+		new MindControlCard();
+		new MinorReconstructionCard();
+		new PreciseMissileCard();
+		new ReinforceCard();
+		new SelfDestructCard();
+		new SmallNukeCard();
+		new BattleCruiserCard();
+		new CarrierCard();
+		new CruiserCard();
+		new DestroyerCard();
+		new ExplorerCard();
+		new FighterSquadCard();
+		new MiningVesselCard();
+		new SaboteurCard();
+	}	
 }
 
 public enum CardType { UNIT, BUILDING, SPELL }

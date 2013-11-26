@@ -110,7 +110,7 @@ public class GridControl : MonoBehaviour
 	
 	// Inspired by FX_HexGrid
 	void GenerateMap() {
-		boolMap = BuildBoolMap();
+		boolMap = BuildFromExtFile(); //BuildBoolMap();
 		Map = new List<List<Hex>>();
 		for (int k = 0; k < MapSize.x; k++){
 			List<Hex> row = new List<Hex>();

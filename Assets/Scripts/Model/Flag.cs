@@ -37,16 +37,20 @@ public class Flag : Unit
 		if(hexs != null) {
 			foreach(Hex h in hexs) {
 				Color c;
-				switch(OwnerTeam) {
-				case 1:
-					c = Settings.OwnedFlagTileColour;
-					break;
-				case 2:
-					c = Settings.EnemyFlagTileColour;
-					break;
-				default:
-					c = Settings.NeutralFlagTileColour;
-					break;
+				if(GameControl.gameControl.thisPlayer.targets.Contains(h)) {
+					c = Settings.MovableTileColour;
+				} else {
+					switch(OwnerTeam) {
+					case 1:
+						c = Settings.OwnedFlagTileColour;
+						break;
+					case 2:
+						c = Settings.EnemyFlagTileColour;
+						break;
+					default:
+						c = Settings.NeutralFlagTileColour;
+						break;
+					}
 				}
 				h.renderer.material.color = c;
 			}
@@ -60,6 +64,10 @@ public class Flag : Unit
 			}
 			return hexs;
 		}
+	}
+
+	public void SwapOwner() {
+		if(OwnerTeam != 0) OwnerTeam = OwnerTeam == 1 ? 2 : 1;
 	}
 	
 	public override void FromCard(EntityCard card) {

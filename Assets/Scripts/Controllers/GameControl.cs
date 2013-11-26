@@ -90,7 +90,7 @@ public class GameControl : MonoBehaviour {
 		InitControllers();	
 		ShowDeckOptions();
 		InitPlayers(deckFromInt(Random.Range(0, 2)));
-		
+		SetUpFlags();
 		LoadingScreen.hide();
 	}
 	#region Init
@@ -98,6 +98,7 @@ public class GameControl : MonoBehaviour {
 	void InitGame() {
 		new MothershipCard();
 		state = State.PREGAME;
+		Card.InitCards();
 	}
 	
 	void InitPlayers(List<Card> deck) {
@@ -113,6 +114,7 @@ public class GameControl : MonoBehaviour {
 		enemyPlayer.Ai = !IsMulti;
 		enemyPlayer.Team = 2;
 		enemyPlayer.gameControl = this;
+		
 	}
 	
 	void InitSinglePlayer() {
@@ -263,7 +265,6 @@ public class GameControl : MonoBehaviour {
 	
 	#region SetUp
 	public void SetUpMasterGame() {
-		SetUpFlags();
 		Card baseCard = new MothershipCard();
 		if(IsMulti) {
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)]);
@@ -278,6 +279,7 @@ public class GameControl : MonoBehaviour {
 	}
 		
 	public void SetUpClientGame() {
+		flags.ForEach(f => f.SwapOwner());
 		guiControl.SetButton("Waiting for opponent");
 		state = State.START;
 		cameraControl.SetPlayerCamera(false);
@@ -326,7 +328,7 @@ public class GameControl : MonoBehaviour {
 			hex.Unit = unit;
 			units.Add(unit);
 			unit.Team = MyTurn() ? 1 : 2;
-			card.OnPlay(new StateObject(units, unit, thisPlayer, enemyPlayer));
+			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			if(MyTurn() && thisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();

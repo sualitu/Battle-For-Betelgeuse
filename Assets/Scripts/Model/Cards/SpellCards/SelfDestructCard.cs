@@ -29,6 +29,12 @@ public class SelfDestructCard : SpellCard
 	public SelfDestructCard() {
 		CardText += "Blows up the unit dealing damage equal to its remaining health to all adjacent units.";
 	}
+	
+	public override void SpellAnimation (StateObject s)
+	{
+		Object.Instantiate((GameObject) Resources.Load("Effects/Nuke"), s.TargetUnit.Hex.collider.bounds.center, Quaternion.identity);
+		DoDelayedEffect(s, 0.5f);
+	}
 
 	public override void SpellEffect (StateObject s)
 	{

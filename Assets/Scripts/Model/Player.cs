@@ -52,7 +52,7 @@ public class Player
 		}
 		Deck.Remove(card);
 		Hand.Add(card);
-		if(!Ai) {
+		if(Team == 1) {
 			GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
 			guiCard.SetInfo(card, this);
 			GuiHand.Add(guiCard);

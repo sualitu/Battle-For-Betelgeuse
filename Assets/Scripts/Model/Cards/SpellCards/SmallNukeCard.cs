@@ -7,7 +7,7 @@ public class SmallNukeCard : SpellCard {
 
 	public override int Cost {
 		get {
-			return 3;
+			return 4;
 		}
 	}
 
@@ -32,6 +32,16 @@ public class SmallNukeCard : SpellCard {
 	
 	public SmallNukeCard() {
 		CardText += "Deals 2 damage to target unit and all adjacent units. Does not affect motherships.";
+	}
+	
+	public override void SpellAnimation (StateObject s)
+	{
+		Hex hex = s.TargetUnit.Hex;
+		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
+		Nuke nuke = missile.AddComponent<Nuke>();
+		missile.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
+		nuke.Launch(hex);
+		DoDelayedEffect(s, 10);
 	}
 
 	public override void SpellEffect (StateObject s)
