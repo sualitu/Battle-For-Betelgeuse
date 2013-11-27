@@ -20,7 +20,7 @@ public class Settings
     public static int PanAngleMax = 60;
 	// Gameplay Settings
 	public static int StartingHandCount = 3;
-	public static int MaxHandCount = 5;	
+	public static int MaxHandCount = 7;	
 	// Tile Colours
 	public static Color MouseOverTileColour = Color.red;
 	public static Color MovableTileColour = Color.green;

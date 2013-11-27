@@ -70,7 +70,7 @@ public class GUICard : MonoBehaviour
 			
 			if(position.Contains(Event.current.mousePosition)) {
 				position = iTween.RectUpdate(position, new Rect (x,y-height*1/2,width,height), 4);
-				r = iTween.FloatUpdate(r,Rotation,1);
+				r = iTween.FloatUpdate(r,0,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
 				GUI.depth = 0;
 				

@@ -112,12 +112,13 @@ public class Player
 	
 	public void SortCards() {
 		int c = Hand.Count;
-		if(c > 0) {
-			List<List<int>> positions = gameControl.handControl.handPositions[c-1];
-			for(int i = 0; i < c; i++) {
-				GuiHand[i].SetPosition(positions[i][0], positions[i][1]);
-				GuiHand[i].Rotation = positions[i][2];
-			}
+		int x = Mathf.FloorToInt(Screen.width/2-100);
+		int y = Mathf.FloorToInt(Screen.height-200);
+		bool oddCount = c % 2 == 0;
+		for(int i = 0; i < c; i++) {
+			float relativePosition = (i - (c/2) + (oddCount ? 0.5f : 0f));
+			GuiHand[i].SetPosition(x+Mathf.FloorToInt(relativePosition*(150-(c*7))), y);
+			GuiHand[i].Rotation = Mathf.FloorToInt(relativePosition*(12-c));
 		}
 	}
 }

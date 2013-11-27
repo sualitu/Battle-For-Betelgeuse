@@ -6,7 +6,6 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CombatControl))]
 [RequireComponent(typeof(MouseControl))]
 [RequireComponent(typeof(GridControl))]
-[RequireComponent(typeof(HandControl))]
 [RequireComponent(typeof(NetworkControl))]
 public class GameControl : MonoBehaviour {
 	
@@ -28,7 +27,6 @@ public class GameControl : MonoBehaviour {
 	public GUIControl guiControl { get; set; }
 	public CombatControl combatControl { get; set; }
 	public MouseControl mouseControl { get; set; }
-	public HandControl handControl {get; set; }
 	public NetworkControl networkControl { get; set; }
 	public AudioControl audioControl { get; set; }
 	public CameraControl cameraControl { get; set; }
@@ -131,7 +129,6 @@ public class GameControl : MonoBehaviour {
 		guiControl = GetComponent<GUIControl>();
 		combatControl = GetComponent<CombatControl>();
 		mouseControl = GetComponent<MouseControl>();
-		handControl = GetComponent<HandControl>();	
 		networkControl = GetComponent<NetworkControl>();
 		audioControl = GetComponent<AudioControl>();
 		cameraControl = GetComponent<CameraControl>();
@@ -328,11 +325,11 @@ public class GameControl : MonoBehaviour {
 			hex.Unit = unit;
 			units.Add(unit);
 			unit.Team = MyTurn() ? 1 : 2;
-			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			if(MyTurn() && thisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();
 			}
+			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			return unit;
 		} else {
 			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
