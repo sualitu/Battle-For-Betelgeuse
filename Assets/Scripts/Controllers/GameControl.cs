@@ -372,10 +372,10 @@ public class GameControl : MonoBehaviour {
 			}
 		}
 		
-		if(state > State.PREGAME && (thisPlayer.Base == null || enemyPlayer.Points >= 1000)) {
+		if(state > State.PREGAME && (enemyPlayer.Points >= 1000)) {
 			guiControl.ShowSplashText("You lost!");
 			EndGame();
-		} else if(state > State.PREGAME && (enemyPlayer.Base == null || thisPlayer.Points >= 1000)) {
+		} else if(state > State.PREGAME && (thisPlayer.Points >= 1000)) {
 			guiControl.ShowSplashText("You won!");
 			EndGame();
 		}

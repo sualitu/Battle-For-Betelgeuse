@@ -12,50 +12,34 @@
 	"buffers":
 	[
 		{
-			"file": "Controllers/GameControl.cs",
-			"settings":
-			{
-				"buffer_size": 11666,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Model/Cards/UnitCards/MiningVesselCard.cs",
-			"settings":
-			{
-				"buffer_size": 790,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Model/Flag.cs",
-			"settings":
-			{
-				"buffer_size": 2635,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Model/Card.cs",
-			"settings":
-			{
-				"buffer_size": 9177,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "Model/Player.cs",
 			"settings":
 			{
-				"buffer_size": 3311,
+				"buffer_size": 3450,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Model/Cards/SpellCards/FaultyThrustersCard.cs",
+			"file": "Settings.cs",
 			"settings":
 			{
-				"buffer_size": 634,
+				"buffer_size": 1117,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "GUI/GUICard.cs",
+			"settings":
+			{
+				"buffer_size": 2960,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Controllers/GameControl.cs",
+			"settings":
+			{
+				"buffer_size": 11480,
 				"line_ending": "Unix"
 			}
 		}
@@ -104,9 +88,16 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Animation/Glow.shader",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/HandControl.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/GUI/GUICard.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Card.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Player.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GameControl.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/SpellCards/FaultyThrustersCard.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Flag.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/SpellCards/MindControlCard.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GridControl.cs",
-		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GameControl.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/CameraControl.cs",
 		"/C/Users/Sune/Dropbox/Best Game Clearly/Exports/Windows/map.txt",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/map.txt",
@@ -153,6 +144,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"x",
 			"photonnetwork",
 			"^(.*)$",
 			"tiger",
@@ -176,24 +168,24 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Controllers/GameControl.cs",
+					"file": "Model/Player.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11666,
+						"buffer_size": 3450,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8025,
-								8025
+								3164,
+								3164
 							]
 						],
 						"settings":
@@ -202,138 +194,26 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4515.0,
+						"translation.y": 1226.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Model/Cards/UnitCards/MiningVesselCard.cs",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 790,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								687,
-								687
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 225.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Model/Flag.cs",
+					"file": "Settings.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2635,
+						"buffer_size": 1117,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1565,
-								1565
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 495.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Model/Card.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9177,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9122,
-								9122
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3398.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "Model/Player.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3311,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2938,
-								2938
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C#/C#.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1406.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "Model/Cards/SpellCards/FaultyThrustersCard.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 634,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
+								698,
+								698
 							]
 						],
 						"settings":
@@ -343,6 +223,62 @@
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "GUI/GUICard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2960,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1713,
+								1713
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 938.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Controllers/GameControl.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11480,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10755,
+								10755
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5164.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -397,16 +333,40 @@
 		"selected_items":
 		[
 			[
-				"fault",
-				"Model\\Cards\\SpellCards\\FaultyThrustersCard.cs"
+				"glow",
+				"Animation\\Glow.shader"
+			],
+			[
+				"guica",
+				"GUI\\GUICard.cs"
+			],
+			[
+				"settings",
+				"Settings.cs"
+			],
+			[
+				"handcon",
+				"Controllers\\HandControl.cs"
 			],
 			[
 				"player",
 				"Model\\Player.cs"
 			],
 			[
+				"guicard",
+				"GUI\\GUICard.cs"
+			],
+			[
 				"card",
 				"Model\\Card.cs"
+			],
+			[
+				"play",
+				"Model\\Player.cs"
+			],
+			[
+				"fault",
+				"Model\\Cards\\SpellCards\\FaultyThrustersCard.cs"
 			],
 			[
 				"flag",
