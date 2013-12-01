@@ -6,8 +6,8 @@ public class EndTurn : MonoBehaviour {
 	public string title = "End turn";
 	public GUISkin skin = null;
 	public Rect position;
-	int x = 175;
-	int y = 75;
+	int x = 154;
+	int y = 55;
 	GameControl gameControl;
 	public bool IsMouseOver = false;
 	

@@ -4,6 +4,26 @@
 		"selected_items":
 		[
 			[
+				"ALP",
+				"Alpha8	TextureFormat.*"
+			],
+			[
+				"Log",
+				"Log	Debug.*(message, context)"
+			],
+			[
+				"but",
+				"button	GUISkin.*"
+			],
+			[
+				"selUnitLba",
+				"selUnitLabelObject"
+			],
+			[
+				"HideSElUnit",
+				"HideSelUnitInfo"
+			],
+			[
 				"Faulty",
 				"FaultyThrustersCard"
 			]
@@ -11,6 +31,38 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "GUI/GUICard.cs",
+			"settings":
+			{
+				"buffer_size": 5899,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Model/Card.cs",
+			"settings":
+			{
+				"buffer_size": 9245,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Model/Cards/UnitCard.cs",
+			"settings":
+			{
+				"buffer_size": 518,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Model/Cards/EntityCard.cs",
+			"settings":
+			{
+				"buffer_size": 976,
+				"line_ending": "Unix"
+			}
+		},
 		{
 			"file": "Model/Player.cs",
 			"settings":
@@ -20,26 +72,34 @@
 			}
 		},
 		{
-			"file": "Settings.cs",
+			"file": "Model/Cards/UnitCards/CruiserCard.cs",
 			"settings":
 			{
-				"buffer_size": 1117,
+				"buffer_size": 871,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "GUI/GUICard.cs",
+			"file": "Model/Cards/UnitCards/BattleCruiserCard.cs",
 			"settings":
 			{
-				"buffer_size": 2960,
+				"buffer_size": 885,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Controllers/GameControl.cs",
+			"file": "Model/Cards/SpellCards/GreatNukeCard.cs",
 			"settings":
 			{
-				"buffer_size": 11480,
+				"buffer_size": 1532,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Model/Cards/UnitCards/CarrierCard.cs",
+			"settings":
+			{
+				"buffer_size": 854,
 				"line_ending": "Unix"
 			}
 		}
@@ -88,12 +148,19 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/EntityCard.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Card.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/MouseControl.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GUIControl.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Player.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/GUI/GUICard.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Settings.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GameControl.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/GUI/EndTurn.cs",
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/GUI/DeckOption.cs",
+		"/C/Users/Sune/Pictures/Game Dev/brushes/LeiylaTech7/Read Me.txt",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Animation/Glow.shader",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/HandControl.cs",
-		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/GUI/GUICard.cs",
-		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Card.cs",
-		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Player.cs",
-		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Controllers/GameControl.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/SpellCards/FaultyThrustersCard.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Flag.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/SpellCards/MindControlCard.cs",
@@ -144,6 +211,23 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"image",
+			"cost",
+			"costW",
+			"attack",
+			"Attack",
+			"attack",
+			"health",
+			"Health",
+			"health",
+			"unitCard",
+			" texture",
+			"Texture",
+			"texture",
+			"Label",
+			"selUnitValues",
+			"selUnitLabels",
+			"y+5",
 			"x",
 			"photonnetwork",
 			"^(.*)$",
@@ -168,24 +252,24 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 8,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "Model/Player.cs",
+					"file": "GUI/GUICard.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3450,
+						"buffer_size": 5899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3164,
-								3164
+								507,
+								507
 							]
 						],
 						"settings":
@@ -194,26 +278,26 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1226.0,
+						"translation.y": 225.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Settings.cs",
+					"file": "Model/Card.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1117,
+						"buffer_size": 9245,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								698,
-								698
+								574,
+								574
 							]
 						],
 						"settings":
@@ -229,19 +313,19 @@
 				},
 				{
 					"buffer": 2,
-					"file": "GUI/GUICard.cs",
+					"file": "Model/Cards/UnitCard.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2960,
+						"buffer_size": 518,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1713,
-								1713
+								0,
+								0
 							]
 						],
 						"settings":
@@ -250,26 +334,26 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 938.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "Controllers/GameControl.cs",
+					"file": "Model/Cards/EntityCard.cs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11480,
+						"buffer_size": 976,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10755,
-								10755
+								0,
+								0
 							]
 						],
 						"settings":
@@ -278,7 +362,147 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5164.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Model/Player.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3450,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2965,
+								2965
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Unity3D/UnityC#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1350.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "Model/Cards/UnitCards/CruiserCard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 871,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								593,
+								593
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "Model/Cards/UnitCards/BattleCruiserCard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 885,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								324,
+								324
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "Model/Cards/SpellCards/GreatNukeCard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1532,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								305,
+								305
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "Model/Cards/UnitCards/CarrierCard.cs",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 854,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								585,
+								585
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C#/C#.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -333,6 +557,62 @@
 		"selected_items":
 		[
 			[
+				"carrier",
+				"Model\\Cards\\UnitCards\\CarrierCard.cs"
+			],
+			[
+				"greatnuk",
+				"Model\\Cards\\SpellCards\\GreatNukeCard.cs"
+			],
+			[
+				"battle",
+				"Model\\Cards\\UnitCards\\BattleCruiserCard.cs"
+			],
+			[
+				"cruis",
+				"Model\\Cards\\UnitCards\\CruiserCard.cs"
+			],
+			[
+				"player",
+				"Model\\Player.cs"
+			],
+			[
+				"entity",
+				"Model\\Cards\\EntityCard.cs"
+			],
+			[
+				"unitca",
+				"Model\\Cards\\UnitCard.cs"
+			],
+			[
+				"card",
+				"Model\\Card.cs"
+			],
+			[
+				"guicar",
+				"GUI\\GUICard.cs"
+			],
+			[
+				"guicontrol",
+				"Controllers\\GUIControl.cs"
+			],
+			[
+				"mousec",
+				"Controllers\\MouseControl.cs"
+			],
+			[
+				"guicont",
+				"Controllers\\GUIControl.cs"
+			],
+			[
+				"decko",
+				"GUI\\DeckOption.cs"
+			],
+			[
+				"endtu",
+				"GUI\\EndTurn.cs"
+			],
+			[
 				"glow",
 				"Animation\\Glow.shader"
 			],
@@ -349,16 +629,8 @@
 				"Controllers\\HandControl.cs"
 			],
 			[
-				"player",
-				"Model\\Player.cs"
-			],
-			[
 				"guicard",
 				"GUI\\GUICard.cs"
-			],
-			[
-				"card",
-				"Model\\Card.cs"
 			],
 			[
 				"play",

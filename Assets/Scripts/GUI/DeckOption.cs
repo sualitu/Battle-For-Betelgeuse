@@ -6,8 +6,8 @@ public class DeckOption : MonoBehaviour
 	public string title = "Deck";
 	public GUISkin skin = null;
 	public Rect position;
-	int x = 175;
-	int y = 75;
+	int x = 154;
+	int y = 55;
 	public int h = 0;
 	GameControl gameControl;
 	public int index = 0;

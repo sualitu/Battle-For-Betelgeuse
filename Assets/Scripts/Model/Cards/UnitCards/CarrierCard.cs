@@ -44,6 +44,12 @@ public class CarrierCard : UnitCard
 			return 5;
 		}
 	}
+
+	public override string Image {
+		get {
+			return "carrier";
+		}
+	}
 	
 	public CarrierCard() {
 		StandardSpecials.Add(new StandardSpecial.Boost(5));

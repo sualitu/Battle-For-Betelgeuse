@@ -18,6 +18,12 @@ public abstract class Card
 	public virtual void OnPlay(StateObject s) {
 		StandardOnPlay(s);
 	}	
+
+	public virtual string Image {
+		get {
+			return "Unknown";
+		}
+	}
 	
 	protected void StandardOnPlay(StateObject s) {
 		foreach(StandardSpecial ss in StandardSpecials) {

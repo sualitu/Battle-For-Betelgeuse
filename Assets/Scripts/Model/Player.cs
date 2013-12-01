@@ -117,7 +117,7 @@ public class Player
 		bool oddCount = c % 2 == 0;
 		for(int i = 0; i < c; i++) {
 			float relativePosition = (i - (c/2) + (oddCount ? 0.5f : 0f));
-			GuiHand[i].SetPosition(x+Mathf.FloorToInt(relativePosition*(150-(c*7))), y);
+			GuiHand[i].SetPosition(x+Mathf.FloorToInt(relativePosition*(175-(c*7))), y);
 			GuiHand[i].Rotation = Mathf.FloorToInt(relativePosition*(12-c));
 		}
 	}

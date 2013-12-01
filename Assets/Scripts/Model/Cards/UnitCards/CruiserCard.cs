@@ -44,6 +44,12 @@ public class CruiserCard : UnitCard
 			return 4;
 		}
 	}
+
+	public override string Image {
+		get {
+			return "cruiser";
+		}
+	}
 	
 	public CruiserCard() {
 		StandardSpecials.Add(new StandardSpecial.Ranged());

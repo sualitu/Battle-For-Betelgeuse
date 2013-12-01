@@ -39,6 +39,12 @@ public class BattleCruiserCard : UnitCard
 		}
 	}
 
+	public override string Image {
+		get {
+			return "battlecruiser";
+		}
+	}
+
 	public override int id {
 		get {
 			return 7;

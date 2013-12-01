@@ -30,6 +30,12 @@ public class GreatNukeCard : SpellCard {
 		
 		return result;
 	}
+
+	public override string Image {
+		get {
+			return "bignuke";
+		}
+	}
 	
 	public GreatNukeCard() {
 		CardText += "Deals five damage to target unit and all unist within 2 tiles. Does not affect motherships.";
