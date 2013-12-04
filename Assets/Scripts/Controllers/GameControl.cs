@@ -167,7 +167,7 @@ public class GameControl : MonoBehaviour {
 				foreach(Unit u in units) {
 					if(u.Team == thisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(units, u, thisPlayer, enemyPlayer));
+						u.OnNewTurn(new StateObject(units, u.Hex, thisPlayer, enemyPlayer));
 					}
 				}
 				break;
@@ -178,7 +178,7 @@ public class GameControl : MonoBehaviour {
 				foreach(Unit u in units) {
 					if(u.Team != thisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(units, u, enemyPlayer, thisPlayer));
+						u.OnNewTurn(new StateObject(units, u.Hex, enemyPlayer, thisPlayer));
 					}
 				}
 				if(!IsMulti) {
@@ -329,14 +329,14 @@ public class GameControl : MonoBehaviour {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();
 			}
-			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
+			card.OnPlay(new StateObject(units, hex, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			return unit;
 		} else {
-			card.OnPlay(new StateObject(units, hex.Unit, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			if(MyTurn() && thisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				thisPlayer.PlayCard();
 			}
+			card.OnPlay(new StateObject(units, hex, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
 			return null;
 		}
 	}
@@ -345,6 +345,7 @@ public class GameControl : MonoBehaviour {
 		GUICard guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
 		guiCard.SetInfo(card, enemyPlayer);
 		guiCard.ForcePlaceCard(Screen.width, -300);
+		guiCard.HandCard = false;
 		guiCard.Played();		
 	}
 	

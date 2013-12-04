@@ -9,6 +9,7 @@ public abstract class Card
 	public abstract string Name { get; }
 	public abstract int Cost { get; }
 	public abstract int id { get; }
+
 		
 	public delegate void SpecialAbility(StateObject s);
 	public List<StandardSpecial> StandardSpecials { get; set; }
@@ -19,6 +20,12 @@ public abstract class Card
 		StandardOnPlay(s);
 	}	
 
+	public virtual Faction Faction {
+		get {
+			return Faction.NEUTRAL;
+		}
+	}
+
 	public virtual string Image {
 		get {
 			return "Unknown";
@@ -28,7 +35,7 @@ public abstract class Card
 	protected void StandardOnPlay(StateObject s) {
 		foreach(StandardSpecial ss in StandardSpecials) {
 			if(ss.GetType() == typeof(StandardSpecial.Boost)) {
-				s.TargetUnit.Move(-((StandardSpecial.Boost) ss).Amount);
+				s.TargetHex.Unit.Move(-((StandardSpecial.Boost) ss).Amount);
 			}
 		}
 	}
@@ -36,9 +43,9 @@ public abstract class Card
 	public static Hashtable cardTable = new Hashtable();
 	
 	public Card() {
-		if(!cardTable.Contains(id)) {
-			Card.cardTable.Add(id, this);
-		}
+		if(!cardTable.Contains(Name)) {
+			Card.cardTable.Add(Name, this);
+		} 
 		StandardSpecials = new List<StandardSpecial>();
 		setStandardCardText();
 	}
@@ -51,9 +58,11 @@ public abstract class Card
 	
 	public static List<Card> GoodDeck() {
 		List<Card> result = new List<Card>();
-		
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
+		result.Add (new IntergalacticPoliticsCard());
+		result.Add (new DeepSpaceExplorationCard());
+		result.Add (new DeepSpaceExplorationCard());
+		result.Add (new TimeDistortionCard());
+		result.Add (new TimeDistortionCard());
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
 		result.Add(new MajorReconstructionCard());
@@ -62,6 +71,8 @@ public abstract class Card
 		result.Add(new MinorReconstructionCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
+		result.Add(new PreciseMissileCard());
+		result.Add(new PreciseMissileCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new CruiserCard());
@@ -70,16 +81,8 @@ public abstract class Card
 		result.Add(new DestroyerCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
 		result.Add(new ReinforceCard());
 		result.Add(new ReinforceCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new MiningVesselCard());
-		result.Add(new MiningVesselCard());
 		result.Add(new MiningVesselCard());
 		result.Add(new MiningVesselCard());
 		return result;
@@ -292,3 +295,5 @@ public abstract class Card
 }
 
 public enum CardType { UNIT, BUILDING, SPELL }
+
+public enum Faction { GOOD, NEUTRAL, EVIL }

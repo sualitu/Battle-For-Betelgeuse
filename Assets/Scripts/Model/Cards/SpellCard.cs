@@ -27,7 +27,7 @@ public abstract class SpellCard : Card
 	}
 	
 	public virtual void SpellAnimation(StateObject s) {
-		Object.Instantiate((GameObject) Resources.Load ("Effects/Heal"), s.TargetUnit.transform.localPosition, Quaternion.identity);
+		Object.Instantiate((GameObject) Resources.Load ("Effects/Heal"), s.TargetHex.collider.bounds.center, Quaternion.identity);
 		SpellEffect(s);
 	}
 	

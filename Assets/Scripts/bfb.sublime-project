@@ -3,7 +3,8 @@
 	[
 		{
 			"follow_symlinks": true,
-			"path": "C:\\Users\\Sune\\Documents\\GitHub\\Battle-For-Betelgeuse\\Assets\\Scripts"
+			"path": "C:\\Users\\Sune\\Documents\\GitHub\\Battle-For-Betelgeuse\\Assets\\Scripts",
+			"file_exclude_patterns": ["*.meta"]
 		}
 	]
 }

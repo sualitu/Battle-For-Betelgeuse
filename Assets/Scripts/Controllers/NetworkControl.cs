@@ -77,7 +77,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	
 	public void PlayNetworkCardOn(Card card, Hex hex) {
 		System.Object[] args = new System.Object[4];
-		args[0] = card.id;
+		args[0] = card.Name;
 		args[1] = Mathf.FloorToInt(hex.GridPosition.x);
 		args[2] = Mathf.FloorToInt(hex.GridPosition.y);
 		args[3] = System.Guid.NewGuid().ToString();
@@ -86,15 +86,15 @@ public class NetworkControl : Photon.MonoBehaviour {
 	}
 	
 	[RPC]
-	public void ReceiveNetworkCard(int id, int x, int y, string guid) {
-		Card card = (Card) Card.cardTable[id];
+	public void ReceiveNetworkCard(string name, int x, int y, string guid) {
+		Card card = (Card) Card.cardTable[name];
 		Hex hex = gameControl.gridControl.Map[x][y];
 		gameControl.PlayCardOnHex(card, hex, guid);
 	}
 	
 	[RPC]
-	public void ReceiveOpponentPlayedCard(int id, int x, int y, string guid) {
-		Card card = (Card) Card.cardTable[id];
+	public void ReceiveOpponentPlayedCard(string name, int x, int y, string guid) {
+		Card card = (Card) Card.cardTable[name];
 		gameControl.EnemyCardPlayed(card);
 	}
 	

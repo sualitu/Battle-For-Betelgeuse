@@ -14,10 +14,11 @@ public class Unit : MonoBehaviour {
 	public int MaxMovement { get; set; }
 	public EntityCard Card { get; set; }
 	public List<Hex> movable = new List<Hex>();
+	public List<UnitBuff> buffs = new List<UnitBuff>();
 			
 	protected GameObject model;
 	protected int i = 0;
-		
+
 	// Fields
 	private int damageTaken;
 	private int moved;
@@ -30,6 +31,8 @@ public class Unit : MonoBehaviour {
 	public GameObject ProjectilePrefab;
 	
 	public virtual void OnNewTurn(StateObject s) {
+		buffs.FindAll(b => b.Duration == 0).ForEach(b => buffs.Remove (b));
+		buffs.ForEach(b => b.OnNewTurn(this));
 		Card.OnNewTurn(s);
 	}
 	
@@ -54,7 +57,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void AttackTarget(Unit unit, int delay) {
-		Card.OnAttack(new StateObject(GameControl.gameControl.units, this, null, null));
+		Card.OnAttack(new StateObject(GameControl.gameControl.units, Hex, null, null));
 		if(unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
@@ -72,7 +75,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void Attacked(Unit attacker) {
-		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.units, this, null, null));
+		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.units, Hex, null, null));
 		if(defend && !attacker.Card.StandardSpecials.Exists(s => s is StandardSpecial.Ranged)) {
 			Hex hex = attacker.Hex;
 			System.Object[] args = new System.Object[2];
@@ -153,9 +156,10 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public virtual string ConstructTooltip() {
-		return ((Team == GameControl.gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + UnitName + "\nAttack: " + Attack + 
+		string s = ((Team == GameControl.gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + UnitName + "\nAttack: " + Attack + 
 			"\nHealth: " + (CurrentHealth() < 1 ? "0" : (CurrentHealth()).ToString()) + " / " + MaxHealth.ToString() + 
 				"\nMovement: " + (MovementLeft() < 1 ? "0" : (MovementLeft()).ToString()) + " / " + MaxMovement.ToString();
+		return s;
 	}
 	
 	void MoveBy(List<Hex> path) {

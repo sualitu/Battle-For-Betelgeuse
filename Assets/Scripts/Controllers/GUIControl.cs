@@ -18,6 +18,10 @@ public class GUIControl : MonoBehaviour {
 	Hex oldHex = null;
 	EndTurn et;
 	GUITexture selUnitObject;
+	Texture2D selUnitTexture;
+	GUICard guiCard;
+	Rect imageRect = new Rect(35,Screen.height-129,154,91);
+	public GameObject CardPrefab;
 
 	void Start() {
 		gameControl = GetComponent<GameControl>();
@@ -67,8 +71,10 @@ public class GUIControl : MonoBehaviour {
 	}
 	
 	void ShowSelUnitInfo(Unit unit) {
-		selUnitLabelObject.text = unit.UnitName + "\nAttack:\nHealth:\nMovement:";
-		selUnitValueObject.text = unit.Attack + "\n" + unit.CurrentHealth() + " / " + unit.MaxHealth + "\n" + unit.MovementLeft() + " / " + unit.MaxMovement;
+		selUnitTexture = (Texture2D) Resources.Load("GUI/Cards/images/" + unit.Card.Image);
+		selUnitLabelObject.text = unit.UnitName + "\nAttack:\nHealth:\nMovement:\n";
+		selUnitValueObject.text = unit.Attack + "\n" + unit.CurrentHealth() + " / " + unit.MaxHealth + "\n" + (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
+		unit.buffs.ForEach(b => selUnitLabelObject.text += b.Name + ", ");
 	}
 
 	void HideSelUnitInfo() {
@@ -76,10 +82,27 @@ public class GUIControl : MonoBehaviour {
 		selUnitValueObject.text = "";
 	}
 
+	void ShowCardOver() {
+
+	}
+
 	void OnGUI() {
 		if(gameControl.mouseControl.selectedUnit != null) {
 			ShowSelUnitBox();
 			ShowSelUnitInfo(gameControl.mouseControl.selectedUnit);
+			GUI.DrawTexture(imageRect, selUnitTexture);
+			if(imageRect.Contains(Event.current.mousePosition)) {
+				if(guiCard == null) {
+					guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
+					guiCard.SetInfo(gameControl.mouseControl.selectedUnit.Card, gameControl.mouseControl.selectedUnit.Team == 1 ? gameControl.thisPlayer : gameControl.enemyPlayer);
+					guiCard.ForcePlaceCard(Event.current.mousePosition.x, Event.current.mousePosition.y-337); 
+					guiCard.HandCard = false;
+				}  else {
+					guiCard.SetPosition(Event.current.mousePosition.x, Event.current.mousePosition.y-337);
+				}
+			} else {
+				if(guiCard != null) guiCard.Kill();
+			}		
 		} else {
 			HideSelUnitBox();
 			HideSelUnitInfo();

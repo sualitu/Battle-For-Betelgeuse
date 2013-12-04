@@ -11,7 +11,7 @@ public class GUICard : MonoBehaviour
 	public Texture2D unitCardTexture;
 	public Texture2D buildingCardTexture;
 	public Texture2D spellCardTexture;
-	
+	public bool HandCard = true;
 	Player Owner;
 	Rect position;	
 	float height = 337f;
@@ -104,6 +104,10 @@ public class GUICard : MonoBehaviour
 	void Start() {
 		uniqueId = System.Guid.NewGuid();
 	}
+
+	public void SetPosition(float x, float y) {
+		SetPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+	}
 	
 	public void SetPosition(int x, int y) {
 		this.x = x;
@@ -141,10 +145,20 @@ public class GUICard : MonoBehaviour
 		Rotation = 0;
 		i = 300;
 	}
+
+	public void Kill() {
+		i = 1;
+	}
 	
 	public bool IsMouseOver = false;
 	
+	public void ForcePlaceCard(float x, float y) {
+		ForcePlaceCard(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+	}
+
 	public void ForcePlaceCard(int x, int y) {
+		this.x = x;
+		this.y = y;
 		position = new Rect(x, y, width,height);
 	}
 	
@@ -157,7 +171,7 @@ public class GUICard : MonoBehaviour
 				UpdateTexture();
 			}
 			GUI.skin = ownSkin;
-			if(position.Contains(Event.current.mousePosition)) {
+			if(position.Contains(Event.current.mousePosition) && HandCard) {
 				position = iTween.RectUpdate(position, new Rect (x,y-height*1/2,width,height), 4);
 				r = iTween.FloatUpdate(r,0,1);
 				GUIUtility.RotateAroundPivot(r, position.center);
@@ -167,10 +181,10 @@ public class GUICard : MonoBehaviour
 				position = iTween.RectUpdate(position, new Rect (x,y,width,height), 4);	
 				r = iTween.FloatUpdate(r,Rotation,1);	
 				GUIUtility.RotateAroundPivot(r, position.center);
-				GUI.depth = 1;
+				GUI.depth = HandCard ? 1 : 0;
 			}
 			
-			if(GUI.Button(position, Card.Name)){
+			if(GUI.Button(position, Card.Name) && HandCard){
 				
 				if(!selected) {
 					
