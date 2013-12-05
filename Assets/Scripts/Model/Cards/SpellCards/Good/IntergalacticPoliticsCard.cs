@@ -9,12 +9,6 @@ public class IntergalacticPoliticsCard : SpellCard {
 		}
 	}
 	
-	public override int id {
-		get {
-			return 23;
-		}
-	}
-	
 	public override string Name {
 		get {
 			return "Intergalactic Diplomacy";

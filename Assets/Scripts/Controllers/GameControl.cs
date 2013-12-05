@@ -17,6 +17,7 @@ public class GameControl : MonoBehaviour {
 	
 	public List<Flag> flags = new List<Flag>();
 	public List<Unit> units = new List<Unit>();	
+	public List<AuraBuff> auraBuffs = new List<AuraBuff>();
 	public GameObject unitPrefab;
 	public GameObject CardPrefab;
 	public GameObject DeckButtonPrefab;

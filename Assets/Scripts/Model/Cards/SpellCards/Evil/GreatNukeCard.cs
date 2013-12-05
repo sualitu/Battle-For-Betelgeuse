@@ -10,13 +10,6 @@ public class GreatNukeCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 19;
-		}
-	}
-
-
 	public override string Name {
 		get {
 			return "Great Nuke";

@@ -39,12 +39,6 @@ public class CarrierCard : UnitCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 5;
-		}
-	}
-
 	public override string Image {
 		get {
 			return "carrier";

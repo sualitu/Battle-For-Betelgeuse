@@ -10,12 +10,6 @@ public class TimeDistortionCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 21;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Time Distortion";
@@ -53,7 +47,10 @@ public class TimeDistortionCard : SpellCard {
 	public override void SpellEffect (StateObject s)
 	{
 		List<Unit> units = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.gridControl.Map, 3, 0).FindAll(h => h.Unit != null).ConvertAll<Unit>(h => h.Unit);
-		units.ForEach(u => u.buffs.Add (new UnitBuff("Distorted", Buff, Buff, unit : u)));
+		units.RemoveAll(u => u.Team == s.Caster.Team);
+
+		if(s.TargetHex.Unit != null && s.TargetHex.Unit.Team != s.Caster.Team) units.Add(s.TargetHex.Unit);
+		units.ForEach(u => u.AddBuff (new UnitBuff("Distorted", Buff, Buff, unit : u)));
 	}
 
 	void Buff(Unit unit) {

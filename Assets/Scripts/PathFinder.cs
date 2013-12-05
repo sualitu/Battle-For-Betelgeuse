@@ -20,7 +20,7 @@ public class PathFinder
 		
 		while(queue.Count > 0) {
 			current = queue.Dequeue();
-			if(DepthFirstSearch(source, current, map, moves).Count > 0 && !visited.Contains(current) && (team == 0 || (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1)))) {
+			if(DepthFirstSearch(source, current, map, moves, team == 0).Count > 0 && !visited.Contains(current) && (team == 0 || (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1)))) {
 				found.Add(current);
 				current.Adjacent(map).ForEach(h => queue.Enqueue(h));
 			}
@@ -30,21 +30,24 @@ public class PathFinder
 		return found;
 	}
 	
-	public static  List<Hex> DepthFirstSearch(Hex fromHex, Hex toHex, List<List<Hex>> map, int moves) {
+	public static  List<Hex> DepthFirstSearch(Hex fromHex, Hex toHex, List<List<Hex>> map, int moves, bool ignoreUnits = false) {
 		targetTile = toHex;
-		List<Hex> resultList = DFS (fromHex, toHex, map, moves, new List<Hex>());
+		List<Hex> resultList = DFS (fromHex, toHex, map, moves, new List<Hex>(), ignoreUnits);
 		/*if(toHex.Unit != null && fromHex.Unit.Team == toHex.Unit.Team) {
 			return resultList;
 		}*/
 		return resultList;
 	}
 	
-	static List<Hex> DFS(Hex thisHex, Hex toHex, List<List<Hex>> map, int moves, List<Hex> acc) {
+	static List<Hex> DFS(Hex thisHex, Hex toHex, List<List<Hex>> map, int moves, List<Hex> acc, bool ignoreUnits) {
 		if(thisHex.GridPosition != toHex.GridPosition) {
 			if(moves < 1) {
 				return new List<Hex>();
 			} else {
-				List<Hex> adj = thisHex.Adjacent(map).FindAll(h => (h.Unit == null || h.GridPosition == targetTile.GridPosition));
+				List<Hex> adj = thisHex.Adjacent(map);
+				if(!ignoreUnits) {
+					adj.RemoveAll (h => !(h.Unit == null || h.GridPosition == targetTile.GridPosition));
+				}
 				Hex nextHex = null;
 				foreach(Hex h in adj) {
 						if(nextHex != null) {
@@ -65,7 +68,7 @@ public class PathFinder
 						}
 				}
 				acc.Add(nextHex);
-				return DFS (nextHex, toHex, map, moves-1, acc);
+				return DFS (nextHex, toHex, map, moves-1, acc, ignoreUnits);
 			}
 		} else { return acc; }
 	}

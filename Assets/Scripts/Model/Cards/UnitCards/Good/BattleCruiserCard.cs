@@ -9,6 +9,12 @@ public class BattleCruiserCard : UnitCard
 		}
 	}
 
+	public override Faction Faction {
+		get {
+			return Faction.GOOD;
+		}
+	}
+
 	public override int Cost {
 		get {
 			return 12;
@@ -42,12 +48,6 @@ public class BattleCruiserCard : UnitCard
 	public override string Image {
 		get {
 			return "battlecruiser";
-		}
-	}
-
-	public override int id {
-		get {
-			return 7;
 		}
 	}
 	

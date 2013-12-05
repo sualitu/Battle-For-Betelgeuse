@@ -12,14 +12,6 @@ public class MinorReconstructionCard : SpellCard {
 		}
 	}
 
-
-	public override int id {
-		get {
-			return 9;
-		}
-	}
-
-
 	public override string Name {
 		get {
 			return "Minor Reconstruction";

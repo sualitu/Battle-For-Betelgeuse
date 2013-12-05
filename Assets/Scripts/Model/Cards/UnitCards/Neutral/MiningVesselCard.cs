@@ -38,12 +38,6 @@ public class MiningVesselCard : UnitCard
 			return "Units/mining_vessel";
 		}
 	}
-
-	public override int id {
-		get {
-			return 21;
-		}
-	}
 	
 	public MiningVesselCard() {
 		CardText += "When this card is played, draw one card.";
@@ -53,12 +47,6 @@ public class MiningVesselCard : UnitCard
 	{
 		s.Caster.DrawCard();
 		
-	}
-
-	public override string Image {
-		get {
-			return "mining_vessel";
-		}
 	}
 
 	public override string Projectile {

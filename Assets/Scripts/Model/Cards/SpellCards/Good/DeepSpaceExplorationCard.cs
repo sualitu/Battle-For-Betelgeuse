@@ -10,12 +10,6 @@ public class DeepSpaceExplorationCard : SpellCard {
 		}
 	}
 	
-	public override int id {
-		get {
-			return 22;
-		}
-	}
-	
 	public override string Name {
 		get {
 			return "Deep Space Exploration";

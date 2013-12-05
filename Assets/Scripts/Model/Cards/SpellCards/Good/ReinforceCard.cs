@@ -11,12 +11,6 @@ public class ReinforceCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 10;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Reinforce";

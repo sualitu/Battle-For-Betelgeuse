@@ -11,15 +11,15 @@ public class SmallNukeCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 16;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Small Nuke";
+		}
+	}
+
+	public override string Image {
+		get {
+			return "nuke";
 		}
 	}
 	

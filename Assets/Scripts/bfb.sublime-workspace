@@ -47,15 +47,15 @@
 			"file": "Model/Cards/SpellCards/Good/TimeDistortionCard.cs",
 			"settings":
 			{
-				"buffer_size": 796,
-				"line_ending": "Windows"
+				"buffer_size": 1465,
+				"line_ending": "Unix"
 			}
 		},
 		{
 			"file": "Model/Card.cs",
 			"settings":
 			{
-				"buffer_size": 9105,
+				"buffer_size": 9956,
 				"line_ending": "Unix"
 			}
 		},
@@ -63,16 +63,8 @@
 			"file": "Model/Unit.cs",
 			"settings":
 			{
-				"buffer_size": 8116,
+				"buffer_size": 9388,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Model/UnitBuff.cs",
-			"settings":
-			{
-				"buffer_size": 37,
-				"line_ending": "Windows"
 			}
 		},
 		{
@@ -87,9 +79,13 @@
 	"build_system": "Packages/Unity3D Build System/Unity.sublime-build",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 219.0,
 		"selected_items":
 		[
+			[
+				"installp",
+				"Package Control: Install Package"
+			],
 			[
 				"install",
 				"Package Control: Install Package"
@@ -107,7 +103,7 @@
 				"Package Control: List Packages"
 			]
 		],
-		"width": 1216.0
+		"width": 1224.0
 	},
 	"console":
 	{
@@ -128,6 +124,7 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/UnitBuff.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/SpellCards/Good/ReinforceCard.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/Model/Cards/UnitCards/BattleCruiserCard.cs",
 		"/C/Users/Sune/Documents/GitHub/Battle-For-Betelgeuse/Assets/Scripts/bfb.sublime-project",
@@ -247,7 +244,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -256,15 +253,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 796,
+						"buffer_size": 1465,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								359,
-								359
+								223,
+								223
 							]
 						],
 						"settings":
@@ -284,15 +281,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9105,
+						"buffer_size": 9956,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								444,
-								444
+								0,
+								0
 							]
 						],
 						"settings":
@@ -312,15 +309,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8116,
+						"buffer_size": 9388,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								78,
-								44
+								0,
+								0
 							]
 						],
 						"settings":
@@ -336,34 +333,6 @@
 				},
 				{
 					"buffer": 3,
-					"file": "Model/UnitBuff.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 37,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								37,
-								37
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"syntax": "Packages/C#/C#.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
 					"file": "Controllers/NetworkControl.cs",
 					"semi_transient": false,
 					"settings":

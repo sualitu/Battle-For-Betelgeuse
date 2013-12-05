@@ -39,12 +39,6 @@ public class ExplorerCard : UnitCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 3;
-		}
-	}
-
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);

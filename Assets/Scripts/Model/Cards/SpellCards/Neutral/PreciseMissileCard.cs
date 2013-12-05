@@ -10,12 +10,6 @@ public class PreciseMissileCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 11;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Precise Missile";

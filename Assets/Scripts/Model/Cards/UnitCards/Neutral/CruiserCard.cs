@@ -39,12 +39,6 @@ public class CruiserCard : UnitCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 4;
-		}
-	}
-
 	public override string Image {
 		get {
 			return "cruiser";

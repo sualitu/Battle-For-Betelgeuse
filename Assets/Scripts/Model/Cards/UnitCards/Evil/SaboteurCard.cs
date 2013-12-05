@@ -38,12 +38,6 @@ public class SaboteurCard : UnitCard
 			return "Units/saboteur";
 		}
 	}
-
-	public override int id {
-		get {
-			return 22;
-		}
-	}
 	
 	public SaboteurCard() {
 		CardText += "Instantly kills any unit or building it attacks.";

@@ -10,13 +10,6 @@ public class FaultyLaunchersCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 14;
-		}
-	}
-
-
 	public override string Name {
 		get {
 			return "Faulty Launchers";

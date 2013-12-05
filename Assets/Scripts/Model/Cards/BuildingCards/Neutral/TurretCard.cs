@@ -22,12 +22,6 @@ public class TurretCard : BuildingCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 6;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Turret";

@@ -10,12 +10,6 @@ public class MadScientistCard : SpellCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 20;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Mad Scientist";

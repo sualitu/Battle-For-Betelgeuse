@@ -39,12 +39,6 @@ public class DestroyerCard : UnitCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 1;
-		}
-	}
-
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);

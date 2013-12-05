@@ -10,13 +10,6 @@ public class MindControlCard : SpellCard
 		}
 	}
 
-
-	public override int id {
-		get {
-			return 12;
-		}
-	}
-
 	public override System.Collections.Generic.List<Hex> Targets (StateObject s)
 	{
 		return s.Units.FindAll(u => u.Team != s.Caster.Team && u != s.Opponent.Base).ConvertAll<Hex>(u => u.Hex);

@@ -10,12 +10,6 @@ public class ImproveThrustersCard : SpellCard {
 		}
 	}
 
-	public override int id {
-		get {
-			return 15;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Improve Thrusters";

@@ -8,7 +8,6 @@ public abstract class Card
 	public string CardText = "";
 	public abstract string Name { get; }
 	public abstract int Cost { get; }
-	public abstract int id { get; }
 
 		
 	public delegate void SpecialAbility(StateObject s);
@@ -36,6 +35,9 @@ public abstract class Card
 		foreach(StandardSpecial ss in StandardSpecials) {
 			if(ss.GetType() == typeof(StandardSpecial.Boost)) {
 				s.TargetHex.Unit.Move(-((StandardSpecial.Boost) ss).Amount);
+			}
+			if(ss.GetType() == typeof(StandardSpecial.ForceField)) {
+				s.TargetHex.Unit.AddBuff(new ForceFieldBuff());
 			}
 		}
 	}
@@ -85,6 +87,15 @@ public abstract class Card
 		result.Add(new ReinforceCard());
 		result.Add(new MiningVesselCard());
 		result.Add(new MiningVesselCard());
+		result.Add(new ForceFieldCard());
+		result.Add(new ForceFieldCard());
+		result.Add (new ImperialFighterCard());
+		result.Add (new ImperialFighterCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add (new BarrierShipCard());
+		result.Add (new BarrierShipCard());
+		result.Add (new PrimeCommanderCard());
 		return result;
 	}
 	

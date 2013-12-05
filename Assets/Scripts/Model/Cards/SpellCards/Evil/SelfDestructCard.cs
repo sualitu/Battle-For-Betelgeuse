@@ -9,12 +9,6 @@ public class SelfDestructCard : SpellCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 17;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Self-Destruct";

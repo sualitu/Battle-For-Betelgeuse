@@ -9,12 +9,6 @@ public class FinalSacrificeCard : SpellCard
 		}
 	}
 
-	public override int id {
-		get {
-			return 18;
-		}
-	}
-
 	public override string Name {
 		get {
 			return "Final Sacrifice";

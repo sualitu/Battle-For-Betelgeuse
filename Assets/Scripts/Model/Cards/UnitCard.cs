@@ -15,6 +15,9 @@ public abstract class UnitCard : EntityCard
 		targets.RemoveAll(h => h.Unit != null);
 		return targets;
 	}
-	
+
+	public virtual void OnMovement (StateObject s) {
+		Debug.Log("Test");
+	}
 }
 

@@ -11,14 +11,6 @@ public class MajorReconstructionCard : SpellCard {
 		}
 	}
 
-
-	public override int id {
-		get {
-			return 8;
-		}
-	}
-
-
 	public override string Name {
 		get {
 			return "Major Reconstruction";

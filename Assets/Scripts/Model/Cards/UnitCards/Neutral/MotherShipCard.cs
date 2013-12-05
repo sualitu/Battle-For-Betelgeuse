@@ -38,12 +38,6 @@ public class MothershipCard : UnitCard
 			return "Buildings/spacestation";
 		}
 	}
-
-	public override int id {
-		get {
-			return 0;
-		}
-	}
 	
 	public MothershipCard() {
 		StandardSpecials.Add(new StandardSpecial.Defenseless());

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Unit : MonoBehaviour {
-	
+
 	// Properties
 	public int Attack { get; set; }
 	public string UnitName { get; set; }
@@ -14,8 +14,8 @@ public class Unit : MonoBehaviour {
 	public int MaxMovement { get; set; }
 	public EntityCard Card { get; set; }
 	public List<Hex> movable = new List<Hex>();
-	public List<UnitBuff> buffs = new List<UnitBuff>();
-			
+	List<UnitBuff> buffs = new List<UnitBuff>();
+
 	protected GameObject model;
 	protected int i = 0;
 
@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour {
 	public Unit attacking = null;
 	private bool activelyAttacking = false;
 	List<GameObject> projectiles = new List<GameObject>();
+	Dictionary<UnitBuff, GameObject> effects = new Dictionary<UnitBuff, GameObject>();
 	
 	// Unity 
 	public Transform explosion;
@@ -35,9 +36,42 @@ public class Unit : MonoBehaviour {
 		buffs.ForEach(b => b.OnNewTurn(this));
 		Card.OnNewTurn(s);
 	}
+
+	public List<UnitBuff> Buffs {
+		get {
+			return buffs;
+		}
+	}
+	
+	public void AddBuff(UnitBuff buff) {
+		buff.OnApplication(this);
+		buffs.Add(buff);
+	}
+
+	public void RemoveBuff(UnitBuff buff) {
+		if(buff.HasEffect) {
+			Destroy(effects[buff]);
+			effects.Remove(buff);
+		}
+		buffs.Remove(buff);
+	}
+
+	void Start() {
+		GameControl.gameControl.auraBuffs.ForEach(ab => ab.CheckBuffOn(this));
+	}
 	
 	public void Damage(int i) {
-		damageTaken += i;
+		if(buffs.Exists(ub => typeof(ForceFieldBuff).IsAssignableFrom(ub.GetType()))) {
+			List<UnitBuff> buffsToRemove = new List<UnitBuff>();
+			foreach(UnitBuff buff in buffs) {
+				if(typeof(ForceFieldBuff).IsAssignableFrom(buff.GetType())) {
+					buffsToRemove.Add(buff);
+				}
+			}
+			buffsToRemove.ForEach(buff => RemoveBuff(buff));
+		} else {
+			damageTaken += i;
+		}
 	}
 	
 	public int CurrentHealth() {
@@ -116,11 +150,18 @@ public class Unit : MonoBehaviour {
 				"oncomplete", "Hit"));
 		}
 	}
+
+	public void AddEffect(UnitBuff buff, GameObject prefab) {
+		GameObject go = (GameObject) Instantiate(prefab, new Vector3(transform.position.x+prefab.transform.position.x, transform.position.y+prefab.transform.position.y,transform.position.z+prefab.transform.position.z), prefab.transform.localRotation);
+		effects.Add(buff, go);
+		go.transform.parent = transform;
+	}
 	
 	public void PrepareMove(Hex hex) {
 		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
 		path.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 		if(path.Count > 0 && (hex.Unit == null || (Team != hex.Unit.Team && hex.Unit.Team != 0))) {
+			GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, hex));
 			movable.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 			movable = new List<Hex>();
 			GameControl.gameControl.mouseControl.DeselectHex();

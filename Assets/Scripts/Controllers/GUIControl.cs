@@ -69,12 +69,12 @@ public class GUIControl : MonoBehaviour {
 	void HideSelUnitBox() {
 		selUnitObject.enabled = false;
 	}
-	
+
 	void ShowSelUnitInfo(Unit unit) {
 		selUnitTexture = (Texture2D) Resources.Load("GUI/Cards/images/" + unit.Card.Image);
 		selUnitLabelObject.text = unit.UnitName + "\nAttack:\nHealth:\nMovement:\n";
 		selUnitValueObject.text = unit.Attack + "\n" + unit.CurrentHealth() + " / " + unit.MaxHealth + "\n" + (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
-		unit.buffs.ForEach(b => selUnitLabelObject.text += b.Name + ", ");
+		unit.Buffs.ForEach(b => selUnitLabelObject.text += b.Name + ", ");
 	}
 
 	void HideSelUnitInfo() {

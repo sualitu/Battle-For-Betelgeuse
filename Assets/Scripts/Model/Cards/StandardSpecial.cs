@@ -24,6 +24,16 @@ public class StandardSpecial
 			return "Ranged";
 		}
 	}
+
+	public class ForceField : StandardSpecial {
+		public ForceField() {
+		}
+
+		public override string ToString ()
+		{
+			return "Force Field";
+		}
+	}
 	
 	public class Defenseless : StandardSpecial {
 	}

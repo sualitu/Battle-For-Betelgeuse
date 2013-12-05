@@ -38,12 +38,6 @@ public class FighterSquadCard : UnitCard
 			return "Units/fighter_squad";
 		}
 	}
-
-	public override int id {
-		get {
-			return 2;
-		}
-	}
 	
 	public FighterSquadCard() {
 		StandardSpecials.Add(new StandardSpecial.Boost(3));
