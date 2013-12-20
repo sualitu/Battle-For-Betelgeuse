@@ -35,6 +35,12 @@ public class MinorReconstructionCard : SpellCard {
 		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
 		return result;
 	}
+
+	public override string Image {
+		get {
+			return "repair";
+		}
+	}
 	
 	public MinorReconstructionCard() {
 		CardText += "Heals target unit or building for two.";

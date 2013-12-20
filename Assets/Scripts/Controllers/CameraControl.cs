@@ -7,8 +7,8 @@ public class CameraControl : MonoBehaviour
 			position = new Vector3(22,30,-14);
 			rotation = new Vector3(50,0,0);
 		} else {
-			position = new Vector3(22,30,40);
-			rotation = new Vector3(50,180,0);
+			position = new Vector3(60,30,-14);
+			rotation = new Vector3(50,0,0);
 		}
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", position,
 			"delay", 0.5f,
@@ -36,15 +36,7 @@ public class CameraControl : MonoBehaviour
         }
 	
 		// Move camera with arrow keys
-		if(GameControl.IsMulti) {
-			if(PhotonNetwork.isMasterClient) {
-        		translation += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-			} else {
-        		translation += new Vector3(-Input.GetAxis("Horizontal"), 0, -Input.GetAxis("Vertical"));
-			}
-		} else {
-        	translation += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		}
+        translation += new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 	
 	 	// Move camera if mouse pointer reaches screen borders
         if (Input.mousePosition.x < Settings.ScrollArea)
@@ -78,7 +70,7 @@ public class CameraControl : MonoBehaviour
             {
                 translation.y = 0;
             }
-            if (desiredPosition.z < -15 || (!GameControl.IsMulti || PhotonNetwork.isMasterClient ? Settings.LevelArea : Settings.LevelArea+30) < desiredPosition.z)
+			if (desiredPosition.z < -15 || Settings.LevelArea-25 < desiredPosition.z)
             {
                 translation.z = 0;
             }

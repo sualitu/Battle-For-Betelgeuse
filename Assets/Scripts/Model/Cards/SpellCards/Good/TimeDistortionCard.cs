@@ -50,7 +50,7 @@ public class TimeDistortionCard : SpellCard {
 		units.RemoveAll(u => u.Team == s.Caster.Team);
 
 		if(s.TargetHex.Unit != null && s.TargetHex.Unit.Team != s.Caster.Team) units.Add(s.TargetHex.Unit);
-		units.ForEach(u => u.AddBuff (new UnitBuff("Distorted", Buff, Buff, unit : u)));
+		units.ForEach(u => u.AddBuff (new UnitBuff("Distorted", newTurn : Buff, onApplication : Buff)));
 	}
 
 	void Buff(Unit unit) {

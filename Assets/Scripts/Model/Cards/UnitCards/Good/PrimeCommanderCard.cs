@@ -33,6 +33,12 @@ public class PrimeCommanderCard : UnitCard
 		}
 	}
 	
+	public override string Image {
+		get {
+			return "commander";
+		}
+	}
+	
 	public override string PrefabPath {
 		get {
 			return "Units/commandership";

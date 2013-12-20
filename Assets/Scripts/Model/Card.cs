@@ -10,8 +10,7 @@ public abstract class Card
 	public abstract int Cost { get; }
 
 		
-	public delegate void SpecialAbility(StateObject s);
-	public List<StandardSpecial> StandardSpecials { get; set; }
+	protected List<StandardSpecial> StandardSpecials { get; set; }
 	
 	public abstract List<Hex> Targets(StateObject s);
 	
@@ -38,6 +37,12 @@ public abstract class Card
 			}
 			if(ss.GetType() == typeof(StandardSpecial.ForceField)) {
 				s.TargetHex.Unit.AddBuff(new ForceFieldBuff());
+			}
+			if(ss.GetType() == typeof(StandardSpecial.Ranged)) {
+				s.TargetHex.Unit.AddBuff(new RangedBuff());
+			}
+			if(ss.GetType() == typeof(StandardSpecial.DeathTouch)) {
+				s.TargetHex.Unit.AddBuff(new DeathTouchBuff());
 			}
 		}
 	}
@@ -96,6 +101,10 @@ public abstract class Card
 		result.Add (new BarrierShipCard());
 		result.Add (new BarrierShipCard());
 		result.Add (new PrimeCommanderCard());
+		result.Add (new EmptySpaceCard());
+		result.Add (new EmptySpaceCard());
+		result.Add (new InstantServiceCard());
+		result.Add (new InstantServiceCard());
 		return result;
 	}
 	
@@ -144,10 +153,6 @@ public abstract class Card
 		result.Add(new PreciseMissileCard());
 		result.Add(new SmallNukeCard());
 		result.Add(new SmallNukeCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new CruiserCard());
@@ -160,13 +165,22 @@ public abstract class Card
 		result.Add(new SelfDestructCard());
 		result.Add(new FinalSacrificeCard());
 		result.Add(new FinalSacrificeCard());
-		result.Add(new GreatNukeCard());
 		result.Add(new GreatNukeCard());
 		result.Add(new MadScientistCard());
 		result.Add(new SaboteurCard());
 		result.Add(new SaboteurCard());
-		result.Add(new SaboteurCard());
-		result.Add(new SaboteurCard());
+		result.Add (new ExplorerCard());
+		result.Add (new ExplorerCard());
+		result.Add(new SpecializedAttacksCard());
+		result.Add(new SpecializedAttacksCard());
+		result.Add(new ExplorationRocketCard());
+		result.Add(new ExplorationRocketCard());
+		result.Add(new SalvageCard());
+		result.Add(new SalvageCard());
+		result.Add(new DestructiveLoadCard());
+		result.Add(new DestructiveLoadCard());
+		result.Add (new NuclearWeaponsCard());
+		result.Add (new NuclearWeaponsCard());
 		return result;
 	}
 	
@@ -222,6 +236,10 @@ public abstract class Card
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
+		result.Add (new ImperialFighterCard());
+		result.Add (new ImperialFighterCard());
+		result.Add (new ImperialFighterCard());
+		result.Add (new ImperialFighterCard());
 		return result;
 	}
 	

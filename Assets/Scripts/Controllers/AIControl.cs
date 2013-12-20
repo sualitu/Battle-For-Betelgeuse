@@ -12,10 +12,11 @@ public class AIControl : MonoBehaviour
 	AIState aistate = AIState.ENEMYTURN;
 	List<List<Card>> cardOptions = new List<List<Card>>();
 	List<Card> chosenHand = new List<Card>();
-	
+	bool isAggressive = false;
+
+
 	public void DoTurn() {
 	}
-	
 	/// <summary>
 	/// Calculates the hex value.
 	/// </summary>
@@ -33,7 +34,65 @@ public class AIControl : MonoBehaviour
 				return int.MaxValue - hex.Unit.Attack;
 			}
 		} else {
-			return 10000 - Mathf.FloorToInt(hex.Distance(gameControl.thisPlayer.Base.Hex));
+			Dictionary<Flag, int> flags;
+			if(isAggressive) {
+				flags = getEnemyOrNeutralFlagValues();
+			} else {
+				flags = getFriendlyFlagValues();
+			}
+			Flag flag = null;
+			foreach(Flag f in flags.Keys) {
+				if(flag == null) flag = f;
+				else {
+					if(flags[f] > flags[flag]) {
+						flag = f;
+					}
+				}
+			}
+			return flags[flag] - Mathf.FloorToInt(hex.Distance(flag.Hex));
+		}
+	}
+
+	Dictionary<Flag, int> getEnemyOrNeutralFlagValues() {
+		return findBestFlag(gameControl.flags.FindAll(f => f.OwnerTeam != player.Team));
+	}
+
+	Dictionary<Flag, int> getFriendlyFlagValues() {
+		return findBestFlag(gameControl.flags.FindAll(f => f.OwnerTeam == player.Team));
+	}
+
+
+	Dictionary<Flag, int> findBestFlag(List<Flag> flags) {
+		Dictionary<Flag, int> result = new Dictionary<Flag, int>();
+		flags.ForEach(f => result.Add(f, flagImportance(f)));
+		return result;
+	}
+
+	int flagImportance(Flag flag) {
+		int value = 0;
+		(from hex in flag.Hexs
+				where hex.Unit != null
+				select new MockUnit(hex.Unit)).ToList().ForEach(
+				mu => 
+					value += mu.Value() * (mu.Team == player.Team ? -1 : 1)
+		);
+		return value == 0 ? int.MaxValue : value;
+	}
+
+	void calculatePlayStyle() {
+		int myFlags = 0;
+		int humanFlags = 0;
+		foreach(Flag flag in gameControl.flags) {
+			if(flag.OwnerTeam == player.Team) myFlags++;
+			if(flag.OwnerTeam == gameControl.thisPlayer.Team) humanFlags++;
+		}
+		try {
+			int turnsTillWin = (Settings.VictoryRequirement - player.Points) / gameControl.FlagCountValue(myFlags);
+			int turnsTillLoss = (Settings.VictoryRequirement - gameControl.thisPlayer.Points) /  gameControl.FlagCountValue(humanFlags);
+
+			isAggressive = turnsTillWin >= turnsTillLoss;
+		} catch {
+			isAggressive = true;
 		}
 	}
 	
@@ -194,7 +253,7 @@ public class AIControl : MonoBehaviour
 	}
 	
 	int UnitCardValue(EntityCard card) {
-		return card.Attack + card.Health/2 + card.Movement/2 + card.StandardSpecials.Count*2;
+		return card.Attack + card.Health/2 + card.Movement/2;
 	}
 	
 	int SpellOnHexValue(SpellCard sCard, Hex hex) {
@@ -233,7 +292,7 @@ public class AIControl : MonoBehaviour
 	
 	int ValulateCardCombOption(List<Card> cards) {
 		int v = 0;
-		cards.ForEach(c => v += c.Cost);
+		cards.ForEach(c => v += ValuateCard(c));
 		return v;
 	}
 	
@@ -242,7 +301,7 @@ public class AIControl : MonoBehaviour
 	void DoMove() {
 		switch(aistate) {
 		case AIState.ENEMYTURN: if(NoMovesInProgress()) { aistate++; } break;
-		case AIState.BUILDINGHAND: cardOptions = CardPlayCombinations(); i = cardOptions.Count; aistate++; break;
+		case AIState.BUILDINGHAND: cardOptions = CardPlayCombinations(); i = cardOptions.Count; aistate++; calculatePlayStyle(); break;
 		case AIState.ANALYZINGCARDOPTIONS: 
 			if(i < 1) { 
 				aistate++; 
@@ -254,7 +313,7 @@ public class AIControl : MonoBehaviour
 			} 
 			break;
 		case AIState.PLAYINGCARDS: 
-			
+			chosenHand.RemoveAll(c => ValuateCard(c) <= 0);
 			if(chosenHand.Count < 1) {
 				aistate++; 
 			} else {

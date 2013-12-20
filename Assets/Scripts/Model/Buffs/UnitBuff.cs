@@ -5,11 +5,13 @@ public class UnitBuff {
 
 	public int Duration  { get; set; }
 	public string Name { get; set; }
-	protected UnitBuffAction newTurnDel;
+	protected UnitBuffAction newTurnDel = DoNothing;
+	protected UnitBuffAction onRemove = DoNothing;
+	protected UnitBuffAction onApplication = DoNothing;
 
 	public delegate void UnitBuffAction(Unit unit);
 
-	public void DoNothing(Unit unit) {
+	public static void DoNothing(Unit unit) {
 	}
 
 	public virtual bool HasEffect {
@@ -24,15 +26,19 @@ public class UnitBuff {
 
 	public UnitBuff(string name, 
 	                UnitBuffAction newTurn = null, 
-	                UnitBuffAction onPlay = null, 
-	                Unit unit = null,
+	                UnitBuffAction onRemove = null,
+	                UnitBuffAction onApplication = null,
 	                int duration = 1) {
 		Name = name;
 		newTurnDel = newTurn ?? DoNothing;
+		this.onRemove = onRemove ?? DoNothing;
+		this.onApplication = onApplication ?? DoNothing;
 		Duration = duration;
-		if(unit != null && onPlay != null) {
-			onPlay(unit);
-		} 
+	}
+
+
+	public virtual void OnRemoved(Unit unit) {
+		onRemove(unit);
 	}
 
 	public virtual void OnDamaged(Unit unit) {
@@ -40,10 +46,14 @@ public class UnitBuff {
 	}
 
 	public virtual void OnApplication(Unit unit) {
+		onApplication(unit);
 	}
 
 	public virtual void OnNewTurn(Unit unit) {
 		newTurnDel(unit);
 		--Duration;
+		if(Duration == 0) {
+			unit.RemoveBuff(this);
+		}
 	}
 }

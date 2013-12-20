@@ -34,6 +34,16 @@ public class StandardSpecial
 			return "Force Field";
 		}
 	}
+
+	public class DeathTouch : StandardSpecial {
+		public DeathTouch() {
+		}
+
+		public override string ToString ()
+		{
+			return "Death Touch";
+		}
+	}
 	
 	public class Defenseless : StandardSpecial {
 	}

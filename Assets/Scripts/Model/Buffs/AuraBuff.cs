@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class AuraBuff : UnitBuff
 {
-	UnitBuffAction onRemove;
 	UnitBuffAction onAdd;
 
 	public void NotifyOnMovement(Unit unit, Hex target) {

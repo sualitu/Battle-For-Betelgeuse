@@ -14,9 +14,9 @@ public class CombatControl : MonoBehaviour
 	/// Defender.
 	/// </param>
 	public void Combat(Unit attacker, Unit defender) {
-		defender.Damage(attacker.Attack);
+		defender.Damage(attacker.Buffs.Exists(b => b is DeathTouchBuff) ? int.MaxValue :  attacker.Attack);
 		if(!attacker.IsRanged()) {
-			attacker.Damage(defender.Attack);
+			attacker.Damage(defender.Buffs.Exists(b => b is DeathTouchBuff) ? int.MaxValue :  defender.Attack);
 		}
 		attacker.Move(attacker.MovementLeft());
 	}

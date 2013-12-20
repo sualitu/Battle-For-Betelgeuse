@@ -28,6 +28,13 @@ public class PreciseMissileCard : SpellCard {
 		
 		return result;
 	}
+
+	
+	public override string Image {
+		get {
+			return "precisemissile";
+		}
+	}
 	
 	public PreciseMissileCard() {
 		CardText += "Deals 3 damage to target unit or building.";

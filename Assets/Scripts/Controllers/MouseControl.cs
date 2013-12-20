@@ -42,7 +42,7 @@ public class MouseControl : MonoBehaviour {
 		selHex = hex;
 		hex.IsSelected = true;
 		selectedUnit = hex.Unit;
-		if(selectedUnit != null) {
+		if(selectedUnit != null && selectedUnit.Team == gameControl.thisPlayer.Team) {
 			hex.Unit.movable = PathFinder.BreadthFirstSearch(hex, gameControl.gridControl.Map, hex.Unit.MovementLeft(), hex.Unit.Team);
 		}
 	}
@@ -97,7 +97,7 @@ public class MouseControl : MonoBehaviour {
 						} else {
 							gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);
 						}
-					} else if(selectedUnit != null && selectedUnit.Hex.GridPosition != hex.GridPosition) {
+					} else if(selectedUnit != null && selectedUnit.Team == gameControl.thisPlayer.Team && selectedUnit.Hex.GridPosition != hex.GridPosition) {
 						// A unit is selected
 						if(GameControl.IsMulti) {
 							gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);

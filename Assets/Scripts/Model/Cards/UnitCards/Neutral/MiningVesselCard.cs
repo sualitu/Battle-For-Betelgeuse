@@ -39,6 +39,12 @@ public class MiningVesselCard : UnitCard
 		}
 	}
 	
+	public override string Image {
+		get {
+			return "mining_vessel";
+		}
+	}
+	
 	public MiningVesselCard() {
 		CardText += "When this card is played, draw one card.";
 	}

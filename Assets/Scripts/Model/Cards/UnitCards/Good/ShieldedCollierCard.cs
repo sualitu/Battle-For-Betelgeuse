@@ -32,6 +32,12 @@ public class ShieldedCollierCard : UnitCard
 			return 4;
 		}
 	}
+
+	public override string Image {
+		get {
+			return "collier";
+		}
+	}
 	
 	public override string Name {
 		get {

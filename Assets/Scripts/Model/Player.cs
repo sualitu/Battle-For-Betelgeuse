@@ -21,7 +21,7 @@ public class Player
 
 	public int MaxMana {
 		get {
-			return maxMana > 20 ? 20 : maxMana;
+			return maxMana > Settings.MaxMana ? Settings.MaxMana : maxMana;
 		}
 		set {
 			maxMana = value;
@@ -107,9 +107,11 @@ public class Player
 				// TODO Do this properly. This should be centralized.
 				if(GameControl.IsMulti) {
 					gameControl.networkControl.PlayNetworkCardOn(selectedCard, Base.Hex);
+
 				} else {
 					gameControl.PlayCardOnHex(selectedCard, Base.Hex, System.Guid.NewGuid().ToString());
 				}
+				DeselectCard();
 			}
 			gameControl.mouseControl.PlayModeOn = false;
 			targets.ForEach(h => h.renderer.material.color = Settings.MovableTileColour);

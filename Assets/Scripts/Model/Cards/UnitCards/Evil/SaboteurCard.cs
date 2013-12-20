@@ -40,24 +40,13 @@ public class SaboteurCard : UnitCard
 	}
 	
 	public SaboteurCard() {
-		CardText += "Instantly kills any unit or building it attacks.";
+		StandardSpecials.Add(new StandardSpecial.DeathTouch());
+		setStandardCardText();
 	}
 
 	public override void OnPlay (StateObject s)
 	{
 		StandardOnPlay(s);
-	}
-
-	public override void OnAttack (StateObject s)
-	{
-		s.TargetHex.Unit.Attack = int.MaxValue;
-		s.TargetHex.Unit.MaxHealth = 1;
-		s.TargetHex.Unit.ResetStats();
-	}
-
-	public override bool OnAttacked (StateObject s)
-	{
-		return base.OnAttacked (s);
 	}
 
 	public override string Projectile {
@@ -70,12 +59,6 @@ public class SaboteurCard : UnitCard
 		get {
 			return "saboteur";
 		}
-	}
-	
-	public override void OnNewTurn (StateObject s)
-	{
-		s.TargetHex.Unit.Attack = 0;
-		s.TargetHex.Unit.MaxHealth = 2;
 	}
 }
 

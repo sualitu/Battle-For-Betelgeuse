@@ -42,6 +42,14 @@ public class ReinforceCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.MaxHealth += 3;
+		s.TargetHex.Unit.AddBuff(new UnitBuff("Reinforced", onRemove : OnRemove, onApplication : OnApply));
+	}
+
+	void OnApply(Unit unit) {
+		unit.MaxHealth += 2;
+	}
+	
+	void OnRemove(Unit unit) {
+		unit.MaxHealth -= 2;
 	}
 }

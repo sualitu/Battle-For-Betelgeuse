@@ -87,7 +87,7 @@ public class GUIControl : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		if(gameControl.mouseControl.selectedUnit != null) {
+		if(gameControl.mouseControl.selectedUnit != null && gameControl.mouseControl.selectedUnit.Team != 0) {
 			ShowSelUnitBox();
 			ShowSelUnitInfo(gameControl.mouseControl.selectedUnit);
 			GUI.DrawTexture(imageRect, selUnitTexture);

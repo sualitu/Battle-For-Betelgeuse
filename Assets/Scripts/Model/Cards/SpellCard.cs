@@ -25,9 +25,13 @@ public abstract class SpellCard : Card
 		SpellCardCallBack cardCallBack = ((GameObject) Object.Instantiate(((GameObject) Resources.Load("Utils/SpellCardCallBack")))).GetComponent<SpellCardCallBack>();
 		cardCallBack.Setup(s, this, delay);
 	}
+
+	protected void StandardAnimation(Vector3 place) {
+		Object.Instantiate((GameObject) Resources.Load ("Effects/Heal"), place, Quaternion.identity);
+	}
 	
 	public virtual void SpellAnimation(StateObject s) {
-		Object.Instantiate((GameObject) Resources.Load ("Effects/Heal"), s.TargetHex.collider.bounds.center, Quaternion.identity);
+		StandardAnimation(s.TargetHex.collider.bounds.center);
 		SpellEffect(s);
 	}
 	

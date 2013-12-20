@@ -135,8 +135,10 @@ public class GameControl : MonoBehaviour {
 		cameraControl = GetComponent<CameraControl>();
 	}
 	#endregion Init
-		
-	int[] pointValues = {0, 5, 20, 31, 50, 100};
+
+	public int FlagCountValue(int i) {
+		return Mathf.FloorToInt(Settings.FlagBaseValue*(Mathf.Pow(Settings.FlagMultValue,i-1)*i));
+	}
 	
 	void CalculatePoints() {
 		int thisPlayerFlags = 0;
@@ -145,8 +147,8 @@ public class GameControl : MonoBehaviour {
 			if(flag.OwnerTeam == thisPlayer.Team) thisPlayerFlags++;
 			if(flag.OwnerTeam == enemyPlayer.Team) enemyPlayerFlags++;
 		}
-		thisPlayer.Points += pointValues[thisPlayerFlags];
-		enemyPlayer.Points += pointValues[enemyPlayerFlags];
+		thisPlayer.Points += FlagCountValue(thisPlayerFlags);
+		enemyPlayer.Points += FlagCountValue(enemyPlayerFlags);
 	}
 	
 	void DoGameLoop () {
@@ -263,26 +265,47 @@ public class GameControl : MonoBehaviour {
 	
 	#region SetUp
 	public void SetUpMasterGame() {
-		Card baseCard = new MothershipCard();
+		/*
 		if(IsMulti) {
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)]);
 			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)]);
 		} else {
 			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)], System.Guid.NewGuid().ToString());
 			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)], System.Guid.NewGuid().ToString());
-		}
+		}*/
+		SetupBases();
 		thisPlayer.MaxMana++;
 		state = State.START;
 		cameraControl.SetPlayerCamera(true);
 	}
 		
 	public void SetUpClientGame() {
+		SetupBases(master : false);
 		flags.ForEach(f => f.SwapOwner());
 		guiControl.SetButton("Waiting for opponent");
 		state = State.START;
 		cameraControl.SetPlayerCamera(false);
 	}
-	
+
+	public void SetupBases(bool master = true) {
+		Hex p1Base = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)];
+		GameObject go = new GameObject();
+		go.AddComponent<Base>();
+		Base b = go.GetComponent<Base>();
+		b.FromCard(null);
+		b.Hex = p1Base;
+		b.transform.position = p1Base.transform.position;
+		Hex p2Base = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)];
+		GameObject go2 = new GameObject();
+		go2.AddComponent<Base>();
+		Base b2 = go2.GetComponent<Base>();
+		b2.FromCard(null);
+		b2.Hex = p2Base;
+		b2.transform.position = p2Base.transform.position;
+		thisPlayer.Base = master ? b : b2;
+		enemyPlayer.Base = master ? b2 : b;
+	}
+
 	public void SetUpFlags() {
 		int i = 1;
 		foreach(Vector2 v in gridControl.flags.Keys) {
@@ -352,6 +375,7 @@ public class GameControl : MonoBehaviour {
 	
 	void Update() {
 		// TODO Do this properly
+		/*
 		if(state != State.PREGAME && gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit != null && gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit != null) {
 			Unit myBase = null;
 			Unit enemyBase = null;
@@ -372,7 +396,7 @@ public class GameControl : MonoBehaviour {
 				enemyBase.Hex.Adjacent(gridControl.Map).ForEach(h => h.Unit = enemyBase);
 				enemyBase.Team = 2;
 			}
-		}
+		}*/
 		
 		if(state > State.PREGAME && (enemyPlayer.Points >= 1000)) {
 			guiControl.ShowSplashText("You lost!");

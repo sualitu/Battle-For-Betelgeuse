@@ -53,6 +53,7 @@ public class Unit : MonoBehaviour {
 			Destroy(effects[buff]);
 			effects.Remove(buff);
 		}
+		buff.OnRemoved(this);
 		buffs.Remove(buff);
 	}
 
@@ -110,7 +111,7 @@ public class Unit : MonoBehaviour {
 	
 	public void Attacked(Unit attacker) {
 		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.units, Hex, null, null));
-		if(defend && !attacker.Card.StandardSpecials.Exists(s => s is StandardSpecial.Ranged)) {
+		if(defend && !attacker.IsRanged()) {
 			Hex hex = attacker.Hex;
 			System.Object[] args = new System.Object[2];
 			args[0] = 5;
@@ -193,7 +194,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public bool IsRanged() {
-		return Card.StandardSpecials.Exists( ss => ss.GetType() == typeof(StandardSpecial.Ranged));
+		return buffs.Exists(b => b is RangedBuff);
 	}
 	
 	public virtual string ConstructTooltip() {

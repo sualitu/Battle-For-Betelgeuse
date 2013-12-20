@@ -38,6 +38,12 @@ public class ImperialFighterCard : UnitCard
 			return "Imperial Fighter";
 		}
 	}
+
+	public override string Image {
+		get {
+			return "imperialfighter";
+		}
+	}
 	
 	public override string PrefabPath {
 		get {

@@ -15,7 +15,12 @@ public class GreatNukeCard : SpellCard {
 			return "Great Nuke";
 		}
 	}
-	
+
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
+	}
 	
 	public override List<Hex> Targets (StateObject s)
 	{
@@ -36,6 +41,7 @@ public class GreatNukeCard : SpellCard {
 	
 	public override void SpellAnimation (StateObject s)
 	{
+		AudioControl.PlayAudioFile("alarm");
 		Hex hex = s.TargetHex;
 		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
 		Nuke nuke = missile.AddComponent<Nuke>();
@@ -46,6 +52,7 @@ public class GreatNukeCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
+		AudioControl.PlayAudioFileAt("explosions/nuke", s.TargetHex.transform.localPosition);
 		List<Hex> targets = new List<Hex>();
 		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.gridControl.Map, 2, 0);
 		if(s.TargetHex.Unit != s.Caster.Base && s.TargetHex.Unit != s.Opponent.Base) {
