@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public abstract class EntityCard : Card
 {
@@ -15,6 +16,10 @@ public abstract class EntityCard : Card
 	
 	public virtual void OnNewTurn(StateObject s) {
 		
+	}
+
+	public virtual int Value() {
+		return Attack + Health + Movement + StandardSpecials.Sum (ss => ss.Value());
 	}
 	
 	protected bool StandardOnAttacked() {

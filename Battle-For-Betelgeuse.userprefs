@@ -1,13 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\CameraControl.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Model\Unit.cs">
     <Files>
-      <File FileName="Assets\Scripts\Model\Card.cs" Line="94" Column="38" />
-      <File FileName="Assets\Scripts\Model\Cards\SpellCards\Evil\NuclearWeaponsCard.cs" Line="32" Column="80" />
-      <File FileName="Assets\Scripts\Model\Cards\SpellCards\Evil\SpecializedAttacksCard.cs" Line="7" Column="1" />
-      <File FileName="Assets\Scripts\Model\Unit.cs" Line="65" Column="40" />
-      <File FileName="Assets\Scripts\Controllers\CameraControl.cs" Line="73" Column="56" />
-      <File FileName="Assets\Scripts\Settings.cs" Line="12" Column="34" />
+      <File FileName="Assets\Scripts\Controllers\HardAI.cs" Line="36" Column="2" />
+      <File FileName="Assets\Scripts\Model\Buffs\AuraBuff.cs" Line="8" Column="21" />
+      <File FileName="Assets\Scripts\PathFinder.cs" Line="77" Column="4" />
+      <File FileName="Assets\Scripts\Settings.cs" Line="29" Column="27" />
+      <File FileName="Assets\Scripts\Controllers\GameControl.cs" Line="383" Column="38" />
+      <File FileName="Assets\Scripts\Controllers\AIControl.cs" Line="10" Column="28" />
+      <File FileName="Assets\Scripts\Controllers\GUIControl.cs" Line="111" Column="92" />
+      <File FileName="Assets\Scripts\Model\Unit.cs" Line="164" Column="115" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

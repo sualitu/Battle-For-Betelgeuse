@@ -14,7 +14,7 @@ public class EndTurn : MonoBehaviour {
 	
 	void Start() {
 		gameControl = GameControl.gameControl;
-		position = new Rect (Screen.width - 400, Screen.height - 200,x,y);
+		position = new Rect (Screen.width - 200, 190,x,y);
 	}
 	
 	

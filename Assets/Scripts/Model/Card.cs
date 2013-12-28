@@ -18,6 +18,14 @@ public abstract class Card
 		StandardOnPlay(s);
 	}	
 
+	public static void InitiateCards() {
+		GoodDeck();
+		EvilDeck();
+		NeutralDeck();
+		AIDeck();
+		RandomDeck();
+	}
+
 	public virtual Faction Faction {
 		get {
 			return Faction.NEUTRAL;
@@ -92,12 +100,12 @@ public abstract class Card
 		result.Add(new ReinforceCard());
 		result.Add(new MiningVesselCard());
 		result.Add(new MiningVesselCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add(new ShieldedCollierCard());
 		result.Add(new ForceFieldCard());
 		result.Add(new ForceFieldCard());
 		result.Add (new ImperialFighterCard());
 		result.Add (new ImperialFighterCard());
-		result.Add(new ShieldedCollierCard());
-		result.Add(new ShieldedCollierCard());
 		result.Add (new BarrierShipCard());
 		result.Add (new BarrierShipCard());
 		result.Add (new PrimeCommanderCard());
@@ -190,6 +198,14 @@ public abstract class Card
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
+		result.Add(new MiningVesselCard());
+		result.Add(new MiningVesselCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add(new MiningVesselCard());
+		result.Add(new MiningVesselCard());
+		result.Add(new ShieldedCollierCard());
+		result.Add(new ShieldedCollierCard());
 		
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
@@ -218,24 +234,20 @@ public abstract class Card
 		result.Add(new DestroyerCard());
 		result.Add(new TurretCard());
 		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());
 		result.Add(new MajorReconstructionCard());
 		result.Add(new MajorReconstructionCard());	
 		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());
 		result.Add(new MinorReconstructionCard());	
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
+		result.Add (new ImperialFighterCard());
+		result.Add (new ImperialFighterCard());
 		result.Add (new ImperialFighterCard());
 		result.Add (new ImperialFighterCard());
 		result.Add (new ImperialFighterCard());

@@ -23,7 +23,7 @@ public class NuclearWeaponsCard : SpellCard
 	
 	public override List<Hex> Targets (StateObject s)
 	{
-		List<Hex> result = s.Units.ConvertAll<Hex>(u => u.Hex);
+		List<Hex> result = s.Units.FindAll (u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
 		
 		return result;
 	}

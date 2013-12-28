@@ -5,7 +5,7 @@ public class BattleCruiserCard : UnitCard
 {
 	public override int Attack {
 		get {
-			return 15;
+			return 11;
 		}
 	}
 
@@ -23,13 +23,13 @@ public class BattleCruiserCard : UnitCard
 
 	public override int Health {
 		get {
-			return 10;
+			return 8;
 		}
 	}
 
 	public override int Movement {
 		get {
-			return 5;
+			return 4;
 		}
 	}
 
@@ -52,7 +52,6 @@ public class BattleCruiserCard : UnitCard
 	}
 	
 	public BattleCruiserCard() {
-		StandardSpecials.Add(new StandardSpecial.Ranged());
 		setStandardCardText();
 	}
 

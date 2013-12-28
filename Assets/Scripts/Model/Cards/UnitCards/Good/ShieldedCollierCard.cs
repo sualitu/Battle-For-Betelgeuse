@@ -5,7 +5,7 @@ public class ShieldedCollierCard : UnitCard
 {
 	public override int Attack {
 		get {
-			return 3;
+			return 2;
 		}
 	}
 	
@@ -23,7 +23,7 @@ public class ShieldedCollierCard : UnitCard
 	
 	public override int Health {
 		get {
-			return 5;
+			return 4;
 		}
 	}
 	

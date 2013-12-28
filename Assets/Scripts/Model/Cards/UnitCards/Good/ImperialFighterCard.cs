@@ -23,7 +23,7 @@ public class ImperialFighterCard : UnitCard
 	
 	public override int Health {
 		get {
-			return 3;
+			return 2;
 		}
 	}
 	

@@ -105,7 +105,8 @@ public class Unit : MonoBehaviour {
 			"onstarttarget", unit.gameObject,
 			"onstartparams", this,
 			"oncomplete", "FireMissiles",
-			"oncompleteparams", args));
+			"oncompleteparams", args,
+		    "name", Id));
 		
 	}
 	
@@ -118,9 +119,10 @@ public class Unit : MonoBehaviour {
 			args[1] = hex;
 			Move (int.MinValue);
 			iTween.LookTo(gameObject, iTween.Hash ("lookTarget", new Vector3(hex.renderer.bounds.center.x, 0f, hex.renderer.bounds.center.z),
-			"time", 1,
-			"oncomplete", "FireMissiles",
-			"oncompleteparams", args));
+				"time", 1,
+				"oncomplete", "FireMissiles",
+				"oncompleteparams", args,
+				"name", Id));
 		}
 	}
 	
@@ -160,13 +162,12 @@ public class Unit : MonoBehaviour {
 	
 	public void PrepareMove(Hex hex) {
 		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
-		path.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 		if(path.Count > 0 && (hex.Unit == null || (Team != hex.Unit.Team && hex.Unit.Team != 0))) {
-			GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, hex));
 			movable.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 			movable = new List<Hex>();
 			GameControl.gameControl.mouseControl.DeselectHex();
-			if(hex.Unit == null) {				
+			if(hex.Unit == null) {	
+				GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, hex));
 				MoveBy(path);
 				if(Team == GameControl.gameControl.thisPlayer.Team) {
 					GameControl.gameControl.mouseControl.SelectHex(hex);
@@ -175,6 +176,7 @@ public class Unit : MonoBehaviour {
 				int delay = 0;
 				if(path.Count > 1) {
 					path.RemoveAt(path.Count-1);
+					GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, path[path.Count-1]));
 					delay = path.Count;
 					if(Team == GameControl.gameControl.thisPlayer.Team) {
 						GameControl.gameControl.mouseControl.SelectHex(path[path.Count-1]);
@@ -216,14 +218,16 @@ public class Unit : MonoBehaviour {
 				"time", p.Count,
 				"orienttopath", true,
 				"easetype", "easeInOutQuad",
-				"oncomplete", "MovementDone"));
+				"oncomplete", "MovementDone",
+				"name", Id));
 		} else {
 			iTween.MoveTo(gameObject, iTween.Hash (
 				"position", p[0],
 				"time", p.Count,
 				"orienttopath", true,
 				"easetype", "easeInOutQuad",
-				"oncomplete", "MovementDone"));
+				"oncomplete", "MovementDone",
+				"name", Id));
 		}
 		prevHex.Unit = null;
 		Hex = newHex;
@@ -250,8 +254,11 @@ public class Unit : MonoBehaviour {
 			movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.mouseControl.mouseOverHex == h ? Settings.MouseOverTileColour : Settings.MovableTileColour);	
 		}
 		if(CurrentHealth() < 1) {
+
+			GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnDeath(this));
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
 			GameControl.gameControl.units.Remove(this);
+			iTween.StopByName(Id);
 			Destroy(gameObject);
 		}
 		if(i <= 7500) {		

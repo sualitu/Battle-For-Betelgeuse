@@ -24,7 +24,7 @@ public class Settings
 	public static int FlagMultValue = 2;
 	public static int StartingHandCount = 3;
 	public static int MaxHandCount = 7;	
-	public static int VictoryRequirement = 1000;
+	public static int VictoryRequirement = 500;
 	// Tile Colours
 	public static Color MouseOverTileColour = Color.red; 
 	public static Color MovableTileColour = new Color(0.95f, 0.47f, 0.13f); // Dark Orange

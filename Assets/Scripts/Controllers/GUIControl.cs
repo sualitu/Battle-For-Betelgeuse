@@ -11,8 +11,14 @@ public class GUIControl : MonoBehaviour {
 	public GUITexture selUnitBox;
 	public GUIText selUnitLabels;
 	public GUIText selUnitValues;
+	public GUIText selUnitName;
+	public GUIText playerStats;
+	public GUIText enemyStats;
 	GUIText selUnitLabelObject;
 	GUIText selUnitValueObject;
+	GUIText selUnitNameObject;
+	GUIText playerStatsObject;
+	GUIText enemyStatsObject;
 	Vector2 popUp = new Vector2(0,0);
 	public GUISkin skin = null;
 	Hex oldHex = null;
@@ -20,7 +26,7 @@ public class GUIControl : MonoBehaviour {
 	GUITexture selUnitObject;
 	Texture2D selUnitTexture;
 	GUICard guiCard;
-	Rect imageRect = new Rect(35,Screen.height-129,154,91);
+	Rect imageRect = new Rect(34,47,154,91);
 	public GameObject CardPrefab;
 
 	void Start() {
@@ -29,7 +35,10 @@ public class GUIControl : MonoBehaviour {
 		et.title = "Random Deck";
 		selUnitLabelObject = (GUIText) Instantiate(selUnitLabels);
 		selUnitValueObject = (GUIText) Instantiate(selUnitValues);
+		selUnitNameObject = (GUIText) Instantiate(selUnitName);
 		selUnitObject = (GUITexture) Instantiate(selUnitBox);
+		playerStatsObject = (GUIText) Instantiate(playerStats);
+		enemyStatsObject = (GUIText) Instantiate(enemyStats);
 		HideSelUnitBox();
 		HideSelUnitInfo();
 	}
@@ -72,7 +81,8 @@ public class GUIControl : MonoBehaviour {
 
 	void ShowSelUnitInfo(Unit unit) {
 		selUnitTexture = (Texture2D) Resources.Load("GUI/Cards/images/" + unit.Card.Image);
-		selUnitLabelObject.text = unit.UnitName + "\nAttack:\nHealth:\nMovement:\n";
+		selUnitNameObject.text = unit.UnitName;
+		selUnitLabelObject.text = "Attack:\nHealth:\nMovement:\n";
 		selUnitValueObject.text = unit.Attack + "\n" + unit.CurrentHealth() + " / " + unit.MaxHealth + "\n" + (unit.MovementLeft() < 1 ? "0" : (unit.MovementLeft()).ToString()) + " / " + unit.MaxMovement.ToString();
 		unit.Buffs.ForEach(b => selUnitLabelObject.text += b.Name + ", ");
 	}
@@ -80,6 +90,7 @@ public class GUIControl : MonoBehaviour {
 	void HideSelUnitInfo() {
 		selUnitLabelObject.text = "";
 		selUnitValueObject.text = "";
+		selUnitNameObject.text = "";
 	}
 
 	void ShowCardOver() {
@@ -87,6 +98,16 @@ public class GUIControl : MonoBehaviour {
 	}
 
 	void OnGUI() {
+		enemyStatsObject.text = "Opponent\nCards in Deck: " + gameControl.enemyPlayer.Deck.Count  + 
+			"\nCards in Hand: " + gameControl.enemyPlayer.Hand.Count + 
+				"\nMana: " + gameControl.enemyPlayer.ManaLeft() + " / " + gameControl.enemyPlayer.MaxMana + 
+				"\nVictory Points: " + gameControl.enemyPlayer.Points + " / " + Settings.VictoryRequirement;
+
+		playerStatsObject.text = "You\nCards in Deck: " + gameControl.thisPlayer.Deck.Count  + 
+			"\nCards in Hand: " + gameControl.thisPlayer.Hand.Count + 
+				"\nMana: " + gameControl.thisPlayer.ManaLeft() + " / " + gameControl.thisPlayer.MaxMana + 
+				"\nVictory Points: " + gameControl.thisPlayer.Points + " / " + Settings.VictoryRequirement;
+
 		if(gameControl.mouseControl.selectedUnit != null && gameControl.mouseControl.selectedUnit.Team != 0) {
 			ShowSelUnitBox();
 			ShowSelUnitInfo(gameControl.mouseControl.selectedUnit);
@@ -95,10 +116,10 @@ public class GUIControl : MonoBehaviour {
 				if(guiCard == null) {
 					guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
 					guiCard.SetInfo(gameControl.mouseControl.selectedUnit.Card, gameControl.mouseControl.selectedUnit.Team == 1 ? gameControl.thisPlayer : gameControl.enemyPlayer);
-					guiCard.ForcePlaceCard(Event.current.mousePosition.x, Event.current.mousePosition.y-337); 
+					guiCard.ForcePlaceCard(Event.current.mousePosition.x, Event.current.mousePosition.y); 
 					guiCard.HandCard = false;
 				}  else {
-					guiCard.SetPosition(Event.current.mousePosition.x, Event.current.mousePosition.y-337);
+					guiCard.SetPosition(Event.current.mousePosition.x, Event.current.mousePosition.y);
 				}
 			} else {
 				if(guiCard != null) guiCard.Kill();

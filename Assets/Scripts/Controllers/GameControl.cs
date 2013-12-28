@@ -45,6 +45,10 @@ public class GameControl : MonoBehaviour {
 		default: return Card.NeutralDeck();
 		}
 	}
+
+	public bool NoMovesInProgress() {
+		return iTween.tweens.Count < 1;
+	}
 	
 	public void ChooseDeck(int i) {
 		InitPlayers(deckFromInt (i));
@@ -69,18 +73,12 @@ public class GameControl : MonoBehaviour {
 		doZero.h = -1000;
 		doZero.title = "Good Deck";
 		
-		DeckOption doOne = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
-		doOne.index = 1;
-		doOne.h = -800;
-		doOne.title = "Neutral Deck";
-		
 		DeckOption doTwo = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doTwo.index = 2;
 		doTwo.h = -600;
 		doTwo.title = "Evil Deck";
 		
 		dos.Add(doZero);
-		dos.Add(doOne);
 		dos.Add(doTwo);
 	}
 	
@@ -118,8 +116,8 @@ public class GameControl : MonoBehaviour {
 	
 	void InitSinglePlayer() {
 		guiControl.SetButton(Dictionary.startGame);
-		gameObject.AddComponent<AIControl>();
-		aiController = GetComponent<AIControl>().SetAI(enemyPlayer, this);
+		gameObject.AddComponent<HardAI>();
+		aiController = GetComponent<HardAI>().SetAI(enemyPlayer, this);
 		enemyPlayer.DrawHand();
 		SetUpMasterGame();
 	}
@@ -185,7 +183,6 @@ public class GameControl : MonoBehaviour {
 					}
 				}
 				if(!IsMulti) {
-					aiController.DoTurn();
 					enemyPlayer.DrawCard();
 					enemyPlayer.MaxMana++;
 					enemyPlayer.ManaSpend = 0;
@@ -199,19 +196,26 @@ public class GameControl : MonoBehaviour {
 	public bool MyTurn() {
 		return state == State.MYTURN;
 	}
+
+	bool TurnEnded = false;
+
+	void EndTurn() {
+		TurnEnded = false;
+		if(IsMulti) {
+			networkControl.EndNetworkTurn();
+		}
+		thisPlayer.DeselectCard();
+		mouseControl.DeselectHex();
+		state = State.ENEMYTURN;
+		DoGameLoop();
+	}
 	
 	public void EndTurnClicked () {
 		switch(state) {
 		case State.MYTURN:
 			if(MyTurn()) {
 				guiControl.SetButton(Dictionary.EnemyTurnInProgress);
-				if(IsMulti) {
-					networkControl.EndNetworkTurn();
-				}
-				thisPlayer.DeselectCard();
-				mouseControl.DeselectHex();
-				state = State.ENEMYTURN;
-				DoGameLoop();
+				TurnEnded = true;
 			}
 			break;
 		case State.START:
@@ -326,6 +330,7 @@ public class GameControl : MonoBehaviour {
 	#endregion SetUp
 	
 	public void EnemeyEndTurn() {
+
 		guiControl.SetButton(Dictionary.endTurn);
 		state = State.MYTURN;
 		thisPlayer.DrawCard();
@@ -372,46 +377,24 @@ public class GameControl : MonoBehaviour {
 		guiCard.HandCard = false;
 		guiCard.Played();		
 	}
-	
+
+	int i = 0;
 	void Update() {
-		// TODO Do this properly
-		/*
-		if(state != State.PREGAME && gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit != null && gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit != null) {
-			Unit myBase = null;
-			Unit enemyBase = null;
-			if(!PhotonNetwork.isNonMasterClientInRoom) {
-				 myBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit;
-				 enemyBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit;
-			} else {
-				enemyBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)].Unit;
-				myBase = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)].Unit;
+		if(TurnEnded && NoMovesInProgress()) { 
+			if( i < 10) i++;
+			else {
+				i = 0;
+				EndTurn(); 
 			}
-			if(thisPlayer.Base == null) {
-				thisPlayer.Base = myBase;
-				myBase.Hex.Adjacent(gridControl.Map).ForEach(h => h.Unit = myBase);
-				myBase.Team = 1;
-			} 
-			if(enemyPlayer.Base == null) {
-				enemyPlayer.Base = enemyBase;
-				enemyBase.Hex.Adjacent(gridControl.Map).ForEach(h => h.Unit = enemyBase);
-				enemyBase.Team = 2;
-			}
-		}*/
-		
-		if(state > State.PREGAME && (enemyPlayer.Points >= 1000)) {
+		}
+
+		if(state > State.PREGAME && (enemyPlayer.Points >= Settings.VictoryRequirement)) {
 			guiControl.ShowSplashText("You lost!");
 			EndGame();
-		} else if(state > State.PREGAME && (thisPlayer.Points >= 1000)) {
+		} else if(state > State.PREGAME && (thisPlayer.Points >= Settings.VictoryRequirement)) {
 			guiControl.ShowSplashText("You won!");
 			EndGame();
 		}
-	}
-	
-	// TODO Do this properly
-	void OnGUI() {
-		GUI.skin = guiControl.skin;
-		GUILayout.Label ("Mana status: " + thisPlayer.ManaLeft() + " / " + thisPlayer.MaxMana + "\nEnemy Stats:" + "\nCards: " + enemyPlayer.Hand.Count + "\nMana: " + enemyPlayer.ManaLeft() + " / " + enemyPlayer.MaxMana + "\nYour points: " + thisPlayer.Points + "/1000\nEnemy points: " + enemyPlayer.Points + "/1000");
-		
 	}
 	
 	

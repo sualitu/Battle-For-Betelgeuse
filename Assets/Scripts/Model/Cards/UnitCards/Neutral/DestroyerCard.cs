@@ -5,7 +5,7 @@ public class DestroyerCard : UnitCard
 {
 	public override int Attack {
 		get {
-			return 8;
+			return 4;
 		}
 	}
 
@@ -17,7 +17,7 @@ public class DestroyerCard : UnitCard
 
 	public override int Health {
 		get {
-			return 3;
+			return 6;
 		}
 	}
 

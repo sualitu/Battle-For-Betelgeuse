@@ -81,12 +81,12 @@ public class MouseControl : MonoBehaviour {
 				}
 				hex.renderer.material.color = Settings.MouseOverTileColour;
 				
-				if(!clickedLastSec && Input.GetMouseButton(0) && gameControl.state == State.MYTURN) {
+				if(!clickedLastSec && Input.GetMouseButton(0)) {
 					clickedLastSec = true;
 					// Left click
 					if(gameControl.thisPlayer.selectedCard != null) {
 						// A card is selected
-						if(gameControl.thisPlayer.targets.Contains(hex)) {
+						if(gameControl.thisPlayer.targets.Contains(hex) && gameControl.state == State.MYTURN) {
 							if(GameControl.IsMulti) {
 								gameControl.networkControl.PlayNetworkCardOn(gameControl.thisPlayer.selectedCard, hex);
 							} else {
@@ -99,10 +99,15 @@ public class MouseControl : MonoBehaviour {
 						}
 					} else if(selectedUnit != null && selectedUnit.Team == gameControl.thisPlayer.Team && selectedUnit.Hex.GridPosition != hex.GridPosition) {
 						// A unit is selected
-						if(GameControl.IsMulti) {
-							gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);
+						if((hex.Unit == null || hex.Unit.Team != gameControl.thisPlayer.Team  ) && gameControl.state == State.MYTURN) {
+							if(GameControl.IsMulti) {
+								gameControl.networkControl.MoveNetworkUnit(selectedUnit, hex);
+							} else {
+								selectedUnit.PrepareMove (hex);
+							}
 						} else {
-							selectedUnit.PrepareMove (hex);
+							DeselectHex();
+							SelectHex(hex);
 						}
 					} else if(selectedUnit == null) {
 						// Select a unit

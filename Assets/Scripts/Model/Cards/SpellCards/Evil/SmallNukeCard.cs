@@ -36,7 +36,7 @@ public class SmallNukeCard : SpellCard {
 	
 	public override void SpellAnimation (StateObject s)
 	{
-		AudioControl.PlayAudioFile("alarm");
+		//AudioControl.PlayAudioFile("alarm");
 		Hex hex = s.TargetHex;
 		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
 		Nuke nuke = missile.AddComponent<Nuke>();
@@ -47,7 +47,7 @@ public class SmallNukeCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		AudioControl.PlayAudioFile("explosions/nuke");
+		//AudioControl.PlayAudioFile("explosions/nuke");
 		List<Hex> targets = new List<Hex>();
 		if(s.TargetHex.Unit != s.Caster.Base && s.TargetHex.Unit != s.Opponent.Base) {
 			targets.Add(s.TargetHex);

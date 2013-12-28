@@ -40,6 +40,7 @@ public class PathFinder
 	}
 	
 	static List<Hex> DFS(Hex thisHex, Hex toHex, List<List<Hex>> map, int moves, List<Hex> acc, bool ignoreUnits) {
+		try {
 		if(thisHex.GridPosition != toHex.GridPosition) {
 			if(moves < 1) {
 				return new List<Hex>();
@@ -70,15 +71,10 @@ public class PathFinder
 				acc.Add(nextHex);
 				return DFS (nextHex, toHex, map, moves-1, acc, ignoreUnits);
 			}
-		} else { return acc; }
-	}
-	
-	public static IEnumerable<IEnumerable<T>> GetPowerSet<T>(List<T> list) {
-	    return from m in Enumerable.Range(0, 1 << list.Count)
-               select
-               from i in Enumerable.Range(0, list.Count)
-               where (m & (1 << i)) != 0
-               select list[i];
+			} else { return acc; }
+		} catch {
+			return acc;
+		}
 	}
 }
 
