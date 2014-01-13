@@ -25,10 +25,10 @@ public class TimeDistortionCard : SpellCard {
 	public override List<Hex> Targets (StateObject s)
 	{
 		List<Hex> result = new List<Hex>();
-		for(int i = 0; i < GameControl.gameControl.gridControl.boolMap.Count; i++) {
-			for(int j = 0; j < GameControl.gameControl.gridControl.boolMap[i].Count; j++) {
-				if(GameControl.gameControl.gridControl.boolMap[i][j]) {
-					result.Add (GameControl.gameControl.gridControl.Map[j][i]);
+		for(int i = 0; i < GameControl.gameControl.GridControl.boolMap.Count; i++) {
+			for(int j = 0; j < GameControl.gameControl.GridControl.boolMap[i].Count; j++) {
+				if(GameControl.gameControl.GridControl.boolMap[i][j]) {
+					result.Add (GameControl.gameControl.GridControl.Map[j][i]);
 				}
 			}
 		}
@@ -46,11 +46,19 @@ public class TimeDistortionCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		List<Unit> units = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.gridControl.Map, 3, 0).FindAll(h => h.Unit != null).ConvertAll<Unit>(h => h.Unit);
+		List<Unit> units = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.GridControl.Map, 3, 0).FindAll(h => h.Unit != null).ConvertAll<Unit>(h => h.Unit);
 		units.RemoveAll(u => u.Team == s.Caster.Team);
-
+		effect = (GameObject) Resources.Load ("Effects/Debuff");
 		if(s.TargetHex.Unit != null && s.TargetHex.Unit.Team != s.Caster.Team) units.Add(s.TargetHex.Unit);
 		units.ForEach(u => u.AddBuff (new UnitBuff("Distorted", newTurn : Buff, onApplication : Buff)));
+		units.ForEach(u => Effect(u.Hex.renderer.collider.bounds.center));
+	}
+
+	
+	GameObject effect;
+	
+	void Effect(Vector3 place) {
+		Object.Instantiate(effect, place, Quaternion.identity);
 	}
 
 	void Buff(Unit unit) {

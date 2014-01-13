@@ -8,15 +8,15 @@ public class Unit : MonoBehaviour {
 	public int Attack { get; set; }
 	public string UnitName { get; set; }
 	public string Id { get; set; }
-	public virtual int Team { get; set; }
+	public virtual Team Team { get; set; }
 	public Hex Hex { get; set; }
 	public int MaxHealth { get; set; }
 	public int MaxMovement { get; set; }
 	public EntityCard Card { get; set; }
-	public List<Hex> movable = new List<Hex>();
+	public List<Hex> Movable = new List<Hex>();
 	List<UnitBuff> buffs = new List<UnitBuff>();
 
-	protected GameObject model;
+	public GameObject Model;
 	protected int i = 0;
 
 	// Fields
@@ -58,7 +58,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	void Start() {
-		GameControl.gameControl.auraBuffs.ForEach(ab => ab.CheckBuffOn(this));
+		GameControl.gameControl.AuraBuffs.ForEach(ab => ab.CheckBuffOn(this));
 	}
 	
 	public void Damage(int i) {
@@ -71,7 +71,10 @@ public class Unit : MonoBehaviour {
 			}
 			buffsToRemove.ForEach(buff => RemoveBuff(buff));
 		} else {
-			damageTaken += i;
+			if(0 > i && damageTaken < Mathf.Abs(i)) {
+				damageTaken = 0;
+			} else
+				damageTaken += i;
 		}
 	}
 	
@@ -92,7 +95,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void AttackTarget(Unit unit, int delay) {
-		Card.OnAttack(new StateObject(GameControl.gameControl.units, Hex, null, null));
+		Card.OnAttack(new StateObject(GameControl.gameControl.Units, Hex, null, null));
 		if(unit == null) return;
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
@@ -111,7 +114,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void Attacked(Unit attacker) {
-		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.units, Hex, null, null));
+		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.Units, Hex, null, null));
 		if(defend && !attacker.IsRanged()) {
 			Hex hex = attacker.Hex;
 			System.Object[] args = new System.Object[2];
@@ -161,35 +164,37 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void PrepareMove(Hex hex) {
-		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.gridControl.Map, MovementLeft());
+		List<Hex> path = PathFinder.DepthFirstSearch(Hex, hex, GameControl.gameControl.GridControl.Map, MovementLeft());
 		if(path.Count > 0 && (hex.Unit == null || (Team != hex.Unit.Team && hex.Unit.Team != 0))) {
-			movable.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
-			movable = new List<Hex>();
-			GameControl.gameControl.mouseControl.DeselectHex();
+			Movable.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
+			Movable.ForEach(h => h.renderer.material.mainTexture = Assets.Instance.BaseHex);
+			Movable = new List<Hex>();
+			bool wasSelected = false;
+			if(this == GameControl.gameControl.MouseControl.selectedUnit) {
+				GameControl.gameControl.MouseControl.DeselectHex();
+				wasSelected = true;
+			}
 			if(hex.Unit == null) {	
-				GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, hex));
+				GameControl.gameControl.AuraBuffs.ForEach(ab => ab.NotifyOnMovement(this, hex));
 				MoveBy(path);
-				if(Team == GameControl.gameControl.thisPlayer.Team) {
-					GameControl.gameControl.mouseControl.SelectHex(hex);
-				}
 			} else {
 				int delay = 0;
 				if(path.Count > 1) {
 					path.RemoveAt(path.Count-1);
-					GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnMovement(this, path[path.Count-1]));
+					GameControl.gameControl.AuraBuffs.ForEach(ab => ab.NotifyOnMovement(this, path[path.Count-1]));
 					delay = path.Count;
-					if(Team == GameControl.gameControl.thisPlayer.Team) {
-						GameControl.gameControl.mouseControl.SelectHex(path[path.Count-1]);
-					}
 					MoveBy(path);
 				} 
 				attacking = hex.Unit;
 				AttackTarget(hex.Unit, delay);
 			}
+			if(wasSelected) {
+				GameControl.gameControl.MouseControl.SelectHex(path[path.Count-1]);
+			}
 		} else {
-			if(GameControl.gameControl.state == State.MYTURN) {
-				GameControl.gameControl.audioControl.PlayErrorSound();
-				GameControl.gameControl.guiControl.ShowSmallSplashText(Dictionary.cannotMoveThereError);		
+			if(GameControl.gameControl.State == State.MYTURN) {
+				GameControl.gameControl.AudioControl.PlayErrorSound();
+				GameControl.gameControl.GuiControl.ShowSmallSplashText(Dictionary.CannotMoveThereError);		
 			}
 		}
 		
@@ -200,7 +205,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public virtual string ConstructTooltip() {
-		string s = ((Team == GameControl.gameControl.thisPlayer.Team) ? "Your " : "Enemy ") + UnitName + "\nAttack: " + Attack + 
+		string s = ((Team == GameControl.gameControl.ThisPlayer.Team) ? "Your " : "Enemy ") + UnitName + "\nAttack: " + Attack + 
 			"\nHealth: " + (CurrentHealth() < 1 ? "0" : (CurrentHealth()).ToString()) + " / " + MaxHealth.ToString() + 
 				"\nMovement: " + (MovementLeft() < 1 ? "0" : (MovementLeft()).ToString()) + " / " + MaxMovement.ToString();
 		return s;
@@ -240,8 +245,8 @@ public class Unit : MonoBehaviour {
 	
 	public virtual void FromCard (EntityCard card) {
 		Card = card;
-		model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x+card.Prefab.transform.position.x, transform.position.y+card.Prefab.transform.position.y,transform.position.z+card.Prefab.transform.position.z), card.Prefab.transform.localRotation);
-		model.transform.parent = transform;
+		Model = (GameObject) Instantiate(card.Prefab, new Vector3(transform.position.x+card.Prefab.transform.position.x, transform.position.y+card.Prefab.transform.position.y,transform.position.z+card.Prefab.transform.position.z), card.Prefab.transform.localRotation);
+		Model.transform.parent = transform;
 		Attack = card.Attack;
 		MaxHealth = card.Health;
 		MaxMovement = card.Movement;
@@ -250,14 +255,15 @@ public class Unit : MonoBehaviour {
 	}
 		
 	void Update () {
-		if(GameControl.gameControl.mouseControl.selectedUnit == this) {
-			movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.mouseControl.mouseOverHex == h ? Settings.MouseOverTileColour : Settings.MovableTileColour);	
+		if(GameControl.gameControl.MouseControl.selectedUnit == this) {
+			Movable.ForEach(h => h.renderer.material.color = GameControl.gameControl.MouseControl.mouseOverHex == h ? Settings.MouseOverTileColour : Settings.MovableTileColour);
+			Movable.ForEach(h => h.renderer.material.mainTexture = h.Unit == null ? Assets.Instance.MoveHex : Assets.Instance.AttackHex);
 		}
 		if(CurrentHealth() < 1) {
 
-			GameControl.gameControl.auraBuffs.ForEach(ab => ab.NotifyOnDeath(this));
+			GameControl.gameControl.AuraBuffs.ForEach(ab => ab.NotifyOnDeath(this));
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
-			GameControl.gameControl.units.Remove(this);
+			GameControl.gameControl.Units.Remove(this);
 			iTween.StopByName(Id);
 			Destroy(gameObject);
 		}
@@ -274,7 +280,7 @@ public class Unit : MonoBehaviour {
 		if(attacking != null && activelyAttacking) {
 			projectiles.RemoveAll(p => p == null);
 			if(projectiles.Count < 1) {
-				GameControl.gameControl.combatControl.Combat(this, attacking);
+				GameControl.gameControl.CombatControl.Combat(this, attacking);
 				attacking.activelyAttacking = false;
 				attacking.attacking = null;
 				activelyAttacking = false;

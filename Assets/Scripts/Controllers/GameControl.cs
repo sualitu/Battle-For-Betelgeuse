@@ -2,41 +2,43 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(GUIControl))]
-[RequireComponent(typeof(CombatControl))]
-[RequireComponent(typeof(MouseControl))]
-[RequireComponent(typeof(GridControl))]
-[RequireComponent(typeof(NetworkControl))]
 public class GameControl : MonoBehaviour {
 	
 	public static GameControl gameControl;
 	
-	public State state;
-	public Player thisPlayer;
-	public Player enemyPlayer;	
-	
-	public List<Flag> flags = new List<Flag>();
-	public List<Unit> units = new List<Unit>();	
-	public List<AuraBuff> auraBuffs = new List<AuraBuff>();
-	public GameObject unitPrefab;
+	public State State { get; set; } // TODO: Consider changing the main gui button
+	public Player ThisPlayer { get; set; }
+	public Player EnemyPlayer { get; set; }
+
+	// Collections
+	public List<Flag> Flags = new List<Flag>();
+	public List<Unit> Units = new List<Unit>();	
+	public List<AuraBuff> AuraBuffs = new List<AuraBuff>();
+
+	// Unity Stuff
+	public GameObject UnitPrefab;
 	public GameObject CardPrefab;
 	public GameObject DeckButtonPrefab;
-	public GameObject flagPrefab;
+	public GameObject FlagPrefab;
+
+	// State
+	public static bool IsMulti = false;
+	public static bool Cheating = true;
 	
 	// Controllers
-	public GridControl gridControl { get; set; }
-	public GUIControl guiControl { get; set; }
-	public CombatControl combatControl { get; set; }
-	public MouseControl mouseControl { get; set; }
-	public NetworkControl networkControl { get; set; }
-	public AudioControl audioControl { get; set; }
-	public CameraControl cameraControl { get; set; }
+	public GridControl GridControl { get; set; }
+	public GUIControl GuiControl { get; set; }
+	public CombatControl CombatControl { get; set; }
+	public MouseControl MouseControl { get; set; }
+	public NetworkControl NetworkControl { get; set; }
+	public AudioControl AudioControl { get; set; }
+	public CameraControl CameraControl { get; set; }
+	public KeyboardControl KeyboardControl { get; set; }
 	AIControl aiController;
+
+	#region Deck Picking 
 	
-	// TODO Move to GUIController
-	
-	public static bool IsMulti = false;
-	
+	// The deck chosen should be defined before loading of this scene. This is temporary. 	
 	List<Card> deckFromInt(int i) {
 		switch(i) {
 		case 0: return Card.GoodDeck(); 
@@ -55,7 +57,7 @@ public class GameControl : MonoBehaviour {
 		if(!IsMulti) {
 			InitSinglePlayer();
 		} else {
-			guiControl.SetButton("Waiting for opponents");
+			GuiControl.SetMainButton("Waiting for opponents");
 		}
 		HideOptions();
 	}
@@ -63,7 +65,7 @@ public class GameControl : MonoBehaviour {
 	List<DeckOption> dos = new List<DeckOption>();
 	
 	void HideOptions() {
-		networkControl.DeckChosen();
+		NetworkControl.DeckChosen();
 		dos.ForEach(Destroy);
 	}
 	
@@ -81,6 +83,7 @@ public class GameControl : MonoBehaviour {
 		dos.Add(doZero);
 		dos.Add(doTwo);
 	}
+	#endregion 
 	
 	void Start () {
 		InitGame();
@@ -94,43 +97,41 @@ public class GameControl : MonoBehaviour {
 	
 	void InitGame() {
 		new MothershipCard();
-		state = State.PREGAME;
+		State = State.PREGAME;
 		Card.InitCards();
 	}
 	
 	void InitPlayers(List<Card> deck) {
-		thisPlayer = new Player(deck);
-		thisPlayer.Ai = false;
-		thisPlayer.Team = 1;
-		thisPlayer.gameControl = this;
+		ThisPlayer = new Player(deck, this);
+		ThisPlayer.Ai = false;
+		ThisPlayer.Team = Team.ME;
 		if(IsMulti) {
-			enemyPlayer = new Player(deck);
+			EnemyPlayer = new Player(deck, this);
 		} else {
-			enemyPlayer = new Player(Card.AIDeck());
+			EnemyPlayer = new Player(Card.AIDeck(), this);
 		}
-		enemyPlayer.Ai = !IsMulti;
-		enemyPlayer.Team = 2;
-		enemyPlayer.gameControl = this;
-		
+		EnemyPlayer.Ai = !IsMulti;
+		EnemyPlayer.Team = Team.ENEMY;		
 	}
 	
 	void InitSinglePlayer() {
-		guiControl.SetButton(Dictionary.startGame);
+		GuiControl.SetMainButton(Dictionary.StartGame);
 		gameObject.AddComponent<HardAI>();
-		aiController = GetComponent<HardAI>().SetAI(enemyPlayer, this);
-		enemyPlayer.DrawHand();
+		aiController = GetComponent<HardAI>().SetAI(EnemyPlayer, this);
+		EnemyPlayer.DrawHand();
 		SetUpMasterGame();
 	}
 	
 	void InitControllers() {
 		gameControl = this;
-		gridControl = GetComponent<GridControl>();
-		guiControl = GetComponent<GUIControl>();
-		combatControl = GetComponent<CombatControl>();
-		mouseControl = GetComponent<MouseControl>();
-		networkControl = GetComponent<NetworkControl>();
-		audioControl = GetComponent<AudioControl>();
-		cameraControl = GetComponent<CameraControl>();
+		KeyboardControl = gameObject.AddComponent<KeyboardControl>();
+		GridControl = GetComponent<GridControl>();
+		GuiControl = gameObject.AddComponent<GUIControl>();
+		CombatControl = gameObject.AddComponent<CombatControl>();
+		MouseControl = gameObject.AddComponent<MouseControl>();
+		NetworkControl = gameObject.AddComponent<NetworkControl>();
+		AudioControl = gameObject.AddComponent<AudioControl>();
+		CameraControl = gameObject.AddComponent<CameraControl>();
 	}
 	#endregion Init
 
@@ -141,51 +142,51 @@ public class GameControl : MonoBehaviour {
 	void CalculatePoints() {
 		int thisPlayerFlags = 0;
 		int enemyPlayerFlags = 0;
-		foreach(Flag flag in flags) {
-			if(flag.OwnerTeam == thisPlayer.Team) thisPlayerFlags++;
-			if(flag.OwnerTeam == enemyPlayer.Team) enemyPlayerFlags++;
+		foreach(Flag flag in Flags) {
+			if(flag.OwnerTeam == ThisPlayer.Team) thisPlayerFlags++;
+			if(flag.OwnerTeam == EnemyPlayer.Team) enemyPlayerFlags++;
 		}
-		thisPlayer.Points += FlagCountValue(thisPlayerFlags);
-		enemyPlayer.Points += FlagCountValue(enemyPlayerFlags);
+		ThisPlayer.Points += FlagCountValue(thisPlayerFlags);
+		EnemyPlayer.Points += FlagCountValue(enemyPlayerFlags);
 	}
 	
 	void DoGameLoop () {
-		guiControl.UpdateGUI();
-		switch(state) {
+		GuiControl.UpdateGUI();
+		switch(State) {
 			case State.PRETURN:
 				if(!IsMulti || PhotonNetwork.isMasterClient) {
-					state = State.MYTURN;
+					State = State.MYTURN;
 				} else {
-					state = State.ENEMYTURN;
+					State = State.ENEMYTURN;
 				}	
 				DoGameLoop();
 				break;
 			case State.MYTURN:
-				flags.ForEach(f => f.OnNewTurn(null));
+				Flags.ForEach(f => f.OnNewTurn(null));
 				CalculatePoints();
-				guiControl.SetButton(Dictionary.endTurn);
-				units.RemoveAll(u => u == null);
-				foreach(Unit u in units) {
-					if(u.Team == thisPlayer.Team) {
+				GuiControl.SetMainButton(Dictionary.EndTurn);
+				Units.RemoveAll(u => u == null);
+				foreach(Unit u in Units) {
+					if(u.Team == ThisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(units, u.Hex, thisPlayer, enemyPlayer));
+						u.OnNewTurn(new StateObject(Units, u.Hex, ThisPlayer, EnemyPlayer));
 					}
 				}
 				break;
 			case State.ENEMYTURN:
-				flags.ForEach(f => f.OnNewTurn(null));
+				Flags.ForEach(f => f.OnNewTurn(null));
 				CalculatePoints();
-				units.RemoveAll(u => u == null);
-				foreach(Unit u in units) {
-					if(u.Team != thisPlayer.Team) {
+				Units.RemoveAll(u => u == null);
+				foreach(Unit u in Units) {
+					if(u.Team != ThisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(units, u.Hex, enemyPlayer, thisPlayer));
+						u.OnNewTurn(new StateObject(Units, u.Hex, EnemyPlayer, ThisPlayer));
 					}
 				}
 				if(!IsMulti) {
-					enemyPlayer.DrawCard();
-					enemyPlayer.MaxMana++;
-					enemyPlayer.ManaSpend = 0;
+					EnemyPlayer.DrawCard();
+					EnemyPlayer.MaxMana++;
+					EnemyPlayer.ManaSpend = 0;
 				}
 				break;
 			default: 
@@ -194,50 +195,50 @@ public class GameControl : MonoBehaviour {
 	}
 	
 	public bool MyTurn() {
-		return state == State.MYTURN;
+		return State == State.MYTURN;
 	}
 
 	bool TurnEnded = false;
 
 	void EndTurn() {
 		TurnEnded = false;
+		GuiControl.SetMainButton(Dictionary.EnemyTurnInProgress);
 		if(IsMulti) {
-			networkControl.EndNetworkTurn();
+			NetworkControl.EndNetworkTurn();
 		}
-		thisPlayer.DeselectCard();
-		mouseControl.DeselectHex();
-		state = State.ENEMYTURN;
+		ThisPlayer.DeselectCard();
+		State = State.ENEMYTURN;
 		DoGameLoop();
 	}
 	
 	public void EndTurnClicked () {
-		switch(state) {
+		switch(State) {
 		case State.MYTURN:
 			if(MyTurn()) {
-				guiControl.SetButton(Dictionary.EnemyTurnInProgress);
+				GuiControl.SetMainButton(Dictionary.EndingTurn);
 				TurnEnded = true;
 			}
 			break;
 		case State.START:
 			HideOptions();
 			if(IsMulti) {
-				networkControl.StartNetworkGame();
+				NetworkControl.StartNetworkGame();
 			} else {
 				StartGame();
 			}
 			break;
 		case State.GAMEOVER:
-			networkControl.QuitGame();
+			NetworkControl.QuitGame();
 			Application.LoadLevel (0);
 			break;
 		case State.ENEMYTURN:
-			if(!IsMulti) {
+			if(!IsMulti && Cheating) {
 				aiController.EndTurn();
 			}
 			break;
 		case State.PREGAME:
 			HideOptions();
-			guiControl.SetButton(Dictionary.startGame);
+			GuiControl.SetMainButton(Dictionary.StartGame);
 			if(!IsMulti) {
 				InitSinglePlayer();
 			} 
@@ -249,80 +250,72 @@ public class GameControl : MonoBehaviour {
 	
 	public void StartGame() {
 		if(PhotonNetwork.isNonMasterClientInRoom) {
-			guiControl.SetButton(Dictionary.EnemyTurnInProgress);
+			GuiControl.SetMainButton(Dictionary.EnemyTurnInProgress);
 		} else {
-			guiControl.SetButton(Dictionary.endTurn);
+			GuiControl.SetMainButton(Dictionary.EndTurn);
 		}
-		thisPlayer.DrawHand();
-		state = State.PRETURN;
+		ThisPlayer.DrawHand();
+		State = State.PRETURN;
 		DoGameLoop();
 	}
 	
 	private void EndGame() {
-		state = State.GAMEOVER;
-		guiControl.SetButton(Dictionary.endGame);
+		State = State.GAMEOVER;
+		GuiControl.SetMainButton(Dictionary.EndGame);
 	}
 	
 	public static bool GameStarted() {
-		return gameControl.state >= State.START;
+		return gameControl.State >= State.START;
 	}
 	
 	#region SetUp
 	public void SetUpMasterGame() {
-		/*
-		if(IsMulti) {
-			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)]);
-			networkControl.PlayNetworkCardOn(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)]);
-		} else {
-			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)], System.Guid.NewGuid().ToString());
-			PlayCardOnHex(baseCard, gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)], System.Guid.NewGuid().ToString());
-		}*/
 		SetupBases();
-		thisPlayer.MaxMana++;
-		state = State.START;
-		cameraControl.SetPlayerCamera(true);
+		ThisPlayer.MaxMana++;
+		State = State.START;
+		CameraControl.SetPlayerCamera();
 	}
 		
 	public void SetUpClientGame() {
-		SetupBases(master : false);
-		flags.ForEach(f => f.SwapOwner());
-		guiControl.SetButton("Waiting for opponent");
-		state = State.START;
-		cameraControl.SetPlayerCamera(false);
+		SetupBases(false);
+		Flags.ForEach(f => f.SwapOwner()); // This line is only needed when players start with flags.
+		GuiControl.SetMainButton(Dictionary.WaitingForOpponent);
+		State = State.START;
+		CameraControl.SetPlayerCamera(false);
 	}
 
+	// TODO: Consider doing this a different way.
 	public void SetupBases(bool master = true) {
-		Hex p1Base = gridControl.Map[Mathf.FloorToInt(gridControl.Base1.x)][Mathf.FloorToInt(gridControl.Base1.y)];
+		Hex p1Base = GridControl.Map[Mathf.FloorToInt(GridControl.Base1.x)][Mathf.FloorToInt(GridControl.Base1.y)];
 		GameObject go = new GameObject();
 		go.AddComponent<Base>();
 		Base b = go.GetComponent<Base>();
 		b.FromCard(null);
 		b.Hex = p1Base;
 		b.transform.position = p1Base.transform.position;
-		Hex p2Base = gridControl.Map[Mathf.FloorToInt(gridControl.Base2.x)][Mathf.FloorToInt(gridControl.Base2.y)];
+		Hex p2Base = GridControl.Map[Mathf.FloorToInt(GridControl.Base2.x)][Mathf.FloorToInt(GridControl.Base2.y)];
 		GameObject go2 = new GameObject();
 		go2.AddComponent<Base>();
 		Base b2 = go2.GetComponent<Base>();
 		b2.FromCard(null);
 		b2.Hex = p2Base;
 		b2.transform.position = p2Base.transform.position;
-		thisPlayer.Base = master ? b : b2;
-		enemyPlayer.Base = master ? b2 : b;
+		ThisPlayer.Base = master ? b : b2;
+		EnemyPlayer.Base = master ? b2 : b;
 	}
 
 	public void SetUpFlags() {
 		int i = 1;
-		foreach(Vector2 v in gridControl.flags.Keys) {
-			Hex hex = gridControl.Map[Mathf.FloorToInt(v.x)][Mathf.FloorToInt(v.y)];
-			GameObject go = (GameObject) Instantiate(flagPrefab, Vector3.zero, Quaternion.identity);
+		foreach(Vector2 v in GridControl.flags.Keys) {
+			Hex hex = GridControl.Map[Mathf.FloorToInt(v.x)][Mathf.FloorToInt(v.y)];
+			GameObject go = (GameObject) Instantiate(FlagPrefab, Vector3.zero, Quaternion.identity);
 			Flag flag = go.GetComponent<Flag>();
 			flag.prefabString = "Buildings/Flag" + i;
 			flag.Id = System.Guid.NewGuid().ToString();
 			flag.FromCard(null);
 			flag.Hex = hex;
 			hex.Unit = flag;
-			flag.OwnerTeam = gridControl.flags[v];
-			flags.Add(flag);
+			Flags.Add(flag);
 			flag.transform.position = hex.transform.position;
 			i++;
 		}
@@ -331,13 +324,13 @@ public class GameControl : MonoBehaviour {
 	
 	public void EnemeyEndTurn() {
 
-		guiControl.SetButton(Dictionary.endTurn);
-		state = State.MYTURN;
-		thisPlayer.DrawCard();
-		thisPlayer.MaxMana++;
-		thisPlayer.ManaSpend = 0;
-		audioControl.PlayNewTurnSound();
-		guiControl.ShowSplashText(Dictionary.yourTurn);
+		GuiControl.SetMainButton(Dictionary.EndTurn);
+		State = State.MYTURN;
+		ThisPlayer.DrawCard();
+		ThisPlayer.MaxMana++;
+		ThisPlayer.ManaSpend = 0;
+		AudioControl.PlayNewTurnSound();
+		GuiControl.ShowSplashText(Dictionary.YourTurn);
 		DoGameLoop();
 	}
 	
@@ -345,34 +338,34 @@ public class GameControl : MonoBehaviour {
 		// TODO Clean up this method to better handle multiple card types.
 		if(typeof(EntityCard).IsAssignableFrom(card.GetType())) {
 			EntityCard eCard = (EntityCard) card;
-			GameObject go = (GameObject) Instantiate(unitPrefab, Vector3.zero, Quaternion.identity);
+			GameObject go = (GameObject) Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
 			Unit unit = go.GetComponent<Unit>();
 			unit.Id = id;
 			unit.FromCard(eCard);
 			unit.Hex = hex;
 			unit.transform.position = hex.transform.position;
 			hex.Unit = unit;
-			units.Add(unit);
-			unit.Team = MyTurn() ? 1 : 2;
-			if(MyTurn() && thisPlayer.Hand.Count != 0) {
+			Units.Add(unit);
+			unit.Team = MyTurn() ? Team.ME : Team.ENEMY;
+			if(MyTurn() && ThisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
-				thisPlayer.PlayCard();
+				ThisPlayer.PlayCard();
 			}
-			card.OnPlay(new StateObject(units, hex, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
+			card.OnPlay(new StateObject(Units, hex, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
 			return unit;
 		} else {
-			if(MyTurn() && thisPlayer.Hand.Count != 0) {
+			if(MyTurn() && ThisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
-				thisPlayer.PlayCard();
+				ThisPlayer.PlayCard();
 			}
-			card.OnPlay(new StateObject(units, hex, MyTurn() ? thisPlayer : enemyPlayer, MyTurn() ? enemyPlayer : thisPlayer));
+			card.OnPlay(new StateObject(Units, hex, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
 			return null;
 		}
 	}
 	
 	public void EnemyCardPlayed(Card card) {
 		GUICard guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
-		guiCard.SetInfo(card, enemyPlayer);
+		guiCard.SetInfo(card, EnemyPlayer);
 		guiCard.ForcePlaceCard(Screen.width, -300);
 		guiCard.HandCard = false;
 		guiCard.Played();		
@@ -388,11 +381,11 @@ public class GameControl : MonoBehaviour {
 			}
 		}
 
-		if(state > State.PREGAME && (enemyPlayer.Points >= Settings.VictoryRequirement)) {
-			guiControl.ShowSplashText("You lost!");
+		if(State > State.PREGAME && (EnemyPlayer.Points >= Settings.VictoryRequirement)) {
+			GuiControl.ShowSplashText("You lost!");
 			EndGame();
-		} else if(state > State.PREGAME && (thisPlayer.Points >= Settings.VictoryRequirement)) {
-			guiControl.ShowSplashText("You won!");
+		} else if(State > State.PREGAME && (ThisPlayer.Points >= Settings.VictoryRequirement)) {
+			GuiControl.ShowSplashText("You won!");
 			EndGame();
 		}
 	}

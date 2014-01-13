@@ -4,46 +4,36 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(GameControl))]
 public class GUIControl : MonoBehaviour {
-	
-	public GUIText SmallTextSplashPrefab;
-	public GUIText TextSplashPrefab;
-	private GameControl gameControl;
-	public GUITexture selUnitBox;
-	public GUIText selUnitLabels;
-	public GUIText selUnitValues;
-	public GUIText selUnitName;
-	public GUIText playerStats;
-	public GUIText enemyStats;
+
 	GUIText selUnitLabelObject;
 	GUIText selUnitValueObject;
 	GUIText selUnitNameObject;
 	GUIText playerStatsObject;
 	GUIText enemyStatsObject;
+	GameControl gameControl;
 	Vector2 popUp = new Vector2(0,0);
-	public GUISkin skin = null;
 	Hex oldHex = null;
 	EndTurn et;
 	GUITexture selUnitObject;
 	Texture2D selUnitTexture;
 	GUICard guiCard;
 	Rect imageRect = new Rect(34,47,154,91);
-	public GameObject CardPrefab;
 
 	void Start() {
 		gameControl = GetComponent<GameControl>();
 		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
 		et.title = "Random Deck";
-		selUnitLabelObject = (GUIText) Instantiate(selUnitLabels);
-		selUnitValueObject = (GUIText) Instantiate(selUnitValues);
-		selUnitNameObject = (GUIText) Instantiate(selUnitName);
-		selUnitObject = (GUITexture) Instantiate(selUnitBox);
-		playerStatsObject = (GUIText) Instantiate(playerStats);
-		enemyStatsObject = (GUIText) Instantiate(enemyStats);
+		selUnitLabelObject = (GUIText) Instantiate(Assets.Instance.SelUnitLabels);
+		selUnitValueObject = (GUIText) Instantiate(Assets.Instance.SelUnitValues);
+		selUnitNameObject = (GUIText) Instantiate(Assets.Instance.SelUnitName);
+		selUnitObject = (GUITexture) Instantiate(Assets.Instance.SelUnitBox);
+		playerStatsObject = (GUIText) Instantiate(Assets.Instance.PlayerStats);
+		enemyStatsObject = (GUIText) Instantiate(Assets.Instance.EnemyStats);
 		HideSelUnitBox();
 		HideSelUnitInfo();
 	}
 
-	public void SetButton(string s) {
+	public void SetMainButton(string s) {
 		et.title = s;
 	}
 			
@@ -51,17 +41,17 @@ public class GUIControl : MonoBehaviour {
 	}
 	
 	public bool MouseIsOverGUI() {
-		return gameControl.state > State.PREGAME &&  (et.IsMouseOver || gameControl.thisPlayer.GuiHand.Exists(g => g.IsMouseOver));
+		return gameControl.State > State.PREGAME &&  (et.IsMouseOver || gameControl.ThisPlayer.GuiHand.Exists(g => g.IsMouseOver));
 	}
 	
 	public void ShowSplashText(string s) {
-		TextSplashPrefab.text = s;
-		Instantiate (TextSplashPrefab);
+		Assets.Instance.TextSplashPrefab.text = s;
+		Instantiate (Assets.Instance.TextSplashPrefab);
 	}
 	
 	public void ShowSmallSplashText(string s) {
-		SmallTextSplashPrefab.text = s;
-		Instantiate (SmallTextSplashPrefab);
+		Assets.Instance.SmallTextSplashPrefab.text = s;
+		Instantiate (Assets.Instance.SmallTextSplashPrefab);
 	}
 	
 	string GetMouseOverString(Unit unit) {
@@ -70,7 +60,7 @@ public class GUIControl : MonoBehaviour {
 
 	void ShowSelUnitBox() {
 		if(selUnitObject == null) 
-			selUnitObject = (GUITexture) Instantiate(selUnitBox);
+			selUnitObject = (GUITexture) Instantiate(Assets.Instance.SelUnitBox);
 		else 
 			selUnitObject.enabled = true;
 	}
@@ -98,24 +88,24 @@ public class GUIControl : MonoBehaviour {
 	}
 
 	void OnGUI() {
-		enemyStatsObject.text = "Opponent\nCards in Deck: " + gameControl.enemyPlayer.Deck.Count  + 
-			"\nCards in Hand: " + gameControl.enemyPlayer.Hand.Count + 
-				"\nMana: " + gameControl.enemyPlayer.ManaLeft() + " / " + gameControl.enemyPlayer.MaxMana + 
-				"\nVictory Points: " + gameControl.enemyPlayer.Points + " / " + Settings.VictoryRequirement;
+		enemyStatsObject.text = "Opponent\nCards in Deck: " + gameControl.EnemyPlayer.Deck.Count  + 
+			"\nCards in Hand: " + gameControl.EnemyPlayer.Hand.Count + 
+				"\nMana: " + gameControl.EnemyPlayer.ManaLeft() + " / " + gameControl.EnemyPlayer.MaxMana + 
+				"\nVictory Points: " + gameControl.EnemyPlayer.Points + " / " + Settings.VictoryRequirement;
 
-		playerStatsObject.text = "You\nCards in Deck: " + gameControl.thisPlayer.Deck.Count  + 
-			"\nCards in Hand: " + gameControl.thisPlayer.Hand.Count + 
-				"\nMana: " + gameControl.thisPlayer.ManaLeft() + " / " + gameControl.thisPlayer.MaxMana + 
-				"\nVictory Points: " + gameControl.thisPlayer.Points + " / " + Settings.VictoryRequirement;
+		playerStatsObject.text = "You\nCards in Deck: " + gameControl.ThisPlayer.Deck.Count  + 
+			"\nCards in Hand: " + gameControl.ThisPlayer.Hand.Count + 
+				"\nMana: " + gameControl.ThisPlayer.ManaLeft() + " / " + gameControl.ThisPlayer.MaxMana + 
+				"\nVictory Points: " + gameControl.ThisPlayer.Points + " / " + Settings.VictoryRequirement;
 
-		if(gameControl.mouseControl.selectedUnit != null && gameControl.mouseControl.selectedUnit.Team != 0) {
+		if(gameControl.MouseControl.selectedUnit != null && gameControl.MouseControl.selectedUnit.Team != Team.NEUTRAL) {
 			ShowSelUnitBox();
-			ShowSelUnitInfo(gameControl.mouseControl.selectedUnit);
+			ShowSelUnitInfo(gameControl.MouseControl.selectedUnit);
 			GUI.DrawTexture(imageRect, selUnitTexture);
 			if(imageRect.Contains(Event.current.mousePosition)) {
 				if(guiCard == null) {
-					guiCard = ((GameObject) Object.Instantiate(CardPrefab)).GetComponent<GUICard>();
-					guiCard.SetInfo(gameControl.mouseControl.selectedUnit.Card, gameControl.mouseControl.selectedUnit.Team == 1 ? gameControl.thisPlayer : gameControl.enemyPlayer);
+					guiCard = ((GameObject) Object.Instantiate(Assets.Instance.CardPrefab)).GetComponent<GUICard>();
+					guiCard.SetInfo(gameControl.MouseControl.selectedUnit.Card, gameControl.MouseControl.selectedUnit.Team == Team.ME ? gameControl.ThisPlayer : gameControl.EnemyPlayer);
 					guiCard.ForcePlaceCard(Event.current.mousePosition.x, Event.current.mousePosition.y); 
 					guiCard.HandCard = false;
 				}  else {
@@ -128,14 +118,14 @@ public class GUIControl : MonoBehaviour {
 			HideSelUnitBox();
 			HideSelUnitInfo();
 		}
-		if(gameControl.mouseControl.mouseOverHex != null && gameControl.mouseControl.mouseOverHex.Unit != null) {
-			if(oldHex == null || oldHex != gameControl.mouseControl.mouseOverHex) {
-				oldHex = gameControl.mouseControl.mouseOverHex;
+		if(gameControl.MouseControl.mouseOverHex != null && gameControl.MouseControl.mouseOverHex.Unit != null) {
+			if(oldHex == null || oldHex != gameControl.MouseControl.mouseOverHex) {
+				oldHex = gameControl.MouseControl.mouseOverHex;
 				popUp.x = Camera.main.WorldToScreenPoint(oldHex.transform.position).x;
 				popUp.y = -(Camera.main.WorldToScreenPoint(oldHex.transform.position).y-Screen.height);
 			}
-			GUI.skin = skin;
-			GUI.Box (new Rect(popUp.x+30, popUp.y-30, 150, 100), GetMouseOverString(gameControl.mouseControl.mouseOverHex.Unit));
+			GUI.skin = Assets.Instance.Skin;
+			GUI.Box (new Rect(popUp.x+30, popUp.y-30, 150, 100), GetMouseOverString(gameControl.MouseControl.mouseOverHex.Unit));
 		}
 	}
 	

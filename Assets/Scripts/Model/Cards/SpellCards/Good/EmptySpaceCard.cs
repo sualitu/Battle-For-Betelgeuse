@@ -29,20 +29,22 @@ public class EmptySpaceCard : SpellCard
 	public EmptySpaceCard() {
 		CardText += "Removes all buffs from up to three random enemy buildings or units.";
 	}
+	GameObject effect;
 
-	void TinyExplosion(Vector3 place) {
-		Object.Instantiate((GameObject) Resources.Load ("Effects/tinyexpl"), place, Quaternion.identity);
+	void Effect(Vector3 place) {
+		Object.Instantiate(effect, place, Quaternion.identity);
 	}
 
 	public void RemoveBuffsFromUnit(Unit u) {
-		//TinyExplosion(u.Hex.collider.bounds.center);
+		Effect(u.Hex.collider.bounds.center);
 		List<UnitBuff> buffs = u.Buffs;
 		buffs.ForEach(b => u.RemoveBuff(b));
 	}
 	
 	public override void SpellEffect (StateObject s)
 	{
-		List<Unit> units = s.Units.FindAll(u => u.Team != s.Caster.Team && s.Caster.Base != u && s.Opponent.Base != u); 
+		effect = (GameObject) Resources.Load ("Effects/Debuff");
+		List<Unit> units = s.Units.FindAll(u => u.Team != s.Caster.Team && s.Caster.Base != u && s.Opponent.Base != u && u.Buffs.Count > 0); 
 		if(units.Count <= 3) {
 			units.ForEach(u => RemoveBuffsFromUnit(u));
 		} else {

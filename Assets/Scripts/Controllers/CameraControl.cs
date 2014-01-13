@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 public class CameraControl : MonoBehaviour
 {
-	public void SetPlayerCamera(bool isPlayerOne) {
+	public void SetPlayerCamera(bool isPlayerOne = true) {
 		Vector3 position, rotation;
 		if(isPlayerOne) {
-			position = new Vector3(22,30,-14);
+			position = new Vector3(22,22,-14);
 			rotation = new Vector3(50,0,0);
 		} else {
-			position = new Vector3(60,30,-14);
+			position = new Vector3(60,22,-14);
 			rotation = new Vector3(50,0,0);
 		}
 		iTween.MoveTo(Camera.main.gameObject, iTween.Hash("position", position,
@@ -18,10 +18,6 @@ public class CameraControl : MonoBehaviour
 			"delay", 0.5f,
 			"easetype", "easeInQuad",
 			"time", 5));
-	}
-	
-	void Start() {
-		
 	}
 	
 	void Update()

@@ -53,7 +53,7 @@ public class SmallNukeCard : SpellCard {
 			targets.Add(s.TargetHex);
 		}
 		
-		s.TargetHex.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(h => targets.Add(h));
+		s.TargetHex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => targets.Add(h));
 		
 		foreach(Hex h in targets) {
 			if(h.Unit != null && h.Unit != s.Caster.Base && h.Unit != s.Opponent.Base) {

@@ -25,7 +25,7 @@ public class InstantServiceCard : SpellCard
 	{
 		return new List<Hex>();
 	}
-	
+
 	public InstantServiceCard() {
 		CardText += "Heals up to three random friendly damaged buildings or units.";
 	}

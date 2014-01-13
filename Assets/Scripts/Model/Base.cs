@@ -6,9 +6,9 @@ public class Base : Unit
 {
 	public string prefabString = "Buildings/spacestation";
 	List<Hex> hexs;
-	public override int Team {
+	public override Team Team {
 		get {
-			return 0;
+			return Team.NEUTRAL;
 		}
 	}
 	
@@ -23,13 +23,13 @@ public class Base : Unit
 	{
 		Hex.renderer.material.color = Color.clear;
 		Hex.Unit = this;
-		Hex.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(h => h.renderer.material.color = Color.clear);
-		Hex.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(h => h.Unit = this);
+		Hex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => h.renderer.material.color = Color.clear);
+		Hex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => h.Unit = this);
 	}
 	
 	public override void FromCard(EntityCard card) {
-		model = (GameObject) Instantiate((GameObject) Resources.Load(prefabString));
-		model.transform.parent = transform;
+		Model = (GameObject) Instantiate((GameObject) Resources.Load(prefabString));
+		Model.transform.parent = transform;
 	}
 	
 	public override void OnNewTurn (StateObject s)

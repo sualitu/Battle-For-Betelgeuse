@@ -3,9 +3,7 @@ using System.Collections;
 
 public class AudioControl : MonoBehaviour
 {
-	public AudioClip newTurnSound;
-	public AudioClip errorSound;
-	public AudioClip endTurnSound;
+
 
 	public static void PlayAudioFile(string file) {
 		var clip = (AudioClip) Resources.Load("Sounds/" + file);
@@ -19,15 +17,15 @@ public class AudioControl : MonoBehaviour
 	}
 	
 	public void PlayNewTurnSound() {
-		Camera.main.audio.PlayOneShot(newTurnSound);
+		Camera.main.audio.PlayOneShot(Assets.Instance.NewTurnSound);
 	}
 	
 	public void PlayErrorSound() {
-		Camera.main.audio.PlayOneShot(errorSound);
+		Camera.main.audio.PlayOneShot(Assets.Instance.ErrorSound);
 	}
 	
 	public void PlayEndTurnSound() {
-		Camera.main.audio.PlayOneShot(endTurnSound);
+		Camera.main.audio.PlayOneShot(Assets.Instance.EndTurnSound);
 	}
 	
 }

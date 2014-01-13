@@ -18,7 +18,7 @@ public abstract class BuildingCard : EntityCard
 	{
 		List<Hex> targets = new List<Hex>();
 
-		GameControl.gameControl.flags.FindAll(f => f.OwnerTeam == s.Caster.Team).ForEach(f => targets.AddRange(f.Hexs));
+		GameControl.gameControl.Flags.FindAll(f => f.OwnerTeam == s.Caster.Team).ForEach(f => targets.AddRange(f.Hexs));
 
 		targets.RemoveAll(h => h.Unit != null);
 		return targets;

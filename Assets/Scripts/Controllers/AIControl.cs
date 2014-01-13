@@ -7,14 +7,14 @@ public abstract class AIControl : MonoBehaviour
 	protected GameControl gameControl;
 	protected AIState aistate = AIState.ENEMYTURN;
 
-	const bool talking = true;
+	protected bool talking = true;
 	
 	protected void Say(string s) {
 		if(talking)
 			Debug.Log ("AI: " + s);
 	}
 	
-	protected void Say(int i) {Say (i.ToString());}
+	protected void Say(Object i) {Say (i.ToString());}
 
 	/// <summary>
 	/// Ends the turn.
@@ -25,7 +25,7 @@ public abstract class AIControl : MonoBehaviour
 	}
 	
 	protected bool MyTurn() {
-		return gameControl.state == State.ENEMYTURN;
+		return gameControl.State == State.ENEMYTURN;
 	}
 
 	/// <summary>

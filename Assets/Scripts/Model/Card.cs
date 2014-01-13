@@ -86,8 +86,6 @@ public abstract class Card
 		result.Add(new MinorReconstructionCard());
 		result.Add(new PreciseMissileCard());
 		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new BattleCruiserCard());
 		result.Add(new CruiserCard());

@@ -7,8 +7,8 @@ public class AuraBuff : UnitBuff
 
 	public void NotifyOnMovement(Unit unit, Hex target) {
 		if(owner == unit) {
-			List<Unit> oldAffUnits = AffectedTiles().FindAll(h => h.Unit != null && h.Unit.Team == owner.Team).ConvertAll<Unit>(h => h.Unit);
-			List<Unit> newAffUnits= AffectedTiles(target).FindAll(h => h.Unit != null && h.Unit.Team == owner.Team).ConvertAll<Unit>(h => h.Unit);
+			List<Unit> oldAffUnits = AffectedTiles().FindAll(h => h.Unit != null && h.Unit != owner && h.Unit.Team == owner.Team).ConvertAll<Unit>(h => h.Unit);
+			List<Unit> newAffUnits = AffectedTiles(target).FindAll(h => h.Unit != null && h.Unit != owner && h.Unit.Team == owner.Team).ConvertAll<Unit>(h => h.Unit);
 			oldAffUnits.FindAll(u => !newAffUnits.Contains(u)).ForEach(u => onRemove(u));
 			newAffUnits.FindAll(u => !oldAffUnits.Contains(u)).ForEach(u => onAdd(u));
 			return;
@@ -26,7 +26,7 @@ public class AuraBuff : UnitBuff
 		if(unit == owner) {
 			List<Unit> affUnits = AffectedTiles().FindAll(h => h.Unit != null && h.Unit.Team == owner.Team).ConvertAll<Unit>(h => h.Unit);
 			affUnits.ForEach(u => onRemove(u));
-			GameControl.gameControl.auraBuffs.Remove(this);
+			GameControl.gameControl.AuraBuffs.Remove(this);
 		}
 	}
 
@@ -40,7 +40,7 @@ public class AuraBuff : UnitBuff
 	int cardinality;
 
 	bool IsInBuff(Hex hex, Hex source) {
-		return PathFinder.BreadthFirstSearch(source, GameControl.gameControl.gridControl.Map, cardinality, 0).Contains(hex);
+		return PathFinder.BreadthFirstSearch(source, GameControl.gameControl.GridControl.Map, cardinality, 0).Contains(hex);
 	}
 
 	bool IsInBuff(Hex hex) {
@@ -48,7 +48,7 @@ public class AuraBuff : UnitBuff
 	}
 
 	List<Hex> AffectedTiles(Hex source) {
-		return PathFinder.BreadthFirstSearch(source, GameControl.gameControl.gridControl.Map, cardinality, 0);
+		return PathFinder.BreadthFirstSearch(source, GameControl.gameControl.GridControl.Map, cardinality, 0);
 	}
 
 	List<Hex> AffectedTiles() {
@@ -61,7 +61,7 @@ public class AuraBuff : UnitBuff
 		Name = name;
 		this.owner = owner;
 		this.cardinality = cardinality;
-		GameControl.gameControl.auraBuffs.Add(this);
+		GameControl.gameControl.AuraBuffs.Add(this);
 		this.onRemove = onRemove ?? DoNothing;
 		this.onAdd = onAdd ?? DoNothing;
 		AffectedTiles().FindAll(h => h.Unit != null).ForEach(h => onAdd(h.Unit));

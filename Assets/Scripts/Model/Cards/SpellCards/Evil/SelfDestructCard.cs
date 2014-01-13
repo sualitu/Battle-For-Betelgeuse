@@ -33,7 +33,7 @@ public class SelfDestructCard : SpellCard
 	public override void SpellEffect (StateObject s)
 	{
 		int damage = s.TargetHex.Unit.CurrentHealth();
-		foreach(Hex h in s.TargetHex.Adjacent(GameControl.gameControl.gridControl.Map)) {
+		foreach(Hex h in s.TargetHex.Adjacent(GameControl.gameControl.GridControl.Map)) {
 			if(h.Unit != null) {
 				h.Unit.Damage(damage);
 			}

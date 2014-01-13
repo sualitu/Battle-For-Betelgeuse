@@ -2,7 +2,9 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public class IntergalacticPoliticsCard : SpellCard {
-	
+
+	int amount = 75;
+
 	public override int Cost {
 		get {
 			return 9;
@@ -27,13 +29,13 @@ public class IntergalacticPoliticsCard : SpellCard {
 	}
 	
 	public IntergalacticPoliticsCard() {
-		CardText += "Grants all players 150 victory points.";
+		CardText += "Grants all players " + amount + " victory points.";
 	}
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.Caster.Points += 150;
-		s.Opponent.Points += 150;
+		s.Caster.Points += amount;
+		s.Opponent.Points += amount;
 	}
 }
 

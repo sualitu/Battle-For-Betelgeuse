@@ -11,7 +11,7 @@ public class PathFinder
 		return null;
 	}
 	
-	public static List<Hex> BreadthFirstSearch(Hex source, List<List<Hex>> map, int moves, int team) {
+	public static List<Hex> BreadthFirstSearch(Hex source, List<List<Hex>> map, int moves, Team team) {
 		Queue<Hex> queue = new Queue<Hex>();
 		List<Hex> found = new List<Hex>();
 		List<Hex> visited = new List<Hex>();
@@ -20,7 +20,7 @@ public class PathFinder
 		
 		while(queue.Count > 0) {
 			current = queue.Dequeue();
-			if(DepthFirstSearch(source, current, map, moves, team == 0).Count > 0 && !visited.Contains(current) && (team == 0 || (current.Unit == null || current.Unit.Team == ((team == 1) ? 2 : 1)))) {
+			if(DepthFirstSearch(source, current, map, moves, team == 0).Count > 0 && !visited.Contains(current) && (team == Team.NEUTRAL || (current.Unit == null || current.Unit.Team == ((team == Team.ME) ? Team.ENEMY : Team.ME)))) {
 				found.Add(current);
 				current.Adjacent(map).ForEach(h => queue.Enqueue(h));
 			}

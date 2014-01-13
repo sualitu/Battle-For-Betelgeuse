@@ -11,7 +11,7 @@ public abstract class UnitCard : EntityCard
 	public override List<Hex> Targets (StateObject s)
 	{
 		List<Hex> targets = new List<Hex>();
-		s.Caster.Base.Hex.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(h => h.Adjacent(GameControl.gameControl.gridControl.Map).ForEach(he => targets.Add(he)));
+		s.Caster.Base.Hex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => h.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(he => targets.Add(he)));
 		targets.RemoveAll(h => h.Unit != null);
 		return targets;
 	}

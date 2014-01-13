@@ -54,7 +54,7 @@ public class GreatNukeCard : SpellCard {
 	{
 		AudioControl.PlayAudioFileAt("explosions/nuke", s.TargetHex.transform.localPosition);
 		List<Hex> targets = new List<Hex>();
-		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.gridControl.Map, 2, 0);
+		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.GridControl.Map, 2, 0);
 		if(s.TargetHex.Unit != s.Caster.Base && s.TargetHex.Unit != s.Opponent.Base) {
 			targets.Add(s.TargetHex);
 		}

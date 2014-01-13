@@ -6,21 +6,47 @@ public class Flag : Unit
 {
 	public string prefabString = "";
 	List<Hex> hexs;
-	public override int Team {
+	public override Team Team {
 		get {
-			return 0;
+			return Team.NEUTRAL;
 		}
 	}
+
+	GameObject ring;
+
+	Team ownerTeam;
 	
-	public int OwnerTeam { get; set; }
+	public Team OwnerTeam { 
+		get {
+			return ownerTeam;
+		}
+		set {
+			ownerTeam = value;
+			Destroy (ring);
+			if(ownerTeam == Team.ME) {
+				Model.renderer.material.mainTexture = Assets.Instance.OwnedFlag;
+				ring = (GameObject) Instantiate(Assets.Instance.GreenFlagRing, transform.position, Quaternion.identity);
+			}
+			else if(ownerTeam == Team.ENEMY) {
+				Model.renderer.material.mainTexture = Assets.Instance.EnemyFlag;
+				ring = (GameObject) Instantiate(Assets.Instance.RedFlagRing, transform.position, Quaternion.identity);
+			}
+			else {
+				Model.renderer.material.mainTexture = Assets.Instance.NeutralFlag;
+				ring = (GameObject) Instantiate(Assets.Instance.GreyFlagRing, transform.position, Quaternion.identity);
+			}
+		}
+	}
 	// Use this for initialization
 	void Start ()
 	{
+		OwnerTeam = Team.NEUTRAL;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+		ColourizeHexs();
 		Hex.renderer.material.color = Color.clear;
 		if(i <= 7500) {		
 			transform.position = new Vector3(transform.position.x, transform.position.y + (i < 3750 ? 0.000001f*(1+i) : 0.000001f*(7501-i)) , transform.position.z);
@@ -37,14 +63,14 @@ public class Flag : Unit
 		if(hexs != null) {
 			foreach(Hex h in hexs) {
 				Color c;
-				if(GameControl.gameControl.thisPlayer.targets.Contains(h)) {
+				if(GameControl.gameControl.ThisPlayer.targets.Contains(h)) {
 					c = Settings.MovableTileColour;
 				} else {
 					switch(OwnerTeam) {
-					case 1:
+					case Team.ME:
 						c = Settings.OwnedFlagTileColour;
 						break;
-					case 2:
+					case Team.ENEMY:
 						c = Settings.EnemyFlagTileColour;
 						break;
 					default:
@@ -60,19 +86,19 @@ public class Flag : Unit
 	public List<Hex> Hexs {
 		get {
 			if(hexs == null) {
-				hexs = PathFinder.BreadthFirstSearch(Hex, GameControl.gameControl.gridControl.Map, 2, Team);
+				hexs = PathFinder.BreadthFirstSearch(Hex, GameControl.gameControl.GridControl.Map, 2, Team);
 			}
 			return hexs;
 		}
 	}
 
 	public void SwapOwner() {
-		if(OwnerTeam != 0) OwnerTeam = OwnerTeam == 1 ? 2 : 1;
+		if(OwnerTeam != Team.NEUTRAL) OwnerTeam = OwnerTeam == Team.ME ? Team.ENEMY : Team.ME;
 	}
 	
 	public override void FromCard(EntityCard card) {
-		model = (GameObject) Instantiate((GameObject) Resources.Load(prefabString));
-		model.transform.parent = transform;
+		Model = (GameObject) Instantiate(Assets.Instance.Flag);
+		Model.transform.parent = transform;
 	}
 
 	public override void OnNewTurn (StateObject s)
@@ -81,12 +107,12 @@ public class Flag : Unit
 		switch(OwnerTeam) {
 		case 0: // Flag is neutral.
 			if(Hexs.Exists(h => h.Unit != null && h.Unit != this)) {
-				bool p1 = Hexs.Exists(h => h.Unit != null && h.Unit.Team == 1);
-				bool p2 = Hexs.Exists(h => h.Unit != null && h.Unit.Team == 2);
+				bool p1 = Hexs.Exists(h => h.Unit != null && h.Unit.Team == Team.ME);
+				bool p2 = Hexs.Exists(h => h.Unit != null && h.Unit.Team == Team.ENEMY);
 				if(p1 && !p2) {
-					OwnerTeam = 1;
+					OwnerTeam = Team.ME;
 				} else if(!p1 && p2) {
-					OwnerTeam = 2;
+					OwnerTeam = Team.ENEMY;
 				}
 			}
 			break;
@@ -102,8 +128,8 @@ public class Flag : Unit
 	
 	public string OwnerString() {
 		switch(OwnerTeam) {
-		case 1: return "Your";
-		case 2: return "Enemy";
+		case Team.ME: return "Your";
+		case Team.ENEMY: return "Enemy";
 		default: return "Neutral";
 		}
 	}

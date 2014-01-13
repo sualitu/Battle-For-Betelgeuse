@@ -49,11 +49,11 @@ public class EasyAI : AIControl
 	}
 
 	Dictionary<Flag, int> getEnemyOrNeutralFlagValues() {
-		return findBestFlag(gameControl.flags.FindAll(f => f.OwnerTeam != player.Team));
+		return findBestFlag(gameControl.Flags.FindAll(f => f.OwnerTeam != player.Team));
 	}
 
 	Dictionary<Flag, int> getFriendlyFlagValues() {
-		return findBestFlag(gameControl.flags.FindAll(f => f.OwnerTeam == player.Team));
+		return findBestFlag(gameControl.Flags.FindAll(f => f.OwnerTeam == player.Team));
 	}
 
 
@@ -77,13 +77,13 @@ public class EasyAI : AIControl
 	void calculatePlayStyle() {
 		int myFlags = 0;
 		int humanFlags = 0;
-		foreach(Flag flag in gameControl.flags) {
+		foreach(Flag flag in gameControl.Flags) {
 			if(flag.OwnerTeam == player.Team) myFlags++;
-			if(flag.OwnerTeam == gameControl.thisPlayer.Team) humanFlags++;
+			if(flag.OwnerTeam == gameControl.ThisPlayer.Team) humanFlags++;
 		}
 		try {
 			int turnsTillWin = (Settings.VictoryRequirement - player.Points) / gameControl.FlagCountValue(myFlags);
-			int turnsTillLoss = (Settings.VictoryRequirement - gameControl.thisPlayer.Points) /  gameControl.FlagCountValue(humanFlags);
+			int turnsTillLoss = (Settings.VictoryRequirement - gameControl.ThisPlayer.Points) /  gameControl.FlagCountValue(humanFlags);
 
 			isAggressive = turnsTillWin >= turnsTillLoss;
 		} catch {
@@ -92,14 +92,14 @@ public class EasyAI : AIControl
 	}
 	
 	List<Unit> MyUnits() {
-		return gameControl.units.FindAll(u => u.Team == player.Team);
+		return gameControl.Units.FindAll(u => u.Team == player.Team);
 	}
 	
 	void getMoves(Hex hex, int i, List<Hex> acc) {
 		if(i < 1) {
 			return;
 		} else {
-			List<Hex> adj = hex.Adjacent(gameControl.gridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || (h.Unit.Team != 0 && h.Unit.Team != player.Team)));
+			List<Hex> adj = hex.Adjacent(gameControl.GridControl.Map).FindAll(h => !acc.Contains(h) && (h.Unit == null || (h.Unit.Team != 0 && h.Unit.Team != player.Team)));
 			acc.AddRange(adj);
 			adj.ForEach(h => getMoves(h, --i, acc));
 		}
@@ -178,7 +178,7 @@ public class EasyAI : AIControl
 		if(unitMoves[unit].Count > 0) {
 			int j = 0;
 			try {
-				while(PathFinder.DepthFirstSearch(unit.Hex, unitMoves[unit][j], gameControl.gridControl.Map, unit.MovementLeft()).Count < 1) {
+				while(PathFinder.DepthFirstSearch(unit.Hex, unitMoves[unit][j], gameControl.GridControl.Map, unit.MovementLeft()).Count < 1) {
 					j++;
 				}
 			} catch {
@@ -204,7 +204,7 @@ public class EasyAI : AIControl
 	
 	List<Hex> StandardList() {
 		List<Hex> returnList = new List<Hex>();
-		foreach(List<Hex> row in gameControl.gridControl.Map) {
+		foreach(List<Hex> row in gameControl.GridControl.Map) {
 			foreach(Hex h in row) {
 				if(h != null) {
 					returnList.Add(h);

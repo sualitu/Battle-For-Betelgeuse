@@ -37,13 +37,13 @@ public class NetworkControl : Photon.MonoBehaviour {
 	}
 	
 	void OnCreatedRoom() {	
-		gameControl.guiControl.ShowSplashText("Waiting for an opponent...");
+		gameControl.GuiControl.ShowSplashText("Waiting for an opponent...");
 		PhotonNetwork.room.open = true;
 	}
 	
 	[RPC]
 	void Joined() {
-		gameControl.guiControl.ShowSplashText("Opponent found!");
+		gameControl.GuiControl.ShowSplashText("Opponent found!");
 		PhotonNetwork.room.open = false;
 	}
 	
@@ -70,8 +70,8 @@ public class NetworkControl : Photon.MonoBehaviour {
 	
 	[RPC]
 	public void ReceiveNetworkUnitMove(string id, int x, int y) {
-		Unit unit = gameControl.units.Find(u => u.Id.ToString() == id);
-		Hex hex = gameControl.gridControl.Map[x][y];
+		Unit unit = gameControl.Units.Find(u => u.Id.ToString() == id);
+		Hex hex = gameControl.GridControl.Map[x][y];
 		unit.PrepareMove(hex);
 	}
 	
@@ -88,7 +88,7 @@ public class NetworkControl : Photon.MonoBehaviour {
 	[RPC]
 	public void ReceiveNetworkCard(string name, int x, int y, string guid) {
 		Card card = (Card) Card.cardTable[name];
-		Hex hex = gameControl.gridControl.Map[x][y];
+		Hex hex = gameControl.GridControl.Map[x][y];
 		gameControl.PlayCardOnHex(card, hex, guid);
 	}
 	

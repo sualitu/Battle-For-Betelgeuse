@@ -5,8 +5,8 @@ using System.Collections.Generic;
 public class Player
 {
 	public Unit Base { get; set; }
-	public GameControl gameControl;
-	public int Team;
+	GameControl gameControl;
+	public Team Team { get; set; }
 	public List<Card> Deck { get; set; }
 	public List<Card> Hand { get; set; }
 	public List<GUICard> GuiHand { get; set; }
@@ -29,10 +29,11 @@ public class Player
 	}
 	public int ManaSpend = 0;
 	
-	public Player(List<Card> deck) {
+	public Player(List<Card> deck, GameControl gameControl) {
 		Deck = deck;
 		Hand = new List<Card>();
 		GuiHand = new List<GUICard>();
+		this.gameControl = gameControl;
 	}
 		
 	public int ManaLeft() {
@@ -44,24 +45,23 @@ public class Player
 	}
 	
 	public void DrawHand() {
-		for(int i = 0; i < Settings.StartingHandCount; i++) { DrawCard(); }
+		DrawCards (Settings.StartingHandCount);
+	}
+
+	public void DrawCards(int count) {
+		for(int i = 0; i < count; i++) { DrawCard(); }
 	}
 	
 	public void DrawCard() {
-		if(Hand.Count >= Settings.MaxHandCount) {
-			return ;
+		if(Hand.Count >= Settings.MaxHandCount || Deck.Count < 1) {
+			return;
 		}
 		Card card = null;
-		int cardsLeft = Deck.Count;
-		if(cardsLeft > 1) {
-			card = Deck[Random.Range(0, Deck.Count)];
-			
-		} else if(cardsLeft == 1) {
-			card = Deck[0];
-		}
+		card = Deck.RandomElement();
+
 		Deck.Remove(card);
 		Hand.Add(card);
-		if(Team == 1) {
+		if(Team == Team.ME) {
 			GUICard guiCard = ((GameObject) Object.Instantiate(gameControl.CardPrefab)).GetComponent<GUICard>();
 			guiCard.SetInfo(card, this);
 			GuiHand.Add(guiCard);
@@ -75,7 +75,7 @@ public class Player
 		Hand.Remove(guiCard.Card);
 		GuiHand.Remove(guiCard);
 		guiCard.Played();
-		gameControl.mouseControl.PlayModeOn = true;
+		gameControl.MouseControl.PlayModeOn = true;
 		targets.ForEach(h => h.renderer.material.color = Settings.StandardTileColour);
 		targets = new List<Hex>();
 		SortCards ();
@@ -86,11 +86,11 @@ public class Player
 		targets = new List<Hex>();
 		selectedGUICard = null;
 		selectedCard = null;
-		gameControl.mouseControl.PlayModeOn = true;
+		gameControl.MouseControl.PlayModeOn = true;
 	}
 	
 	public void SetTargetsForCard(Card card) {
-		targets = card.Targets(new StateObject(gameControl.units, null, this, (gameControl.thisPlayer == this) ? gameControl.enemyPlayer : gameControl.thisPlayer));
+		targets = card.Targets(new StateObject(gameControl.Units, null, this, (gameControl.ThisPlayer == this) ? gameControl.EnemyPlayer : gameControl.ThisPlayer));
 	}
 	
 	public void SelectCard(GUICard guiCard) {
@@ -106,18 +106,18 @@ public class Player
 			if(targets.Count < 1) {
 				// TODO Do this properly. This should be centralized.
 				if(GameControl.IsMulti) {
-					gameControl.networkControl.PlayNetworkCardOn(selectedCard, Base.Hex);
+					gameControl.NetworkControl.PlayNetworkCardOn(selectedCard, Base.Hex);
 
 				} else {
 					gameControl.PlayCardOnHex(selectedCard, Base.Hex, System.Guid.NewGuid().ToString());
 				}
 				DeselectCard();
 			}
-			gameControl.mouseControl.PlayModeOn = false;
+			gameControl.MouseControl.PlayModeOn = false;
 			targets.ForEach(h => h.renderer.material.color = Settings.MovableTileColour);
 		} else {
-			gameControl.audioControl.PlayErrorSound();
-			gameControl.guiControl.ShowSmallSplashText(Dictionary.NotEnoughMana);
+			gameControl.AudioControl.PlayErrorSound();
+			gameControl.GuiControl.ShowSmallSplashText(Dictionary.NotEnoughMana);
 		}
 	}
 	
@@ -134,3 +134,4 @@ public class Player
 	}
 }
 
+public enum Team { NEUTRAL, ME, ENEMY }

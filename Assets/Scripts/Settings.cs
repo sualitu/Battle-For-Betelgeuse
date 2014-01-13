@@ -19,6 +19,7 @@ public class Settings
 	public static int PanAngleMin = 35;
     public static int PanAngleMax = 60;
 	// Gameplay Settings
+	public static string GameMode = "KingOfTheHill";
 	public static int MaxMana = 15;
 	public static int FlagBaseValue = 7;
 	public static int FlagMultValue = 2;

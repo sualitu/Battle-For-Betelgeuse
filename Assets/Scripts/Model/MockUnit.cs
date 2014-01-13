@@ -7,7 +7,7 @@ public class MockUnit
 	public int Attack;
 	public int CurrentHealth;
 	public int MaxHealth;
-	public int Team;
+	public Team Team;
 	public Hex Hex;
 	public List<UnitBuff> Buffs;
 	public string Id;

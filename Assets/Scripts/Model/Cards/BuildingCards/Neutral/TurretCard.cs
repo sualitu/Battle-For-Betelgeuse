@@ -31,7 +31,7 @@ public class TurretCard : BuildingCard
 	public override void OnNewTurn (StateObject s)
 	{
 		List<Unit> targets = new List<Unit>();
-		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.gridControl.Map, 2, s.TargetHex.Unit.Team).ConvertAll<Unit>(h => h.Unit);
+		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.GridControl.Map, 2, s.TargetHex.Unit.Team).ConvertAll<Unit>(h => h.Unit);
 		targets = targets.FindAll(u => u != null);
 		targets = targets.FindAll(u => u.Team != s.TargetHex.Unit.Team);
 		if(targets.Count > 0) {

@@ -11,13 +11,13 @@ public class HardAI : AIControl
 		Say ("Determining play style");
 		int myFlags = 0;
 		int humanFlags = 0;
-		foreach(Flag flag in gameControl.flags) {
+		foreach(Flag flag in gameControl.Flags) {
 			if(flag.OwnerTeam == player.Team) myFlags++;
-			if(flag.OwnerTeam == gameControl.thisPlayer.Team) humanFlags++;
+			if(flag.OwnerTeam == gameControl.ThisPlayer.Team) humanFlags++;
 		}
 		try {
 			int turnsTillWin = (Settings.VictoryRequirement - player.Points) / gameControl.FlagCountValue(myFlags);
-			int turnsTillLoss = (Settings.VictoryRequirement - gameControl.thisPlayer.Points) /  gameControl.FlagCountValue(humanFlags);
+			int turnsTillLoss = (Settings.VictoryRequirement - gameControl.ThisPlayer.Points) /  gameControl.FlagCountValue(humanFlags);
 			
 			isAggressive = turnsTillWin > turnsTillLoss;
 		} catch {
@@ -27,7 +27,7 @@ public class HardAI : AIControl
 	}
 
 	int CalculateHexValue(Hex hex) {
-		return CalculateHexValue(hex, gameControl.units.ConvertAll<MockUnit>(u => new MockUnit(u)));
+		return CalculateHexValue(hex, gameControl.Units.ConvertAll<MockUnit>(u => new MockUnit(u)));
 	}
 
 	bool IsDefended(Flag flag) {
@@ -44,7 +44,7 @@ public class HardAI : AIControl
 	int CalculateHexValue(Hex hex, List<MockUnit> state) {
 		// Calculate flag values
 		int max = int.MinValue;
-		foreach(Flag f in gameControl.flags) {
+		foreach(Flag f in gameControl.Flags) {
 			int thisValue = 0;
 			if(f.OwnerTeam != player.Team && (!IsDefended(f) || isAggressive)) {
 				thisValue = 15 - MyPresence(f, state) - Mathf.FloorToInt (hex.Distance(f.Hex));
@@ -227,12 +227,12 @@ public class HardAI : AIControl
 	void EvaluateUnitOrdering(List<Unit> ordering) {
 		List<MockUnit> mus = new List<MockUnit>();
 		Dictionary<Unit, Hex> thisPlan = new Dictionary<Unit, Hex>();
-		gameControl.units.ForEach(u => mus.Add(new MockUnit(u)));
+		gameControl.Units.ForEach(u => mus.Add(new MockUnit(u)));
 
 		int orderingValue = 0;
 		foreach(Unit u in ordering) {
 			MockUnit thisMock = mus.Find(mu => mu.Id == u.Id);
-			List<Hex> targets = PathFinder.BreadthFirstSearch(thisMock.Hex, GameControl.gameControl.gridControl.Map, u.MovementLeft(), player.Team);
+			List<Hex> targets = PathFinder.BreadthFirstSearch(thisMock.Hex, GameControl.gameControl.GridControl.Map, u.MovementLeft(), player.Team);
 			Hex target = thisMock.Hex;
 			int oldValue = CalculateHexValue(target, mus);
 			foreach(Hex h in targets) {
@@ -301,7 +301,7 @@ public class HardAI : AIControl
 		Say(untouchedUnits.Count + " untouched units left");
 		Unit unit = untouchedUnits.First();
 		MockUnit thisMock = new MockUnit(unit);
-		List<Hex> targets = PathFinder.BreadthFirstSearch(thisMock.Hex, GameControl.gameControl.gridControl.Map, unit.MovementLeft(), player.Team);
+		List<Hex> targets = PathFinder.BreadthFirstSearch(thisMock.Hex, GameControl.gameControl.GridControl.Map, unit.MovementLeft(), player.Team);
 		Hex target = thisMock.Hex;
 		int oldValue = CalculateHexValue(target);
 		foreach(Hex h in targets) {
@@ -352,9 +352,9 @@ public class HardAI : AIControl
 			chosenHand.RemoveAll(c => ValuateCard(c) <= 0);
 			if(i == 0) {
 				if(!PlayCard()) {
-					unitPowerSet = gameControl.units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0).PowerSet().ToList ().ConvertAll<List<Unit>>(e => e.ToList());
-					untouchedUnits = gameControl.units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0);
-					// unitPowerSet.RemoveAll(l => l.Count > 4)
+					unitPowerSet = gameControl.Units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0).PowerSet().ToList ().ConvertAll<List<Unit>>(e => e.ToList());
+					untouchedUnits = gameControl.Units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0);
+					// unitPowerSet.RemoveAll(l => l.Count > 3)
 					Say("Removed " + unitPowerSet.RemoveAll(l => l.Count > 3) + " items from the power set");
 					aistate++; 
 				}
