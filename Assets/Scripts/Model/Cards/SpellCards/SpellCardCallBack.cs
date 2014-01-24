@@ -9,7 +9,7 @@ public class SpellCardCallBack : MonoBehaviour {
 	
 	void Update() {
 		if(invoked) {
-			StartCoroutine("Delay");
+			StartCoroutine(Delay ());
 		}
 	}
 	
@@ -20,7 +20,7 @@ public class SpellCardCallBack : MonoBehaviour {
 		invoked = true;
 	}
 	
-	IEnumerator Delay(){
+	IEnumerator Delay() {
 		yield return new WaitForSeconds (delay);
 		target.SpellEffect(s);
 		Destroy(this);

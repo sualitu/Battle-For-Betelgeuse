@@ -5,9 +5,15 @@ using System.Collections;
 public class CombatControl : MonoBehaviour
 {
 	public void Combat(Unit attacker, Unit defender) {
-		defender.Damage(attacker.Buffs.Exists(b => b is DeathTouchBuff) ? int.MaxValue :  attacker.Attack);
+		if(attacker.Buffs.Exists(b => b is DeathTouchBuff))
+			defender.Kill();
+		else
+			defender.Damage(attacker.Attack);
 		if(!attacker.IsRanged()) {
-			attacker.Damage(defender.Buffs.Exists(b => b is DeathTouchBuff) ? int.MaxValue :  defender.Attack);
+			if(defender.Buffs.Exists(b => b is DeathTouchBuff))
+			   attacker.Kill();
+			else
+			   attacker.Damage(defender.Attack);
 		}
 		attacker.Move(attacker.MovementLeft());
 	}

@@ -43,6 +43,9 @@ public class Assets : MonoBehaviour
 	public AudioClip NewTurnSound;
 	public AudioClip ErrorSound;
 	public AudioClip EndTurnSound;
+	public AudioClip ButtonClickSound;
+	public AudioClip ButtonHoverSound;
+	public AudioClip CardMovementSound;
 
 	// GUI
 	public GUIText SmallTextSplashPrefab;
@@ -55,4 +58,6 @@ public class Assets : MonoBehaviour
 	public GUIText EnemyStats;
 	public GUISkin Skin;
 	public GameObject CardPrefab;
+	public GameObject MainMenu;
+	public GameObject Fade;
 }

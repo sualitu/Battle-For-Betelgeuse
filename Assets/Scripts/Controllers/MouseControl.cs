@@ -152,7 +152,7 @@ public class MouseControl : MonoBehaviour {
 							DeselectHex();
 							SelectHex(hex);
 						}
-					} else if(selectedUnit == null) {
+					} else if(selectedUnit == null || (hex.Unit != null && hex.Unit.Team == Team.ME)) {
 						// Select a unit
 						SelectHex(hex);
 					}

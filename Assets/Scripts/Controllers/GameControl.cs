@@ -69,11 +69,17 @@ public class GameControl : MonoBehaviour {
 		dos.ForEach(Destroy);
 	}
 	
-	void ShowDeckOptions() {
+	IEnumerator ShowDeckOptions() {
+		yield return new WaitForSeconds (2);
 		DeckOption doZero = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doZero.index = 0;
 		doZero.h = -1000;
 		doZero.title = "Good Deck";
+
+		DeckOption doOne = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
+		doOne.index = 1;
+		doOne.h = -800;
+		doOne.title = "Neutral Deck";
 		
 		DeckOption doTwo = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doTwo.index = 2;
@@ -81,6 +87,7 @@ public class GameControl : MonoBehaviour {
 		doTwo.title = "Evil Deck";
 		
 		dos.Add(doZero);
+		dos.Add(doOne);
 		dos.Add(doTwo);
 	}
 	#endregion 
@@ -88,7 +95,7 @@ public class GameControl : MonoBehaviour {
 	void Start () {
 		InitGame();
 		InitControllers();	
-		ShowDeckOptions();
+		StartCoroutine( ShowDeckOptions());
 		InitPlayers(deckFromInt(Random.Range(0, 2)));
 		SetUpFlags();
 		LoadingScreen.hide();
@@ -372,6 +379,7 @@ public class GameControl : MonoBehaviour {
 	}
 
 	int i = 0;
+
 	void Update() {
 		if(TurnEnded && NoMovesInProgress()) { 
 			if( i < 10) i++;
@@ -389,7 +397,16 @@ public class GameControl : MonoBehaviour {
 			EndGame();
 		}
 	}
-	
+
+	public IEnumerator LeaveGameDelayed() {
+		yield return new WaitForSeconds(2);
+		LeaveGame();
+	}	
+
+	public void LeaveGame() {
+		GameControl.gameControl.NetworkControl.QuitGame();
+		Application.LoadLevel (0);
+	}
 	
 }
 

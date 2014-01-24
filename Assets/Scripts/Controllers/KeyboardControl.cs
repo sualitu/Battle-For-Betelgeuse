@@ -7,8 +7,11 @@ public class KeyboardControl : MonoBehaviour
 	void Update ()
 	{
 		if(Input.GetKey(KeyCode.Escape)) {
+			NGUITools.SetActive(Assets.Instance.MainMenu, true);
+			/*
 			GameControl.gameControl.NetworkControl.QuitGame();
 			Application.LoadLevel (0);
+			*/
 		}
 	}
 }

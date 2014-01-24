@@ -43,7 +43,7 @@ public class ReinforceCard : SpellCard {
 	public override void SpellEffect (StateObject s)
 	{
 		Debug.Log ("Applied Reinforce");
-		s.TargetHex.Unit.AddBuff(new UnitBuff("Reinforced", onRemove : OnRemove, onApplication : OnApply));
+		s.TargetHex.Unit.AddBuff(new UnitBuff("Reinforced", duration : -1, onRemove : OnRemove, onApplication : OnApply));
 	}
 
 	void OnApply(Unit unit) {

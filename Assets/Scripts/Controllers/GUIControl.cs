@@ -41,7 +41,12 @@ public class GUIControl : MonoBehaviour {
 	}
 	
 	public bool MouseIsOverGUI() {
-		return gameControl.State > State.PREGAME &&  (et.IsMouseOver || gameControl.ThisPlayer.GuiHand.Exists(g => g.IsMouseOver));
+		try {
+			return gameControl.State > State.PREGAME &&  (et.IsMouseOver || gameControl.ThisPlayer.GuiHand.Exists(g => g.IsMouseOver));
+		} catch {
+			Debug.LogWarning("MouseIsOverGUI failed.");
+			return false;
+		}
 	}
 	
 	public void ShowSplashText(string s) {
@@ -88,6 +93,7 @@ public class GUIControl : MonoBehaviour {
 	}
 
 	void OnGUI() {
+		GUI.depth = 1;
 		enemyStatsObject.text = "Opponent\nCards in Deck: " + gameControl.EnemyPlayer.Deck.Count  + 
 			"\nCards in Hand: " + gameControl.EnemyPlayer.Hand.Count + 
 				"\nMana: " + gameControl.EnemyPlayer.ManaLeft() + " / " + gameControl.EnemyPlayer.MaxMana + 
@@ -118,7 +124,7 @@ public class GUIControl : MonoBehaviour {
 			HideSelUnitBox();
 			HideSelUnitInfo();
 		}
-		if(gameControl.MouseControl.mouseOverHex != null && gameControl.MouseControl.mouseOverHex.Unit != null) {
+		if(gameControl.MouseControl.mouseOverHex != null && gameControl.MouseControl.mouseOverHex.Unit != null && gameControl.MouseControl.mouseOverHex.Unit.Team != 0) {
 			if(oldHex == null || oldHex != gameControl.MouseControl.mouseOverHex) {
 				oldHex = gameControl.MouseControl.mouseOverHex;
 				popUp.x = Camera.main.WorldToScreenPoint(oldHex.transform.position).x;

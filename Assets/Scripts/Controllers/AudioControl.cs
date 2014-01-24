@@ -15,17 +15,21 @@ public class AudioControl : MonoBehaviour
 		var clip = (AudioClip) Resources.Load("Sounds/" + file);
 		AudioSource.PlayClipAtPoint(clip, position);
 	}
+
+	public void PlayAudio(AudioClip clip) {
+		Camera.main.audio.PlayOneShot(clip);
+	}
 	
 	public void PlayNewTurnSound() {
-		Camera.main.audio.PlayOneShot(Assets.Instance.NewTurnSound);
+		PlayAudio(Assets.Instance.NewTurnSound);
 	}
 	
 	public void PlayErrorSound() {
-		Camera.main.audio.PlayOneShot(Assets.Instance.ErrorSound);
+		PlayAudio(Assets.Instance.ErrorSound);
 	}
 	
 	public void PlayEndTurnSound() {
-		Camera.main.audio.PlayOneShot(Assets.Instance.EndTurnSound);
+		PlayAudio(Assets.Instance.EndTurnSound);
 	}
 	
 }

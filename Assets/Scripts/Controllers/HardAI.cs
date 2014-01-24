@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Threading;
 
 public class HardAI : AIControl
 {	
@@ -291,8 +293,6 @@ public class HardAI : AIControl
 		plannedMovesValue = 0;
 		untouchedUnits = new List<Unit>();
 	}
-
-
 
 	bool MoveLeftOvers() {
 		if(untouchedUnits.Count < 1) {

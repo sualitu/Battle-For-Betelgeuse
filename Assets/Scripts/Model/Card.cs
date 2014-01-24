@@ -118,34 +118,33 @@ public abstract class Card
 		List<Card> result = new List<Card>();
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
+		result.Add(new DematerializeCard());
+		result.Add(new DematerializeCard());
+		result.Add(new GeneratorsCard());
+		result.Add(new GeneratorsCard());
+		result.Add(new PurgeCard());
+		result.Add(new PurgeCard());
+		result.Add(new CongreveShipCard());
+		result.Add(new CongreveShipCard());
+		result.Add(new FaultyLaunchersCard());
+		result.Add(new FaultyLaunchersCard());
+		result.Add(new FaultyThrustersCard());
+		result.Add(new FaultyThrustersCard());
+		result.Add(new MindControlCard());
+		result.Add(new MindControlCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new CruiserCard());
+		result.Add(new DestroyerCard());
+		result.Add(new DestroyerCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new FighterSquadCard());
+		result.Add(new ReinforceCard());
+		result.Add(new ReinforceCard());
 		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());	
 		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new CarrierCard());
-		result.Add(new MindControlCard());
-		result.Add(new MindControlCard());
-		result.Add(new FaultyThrustersCard());
-		result.Add(new FaultyThrustersCard());
-		result.Add(new FaultyLaunchersCard());
-		result.Add(new FaultyLaunchersCard());
-		result.Add(new ImproveThrustersCard());
-		result.Add(new ImproveThrustersCard());
-		result.Add(new ImproveThrustersCard());
-		result.Add(new ImproveThrustersCard());
+
 		return result;
 	}
 	
@@ -187,6 +186,8 @@ public abstract class Card
 		result.Add(new DestructiveLoadCard());
 		result.Add (new NuclearWeaponsCard());
 		result.Add (new NuclearWeaponsCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
 		return result;
 	}
 	
@@ -306,7 +307,8 @@ public abstract class Card
 		
 		return result;
 	}
-	
+
+	// TODO Keep up todate and find a better method for this
 	public static void InitCards() {
 		new TurretCard();
 		new FaultyLaunchersCard();
@@ -335,4 +337,4 @@ public abstract class Card
 
 public enum CardType { UNIT, BUILDING, SPELL }
 
-public enum Faction { GOOD, NEUTRAL, EVIL }
+public enum Faction { GOOD, NEUTRAL, EVIL, CONTROL }

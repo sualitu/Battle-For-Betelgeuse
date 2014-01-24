@@ -37,6 +37,11 @@ public class Unit : MonoBehaviour {
 		Card.OnNewTurn(s);
 	}
 
+	public void Kill() {
+		Damage((int.MaxValue-1)/2);
+		Damage((int.MaxValue-1)/2);
+	}
+
 	public List<UnitBuff> Buffs {
 		get {
 			return buffs;

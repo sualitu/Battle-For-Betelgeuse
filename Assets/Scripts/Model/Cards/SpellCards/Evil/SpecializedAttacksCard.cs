@@ -35,7 +35,7 @@ public class SpecializedAttacksCard : SpellCard {
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.AddBuff(new UnitBuff("Specialized Attacks", onRemove : OnRemove, onApplication : OnApply));
+		s.TargetHex.Unit.AddBuff(new UnitBuff("Specialized Attacks", duration : -1, onRemove : OnRemove, onApplication : OnApply));
 	}
 
 	void OnApply(Unit unit) {
