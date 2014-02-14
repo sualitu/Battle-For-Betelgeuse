@@ -26,20 +26,26 @@ public class SelfDestructCard : SpellCard
 	
 	public override void SpellAnimation (StateObject s)
 	{
-		Object.Instantiate((GameObject) Resources.Load("Effects/Nuke"), s.TargetHex.collider.bounds.center, Quaternion.identity);
+		Object.Instantiate((GameObject) Resources.Load("Effects/Nuke"), s.MainHex.collider.bounds.center, Quaternion.identity);
 		DoDelayedEffect(s, 0.5f);
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
 	}
 
 	public override void SpellEffect (StateObject s)
 	{
-		int damage = s.TargetHex.Unit.CurrentHealth();
-		foreach(Hex h in s.TargetHex.Adjacent(GameControl.gameControl.GridControl.Map)) {
+		int damage = s.MainHex.Unit.CurrentHealth();
+		foreach(Hex h in s.MainHex.Adjacent(GameControl.gameControl.GridControl.Map)) {
 			if(h.Unit != null) {
 				h.Unit.Damage(damage);
 			}
 		}
 		
-		s.TargetHex.Unit.Damage(int.MaxValue);	
+		s.MainHex.Unit.Damage(int.MaxValue);	
 	}
 }
 

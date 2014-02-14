@@ -8,9 +8,6 @@ public class GUICard : MonoBehaviour
 	GUISkin ownSkin;
 	public Card Card { get; set; }
 	public float Rotation = 0;
-	public Texture2D unitCardTexture;
-	public Texture2D buildingCardTexture;
-	public Texture2D spellCardTexture;
 	public bool HandCard = true;
 	Player Owner;
 	Rect position;	
@@ -20,16 +17,33 @@ public class GUICard : MonoBehaviour
 	int y = Screen.height;
 	float r = 0;
 	int i = 0;
-	
-	void UpdateTexture() {
-		Texture2D texture;
+
+	Texture2D GetBaseTexture() {
 		switch(Card.cardType) {
-			case CardType.UNIT: texture = unitCardTexture; break; 
-			//case CardType.SPELL: texture = spellCardTexture; break;
-			case CardType.BUILDING: texture = buildingCardTexture; break;
-			default: texture = ownSkin.button.normal.background; break;
+		case CardType.UNIT: return (Texture2D) Resources.Load("GUI/Cards/base/baseunitcard_" + TranslateFactionToColourString());
+		case CardType.SPELL: return (Texture2D) Resources.Load("GUI/Cards/base/basecard_" + TranslateFactionToColourString());
+		case CardType.BUILDING: return (Texture2D) Resources.Load("GUI/Cards/base/basebuildingcard_" + TranslateFactionToColourString());
+		default: return ownSkin.button.normal.background;
 		}
-		Texture2D costTexture = (Texture2D) Resources.Load("GUI/Cards/costs/cost" + Card.Cost);
+	}
+
+	string TranslateFactionToColourString() {
+		switch (Card.Faction) {
+		case Faction.GOOD:
+			return "blue";
+		case Faction.EVIL:
+			return "red";
+		case Faction.CONTROL:
+			return "green";
+		default:
+			return "grey";
+		}
+	}
+
+	void UpdateTexture() {
+		Texture2D texture = GetBaseTexture();
+
+		Texture2D costTexture = (Texture2D) Resources.Load("GUI/Cards/costs/" + TranslateFactionToColourString() + "/cost" + Card.Cost);
 		int costHeight = costTexture.height;
 		int costWidth = costTexture.width;
 		int fullHeight = Mathf.FloorToInt(texture.height);
@@ -39,7 +53,7 @@ public class GUICard : MonoBehaviour
 		newTexture.SetPixels(texture.GetPixels(0,0,fullWidth,fullHeight));
 
 		var cost = costTexture.GetPixels(0,0, costWidth, costHeight);
-		newTexture.SetPixels(88,310,costWidth,costHeight,cost);
+		newTexture.SetPixels(88,309,costWidth,costHeight,cost);
 
 		switch(Card.cardType) {
 			case CardType.UNIT: SetTextureStats(newTexture, (UnitCard) Card); break;
@@ -58,35 +72,35 @@ public class GUICard : MonoBehaviour
 	}
 
 	Texture2D SetTextureStats(Texture2D texture, UnitCard card) {
-		Texture2D healthTexture = (Texture2D) Resources.Load("GUI/Cards/health/health" + card.Health);
+		Texture2D healthTexture = (Texture2D) Resources.Load("GUI/Cards/health/" + TranslateFactionToColourString() + "/health" + card.Health);
 		int healthHeight = healthTexture.height;
 		int healthWidth = healthTexture.width;
 		var health = healthTexture.GetPixels(0, 0, healthWidth, healthHeight);
-		texture.SetPixels(149,165, healthWidth, healthHeight, health);
-		Texture2D attackTexture = (Texture2D) Resources.Load("GUI/Cards/attack/attack" + card.Attack);
+		texture.SetPixels(154,165, healthWidth, healthHeight, health);
+		Texture2D attackTexture = (Texture2D) Resources.Load("GUI/Cards/attack/" + TranslateFactionToColourString() + "/attack" + card.Attack);
 		int attackHeight = attackTexture.height;
 		int attackWidth = attackTexture.width;
 		var attack = attackTexture.GetPixels(0, 0, attackWidth, attackHeight);
-		texture.SetPixels(43,165, attackWidth, attackHeight, attack);
-		Texture2D movementTexture = (Texture2D) Resources.Load("GUI/Cards/movement/movement" + card.Movement);
+		texture.SetPixels(46,164, attackWidth, attackHeight, attack);
+		Texture2D movementTexture = (Texture2D) Resources.Load("GUI/Cards/movement/" + TranslateFactionToColourString() + "/movement" + card.Movement);
 		int movementHeight = movementTexture.height;
 		int movementWidth = movementTexture.width;
 		var movement = movementTexture.GetPixels(0, 0, movementWidth, movementHeight);
-		texture.SetPixels(95,165, movementWidth, movementHeight, movement);
+		texture.SetPixels(95,167, movementWidth, movementHeight, movement);
 		return texture;
 	}
 
 	Texture2D SetTextureStats(Texture2D texture, BuildingCard card) {
-		Texture2D healthTexture = (Texture2D) Resources.Load("GUI/Cards/health/health" + card.Health);
+		Texture2D healthTexture = (Texture2D) Resources.Load("GUI/Cards/health/" + TranslateFactionToColourString() + "/health" + card.Health);
 		int healthHeight = healthTexture.height;
 		int healthWidth = healthTexture.width;
 		var health = healthTexture.GetPixels(0, 0, healthWidth, healthHeight);
-		texture.SetPixels(137,165, healthWidth, healthHeight, health);
-		Texture2D attackTexture = (Texture2D) Resources.Load("GUI/Cards/attack/attack" + card.Attack);
+		texture.SetPixels(154,165, healthWidth, healthHeight, health);
+		Texture2D attackTexture = (Texture2D) Resources.Load("GUI/Cards/attack/" + TranslateFactionToColourString() + "/attack" + card.Attack);
 		int attackHeight = attackTexture.height;
 		int attackWidth = attackTexture.width;
 		var attack = attackTexture.GetPixels(0, 0, attackWidth, attackHeight);
-		texture.SetPixels(59,165, attackWidth, attackHeight, attack);
+		texture.SetPixels(46,164, attackWidth, attackHeight, attack);
 		return texture;
 	}
 

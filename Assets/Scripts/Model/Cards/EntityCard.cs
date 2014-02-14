@@ -18,6 +18,18 @@ public abstract class EntityCard : Card
 		
 	}
 
+	public virtual bool HasSpecialAbility {
+		get {
+			return false;
+		}
+	}
+
+	public virtual void SpecialAbility(StateObject s) {
+		if(!HasSpecialAbility) {
+			Debug.LogWarning("Special ability attempted on card without special ability");
+		}
+	}
+
 	public virtual int Value() {
 		return Attack + Health + Movement + StandardSpecials.Sum (ss => ss.Value());
 	}
@@ -36,6 +48,10 @@ public abstract class EntityCard : Card
 	
 	public virtual bool OnAttacked(StateObject s) {
 		return StandardOnAttacked();
+	}
+
+	public virtual int OnDamaged(StateObject s, int d) {
+		return d;
 	}
 	
 	public EntityCard() : base() {

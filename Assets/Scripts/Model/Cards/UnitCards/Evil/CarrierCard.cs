@@ -32,6 +32,12 @@ public class CarrierCard : UnitCard
 			return "Carrier";
 		}
 	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
+	}
 
 	public override string PrefabPath {
 		get {

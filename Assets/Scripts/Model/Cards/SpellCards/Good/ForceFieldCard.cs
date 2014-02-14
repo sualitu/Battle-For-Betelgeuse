@@ -33,7 +33,7 @@ public class ForceFieldCard : SpellCard
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.AddBuff(new ForceFieldBuff());
+		s.MainHex.Unit.AddBuff(new ForceFieldBuff());
 	}
 }
 

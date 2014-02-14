@@ -11,7 +11,7 @@ public class NuclearWeaponsCard : SpellCard
 	
 	public override string Name {
 		get {
-			return "Nuclear Weapons";
+			return "Unstable Nuclear Weapons";
 		}
 	}
 	
@@ -34,7 +34,13 @@ public class NuclearWeaponsCard : SpellCard
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.AddBuff(new UnitBuff("Nuclear Weapons", onRemove : OnRemove, onApplication : OnApply, duration : 1));
+		s.MainHex.Unit.AddBuff(new UnitBuff("Nuclear Weapons", onRemove : OnRemove, onApplication : OnApply, duration : 1));
+	}
+	
+	public override string Image {
+		get {
+			return "nuke2";
+		}
 	}
 	
 	void OnApply(Unit unit) {

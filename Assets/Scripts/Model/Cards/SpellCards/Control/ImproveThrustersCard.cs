@@ -28,6 +28,12 @@ public class ImproveThrustersCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.MaxMovement *= 2;
+		s.MainHex.Unit.MaxMovement *= 2;
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
 	}
 }

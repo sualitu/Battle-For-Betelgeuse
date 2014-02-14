@@ -23,11 +23,11 @@ public class ReinforceCard : SpellCard {
 		}
 	}
 
-	public override MockUnit MockOnPlay (MockUnit mo)
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
 	{
 		mo.CurrentHealth += 3;
 		mo.MaxHealth += 3;
-		return mo;
+		return mo.Value(he);
 	}
 	
 	public override List<Hex> Targets (StateObject s)
@@ -42,8 +42,7 @@ public class ReinforceCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		Debug.Log ("Applied Reinforce");
-		s.TargetHex.Unit.AddBuff(new UnitBuff("Reinforced", duration : -1, onRemove : OnRemove, onApplication : OnApply));
+		s.MainHex.Unit.AddBuff(new UnitBuff("Reinforced", duration : -1, onRemove : OnRemove, onApplication : OnApply));
 	}
 
 	void OnApply(Unit unit) {

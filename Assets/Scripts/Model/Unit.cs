@@ -38,8 +38,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void Kill() {
-		Damage((int.MaxValue-1)/2);
-		Damage((int.MaxValue-1)/2);
+		MaxHealth = 0;
 	}
 
 	public List<UnitBuff> Buffs {
@@ -54,7 +53,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void RemoveBuff(UnitBuff buff) {
-		if(buff.HasEffect) {
+		if(buff.HasVisualEffect) {
 			Destroy(effects[buff]);
 			effects.Remove(buff);
 		}
@@ -65,9 +64,16 @@ public class Unit : MonoBehaviour {
 	void Start() {
 		GameControl.gameControl.AuraBuffs.ForEach(ab => ab.CheckBuffOn(this));
 	}
+
+	public void Heal(int i) {
+		Damage (i * -1, true);
+	}
 	
-	public void Damage(int i) {
-		if(buffs.Exists(ub => typeof(ForceFieldBuff).IsAssignableFrom(ub.GetType()))) {
+	public void Damage(int i, bool internalCall = false) {
+		if(i < 0 && !internalCall) { Debug.LogWarning("Attemping to damage with a negative number. Use the Heal function if you wish to heal."); }
+
+		int damage = Card.OnDamaged(new StateObject(GameControl.gameControl.Units, Hex, null, null, null), i);
+		if(damage > 0 && buffs.Exists(ub => typeof(ForceFieldBuff).IsAssignableFrom(ub.GetType()))) {
 			List<UnitBuff> buffsToRemove = new List<UnitBuff>();
 			foreach(UnitBuff buff in buffs) {
 				if(typeof(ForceFieldBuff).IsAssignableFrom(buff.GetType())) {
@@ -76,10 +82,11 @@ public class Unit : MonoBehaviour {
 			}
 			buffsToRemove.ForEach(buff => RemoveBuff(buff));
 		} else {
-			if(0 > i && damageTaken < Mathf.Abs(i)) {
+			if(damage < 0 && damageTaken < Mathf.Abs(damage)) {
 				damageTaken = 0;
-			} else
-				damageTaken += i;
+			} else {
+				damageTaken += damage;
+			}
 		}
 	}
 	
@@ -100,8 +107,11 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void AttackTarget(Unit unit, int delay) {
-		Card.OnAttack(new StateObject(GameControl.gameControl.Units, Hex, null, null));
 		if(unit == null) return;
+		if(Card == null) 
+			Debug.LogError("Card is null for unit: " + UnitName);
+		else 
+			Card.OnAttack(new StateObject(GameControl.gameControl.Units, Hex, unit.Hex, null, null));
 		System.Object[] args = new System.Object[2];
 		args[0] = 5;
 		args[1] = unit.Hex;
@@ -119,7 +129,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void Attacked(Unit attacker) {
-		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.Units, Hex, null, null));
+		bool defend = Card.OnAttacked(new StateObject(GameControl.gameControl.Units, attacker.Hex, Hex, null, null));
 		if(defend && !attacker.IsRanged()) {
 			Hex hex = attacker.Hex;
 			System.Object[] args = new System.Object[2];
@@ -270,6 +280,7 @@ public class Unit : MonoBehaviour {
 			Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
 			GameControl.gameControl.Units.Remove(this);
 			iTween.StopByName(Id);
+			iTween.Stop(gameObject);
 			Destroy(gameObject);
 		}
 		if(i <= 7500) {		

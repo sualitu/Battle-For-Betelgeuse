@@ -27,8 +27,20 @@ public class DeepSpaceExplorationCard : SpellCard {
 		return new List<Hex>();
 	}
 	
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
+	}
+	
 	public DeepSpaceExplorationCard() {
 		CardText += "Draw two cards.";
+	}
+
+	public override string Image {
+		get {
+			return "deepspace";
+		}
 	}
 	
 	public override void SpellEffect (StateObject s)

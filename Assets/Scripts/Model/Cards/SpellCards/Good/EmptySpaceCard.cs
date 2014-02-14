@@ -26,6 +26,12 @@ public class EmptySpaceCard : SpellCard
 		return new List<Hex>();
 	}
 	
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
+	}
+	
 	public EmptySpaceCard() {
 		CardText += "Removes all buffs from up to three random enemy buildings or units.";
 	}
@@ -39,6 +45,12 @@ public class EmptySpaceCard : SpellCard
 		Effect(u.Hex.collider.bounds.center);
 		List<UnitBuff> buffs = u.Buffs;
 		buffs.ForEach(b => u.RemoveBuff(b));
+	}
+
+	public override string Image {
+		get {
+			return "emptyspace";
+		}
 	}
 	
 	public override void SpellEffect (StateObject s)

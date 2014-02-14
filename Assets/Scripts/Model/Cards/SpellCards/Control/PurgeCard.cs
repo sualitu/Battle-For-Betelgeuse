@@ -28,14 +28,29 @@ public class PurgeCard : SpellCard {
 
 	public override void SpellAnimation (StateObject s)
 	{
-		Object.Instantiate((GameObject) Resources.Load ("Effects/Debuff"), s.TargetHex.collider.bounds.center , Quaternion.identity);
+		Object.Instantiate((GameObject) Resources.Load ("Effects/Debuff"), s.MainHex.collider.bounds.center , Quaternion.identity);
 		SpellEffect(s);
+	}
+
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
+	{
+		int draw = mo.Buffs.Count * 3;
+		mo.Buffs = new List<UnitBuff>();
+		return mo.Value(he) - draw;
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
 	}
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.Caster.DrawCards(s.TargetHex.Unit.Buffs.Count);
-		s.TargetHex.Unit.Buffs.ForEach(b => s.TargetHex.Unit.RemoveBuff(b));
-
+		s.Caster.DrawCards(s.MainHex.Unit.Buffs.Count);
+		List<UnitBuff> buffs = new List<UnitBuff>(s.MainHex.Unit.Buffs);
+		foreach(UnitBuff buff in buffs) {
+			s.MainHex.Unit.RemoveBuff(buff);
+		}
 	}
 }

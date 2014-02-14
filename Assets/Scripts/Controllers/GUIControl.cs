@@ -18,6 +18,10 @@ public class GUIControl : MonoBehaviour {
 	Texture2D selUnitTexture;
 	GUICard guiCard;
 	Rect imageRect = new Rect(34,47,154,91);
+	float cardHistoryCurrent = 90;
+	float cardHistoryIncrement = 90;
+	public Vector2 MousePosition = new Vector2(0, 0);
+
 
 	void Start() {
 		gameControl = GetComponent<GameControl>();
@@ -52,6 +56,11 @@ public class GUIControl : MonoBehaviour {
 	public void ShowSplashText(string s) {
 		Assets.Instance.TextSplashPrefab.text = s;
 		Instantiate (Assets.Instance.TextSplashPrefab);
+	}
+
+	public void ShowSplashTexture(Texture2D t) {
+		Assets.Instance.SplashTexture.guiTexture.texture = t;
+		Instantiate(Assets.Instance.SplashTexture);
 	}
 	
 	public void ShowSmallSplashText(string s) {
@@ -88,11 +97,30 @@ public class GUIControl : MonoBehaviour {
 		selUnitNameObject.text = "";
 	}
 
+	public void AddCardToHistory(Card card) {
+		GameObject item = (GameObject) Instantiate(Assets.Instance.CardHistoryItem);
+		item.transform.parent = Assets.Instance.CardHistory.transform;
+		item.transform.localPosition = new Vector3(cardHistoryCurrent, 0f, 0f);
+		item.transform.localScale = new Vector3(1,1,1);
+		cardHistoryCurrent += cardHistoryIncrement;
+		UISprite s = item.GetComponentInChildren<UISprite>();
+		UISlicedSprite ss = item.GetComponentInChildren<UISlicedSprite>();
+		UIButton b = item.GetComponentInChildren<UIButton>();
+		CardHistoryHover chh = b.GetComponent<CardHistoryHover>();
+		chh.Card = card;
+		ss.color = gameControl.MyTurn() ? new Color(0f, 1f, 0f, 0f) : new Color(1f, 0f, 0f, 0f);
+		s.spriteName = card.Image;
+		Assets.Instance.CardHistory.GetComponent<UIDraggablePanel>().relativePositionOnReset = new Vector2(1, 1);
+		Assets.Instance.CardHistory.GetComponent<UIDraggablePanel>().ResetPosition();
+
+	}
+
 	void ShowCardOver() {
 
 	}
 
 	void OnGUI() {
+		MousePosition = Event.current.mousePosition;
 		GUI.depth = 1;
 		enemyStatsObject.text = "Opponent\nCards in Deck: " + gameControl.EnemyPlayer.Deck.Count  + 
 			"\nCards in Hand: " + gameControl.EnemyPlayer.Hand.Count + 

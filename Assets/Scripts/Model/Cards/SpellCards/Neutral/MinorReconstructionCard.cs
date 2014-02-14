@@ -18,7 +18,7 @@ public class MinorReconstructionCard : SpellCard {
 		}
 	}
 
-	public override MockUnit MockOnPlay (MockUnit mo)
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
 	{
 		if(mo.CurrentHealth < mo.MaxHealth) {
 			if(mo.MaxHealth - mo.CurrentHealth < 2) {
@@ -27,7 +27,7 @@ public class MinorReconstructionCard : SpellCard {
 				mo.CurrentHealth += 2;
 			}
 		}
-		return mo;
+		return mo.Value (he);
 	}
 	
 	public override List<Hex> Targets (StateObject s)
@@ -48,12 +48,6 @@ public class MinorReconstructionCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		if(s.TargetHex.Unit.CurrentHealth() < s.TargetHex.Unit.MaxHealth) {
-			if(s.TargetHex.Unit.MaxHealth - s.TargetHex.Unit.CurrentHealth() < 2) {
-				s.TargetHex.Unit.Damage(-(s.TargetHex.Unit.MaxHealth - s.TargetHex.Unit.CurrentHealth()));
-			} else {
-				s.TargetHex.Unit.Damage(-2);
-			}
-		}
+		s.MainHex.Unit.Heal(2);
 	}
 }

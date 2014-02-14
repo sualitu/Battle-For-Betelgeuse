@@ -11,7 +11,8 @@ public class DeckOption : MonoBehaviour
 	public int h = 0;
 	GameControl gameControl;
 	public int index = 0;
-	public List<DeckOption> dos = new List<DeckOption>();
+	public List<DeckOption> dos = new List<DeckOption>();	
+	public bool IsMouseOver = false;
 	
 	void Start() {
 		gameControl = GameControl.gameControl;
@@ -20,8 +21,13 @@ public class DeckOption : MonoBehaviour
 	
 	
 	public void OnGUI() {
-		GUI.skin = skin;
+		GUI.skin = skin;		
+		if(!IsMouseOver && position.Contains(Event.current.mousePosition)) {
+			gameControl.AudioControl.PlayAudio(Assets.Instance.ButtonHoverSound);
+		}
+		IsMouseOver = position.Contains(Event.current.mousePosition);
 		if(GUI.Button(position, title)) {
+			gameControl.AudioControl.PlayAudio(Assets.Instance.ButtonClickSound);
 			gameControl.ChooseDeck(index);
 			dos.ForEach(d => Destroy (d));
 			Destroy (this);

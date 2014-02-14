@@ -1,15 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
+public delegate int HexEvaluator(Hex hex);
+
 public class MockUnit 
 {
-	public delegate int HexEvaluator(Hex hex);
 	public int Attack;
 	public int CurrentHealth;
 	public int MaxHealth;
 	public Team Team;
 	public Hex Hex;
 	public List<UnitBuff> Buffs;
+	public int Movement;
 	public string Id;
 	
 	public MockUnit(Unit unit) {
@@ -20,6 +23,7 @@ public class MockUnit
 		Hex = unit.Hex;
 		Buffs = unit.Buffs;
 		Id = unit.Id;
+		Movement = unit.MaxMovement;
 	}
 	
 	public int Value(HexEvaluator he) {
@@ -28,7 +32,7 @@ public class MockUnit
 		result += Attack;
 		result += CurrentHealth;
 		result += MaxHealth;
-
+		result += (Movement) / 3;
 		result += Buffs.Count*10;
 
 		result += he(Hex);

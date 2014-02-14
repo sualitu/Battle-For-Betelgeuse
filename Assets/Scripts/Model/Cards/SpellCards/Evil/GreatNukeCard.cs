@@ -42,7 +42,7 @@ public class GreatNukeCard : SpellCard {
 	public override void SpellAnimation (StateObject s)
 	{
 		AudioControl.PlayAudioFile("alarm");
-		Hex hex = s.TargetHex;
+		Hex hex = s.MainHex;
 		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
 		Nuke nuke = missile.AddComponent<Nuke>();
 		missile.transform.localScale = new Vector3(0.4f,0.4f,0.4f);
@@ -52,11 +52,11 @@ public class GreatNukeCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		AudioControl.PlayAudioFileAt("explosions/nuke", s.TargetHex.transform.localPosition);
+		AudioControl.PlayAudioFileAt("explosions/nuke", s.MainHex.transform.localPosition);
 		List<Hex> targets = new List<Hex>();
-		targets = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.GridControl.Map, 2, 0);
-		if(s.TargetHex.Unit != s.Caster.Base && s.TargetHex.Unit != s.Opponent.Base) {
-			targets.Add(s.TargetHex);
+		targets = PathFinder.BreadthFirstSearch(s.MainHex, GameControl.gameControl.GridControl.Map, 2, 0);
+		if(s.MainHex.Unit != s.Caster.Base && s.MainHex.Unit != s.Opponent.Base) {
+			targets.Add(s.MainHex);
 		}
 				
 		foreach(Hex h in targets) {

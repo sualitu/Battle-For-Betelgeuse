@@ -12,10 +12,21 @@ public abstract class SpellCard : Card
 		return new List<Hex>();
 	}
 	
-	public virtual MockUnit MockOnPlay(MockUnit mo) {
+	public virtual int MockOnPlay(MockUnit mo, HexEvaluator he) {
 		Debug.LogError("MockOnPlay attempted called on card without it implemented. This probably means an AI is trying to use a card that is not meant for AI");
-		return mo;
+		return 0;
 	}
+
+	
+	public int TargetlessMockOnPlay() {
+		if(IsTargetless) {
+			return MockOnPlay(null, null);
+		} else {
+			Debug.LogError("MockOnPlay for targetless spell called for a spell that was not targetless!");
+			return 0;
+		}
+	}
+
 	
 	public override void OnPlay(StateObject s) {
 		SpellAnimation(s);
@@ -31,7 +42,7 @@ public abstract class SpellCard : Card
 	}
 	
 	public virtual void SpellAnimation(StateObject s) {
-		StandardAnimation(s.TargetHex.collider.bounds.center);
+		StandardAnimation(s.MainHex.collider.bounds.center);
 		SpellEffect(s);
 	}
 	

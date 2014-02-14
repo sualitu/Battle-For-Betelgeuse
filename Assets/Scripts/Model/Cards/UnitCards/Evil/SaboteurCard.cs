@@ -39,6 +39,12 @@ public class SaboteurCard : UnitCard
 		}
 	}
 	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
+	}
+	
 	public SaboteurCard() {
 		StandardSpecials.Add(new StandardSpecial.DeathTouch());
 		setStandardCardText();

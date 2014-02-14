@@ -20,6 +20,7 @@ public abstract class AIControl : MonoBehaviour
 	/// Ends the turn.
 	/// </summary>
 	public void EndTurn() {
+		
 		aistate = AIState.ENEMYTURN;
 		gameControl.EnemeyEndTurn();
 	}

@@ -39,6 +39,12 @@ public class CongreveShipCard : UnitCard
 		}
 	}
 
+	public override string Image {
+		get {
+			return "congreve";
+		}
+	}
+	
 	public override Faction Faction {
 		get {
 			return Faction.CONTROL;

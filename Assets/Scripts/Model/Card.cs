@@ -9,6 +9,11 @@ public abstract class Card
 	public abstract string Name { get; }
 	public abstract int Cost { get; }
 
+	public virtual bool IsTargetless {
+		get {
+			return false;
+		}
+	}
 		
 	protected List<StandardSpecial> StandardSpecials { get; set; }
 	
@@ -22,8 +27,6 @@ public abstract class Card
 		GoodDeck();
 		EvilDeck();
 		NeutralDeck();
-		AIDeck();
-		RandomDeck();
 	}
 
 	public virtual Faction Faction {
@@ -34,23 +37,23 @@ public abstract class Card
 
 	public virtual string Image {
 		get {
-			return "Unknown";
+			return "unknown";
 		}
 	}
 	
 	protected void StandardOnPlay(StateObject s) {
 		foreach(StandardSpecial ss in StandardSpecials) {
 			if(ss.GetType() == typeof(StandardSpecial.Boost)) {
-				s.TargetHex.Unit.Move(-((StandardSpecial.Boost) ss).Amount);
+				s.MainHex.Unit.Move(-((StandardSpecial.Boost) ss).Amount);
 			}
 			if(ss.GetType() == typeof(StandardSpecial.ForceField)) {
-				s.TargetHex.Unit.AddBuff(new ForceFieldBuff());
+				s.MainHex.Unit.AddBuff(new ForceFieldBuff());
 			}
 			if(ss.GetType() == typeof(StandardSpecial.Ranged)) {
-				s.TargetHex.Unit.AddBuff(new RangedBuff());
+				s.MainHex.Unit.AddBuff(new RangedBuff());
 			}
 			if(ss.GetType() == typeof(StandardSpecial.DeathTouch)) {
-				s.TargetHex.Unit.AddBuff(new DeathTouchBuff());
+				s.MainHex.Unit.AddBuff(new DeathTouchBuff());
 			}
 		}
 	}
@@ -134,17 +137,24 @@ public abstract class Card
 		result.Add(new MindControlCard());
 		result.Add(new CruiserCard());
 		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
 		result.Add(new DestroyerCard());
 		result.Add(new DestroyerCard());
 		result.Add(new FighterSquadCard());
 		result.Add(new FighterSquadCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
+		result.Add(new MajorReconstructionCard());
 		result.Add(new MajorReconstructionCard());
 		result.Add(new MinorReconstructionCard());
-
+		result.Add(new MinorReconstructionCard());
+		result.Add (new DisturbtronCard());
+		result.Add (new DisturbtronCard());
+		result.Add(new FrigateCard());
+		result.Add(new FrigateCard());
+		result.Add(new TurretCard());
+		result.Add(new TurretCard());
+		result.Add (new FluytCard());
+		result.Add (new FluytCard());
+		result.Add(new DromonCard());
+		result.Add(new DromonCard());
 		return result;
 	}
 	
@@ -190,149 +200,6 @@ public abstract class Card
 		result.Add(new TurretCard());
 		return result;
 	}
-	
-	public static List<Card> AIDeck() {
-		List<Card> result = new List<Card>();
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new MiningVesselCard());
-		result.Add(new MiningVesselCard());
-		result.Add(new ShieldedCollierCard());
-		result.Add(new ShieldedCollierCard());
-		result.Add(new MiningVesselCard());
-		result.Add(new MiningVesselCard());
-		result.Add(new ShieldedCollierCard());
-		result.Add(new ShieldedCollierCard());
-		
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());	
-		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());	
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add (new ImperialFighterCard());
-		result.Add (new ImperialFighterCard());
-		result.Add (new ImperialFighterCard());
-		result.Add (new ImperialFighterCard());
-		result.Add (new ImperialFighterCard());
-		result.Add (new ImperialFighterCard());
-		return result;
-	}
-	
-	
-	public static List<Card> RandomDeck() {
-		List<Card> result = new List<Card>();
-		
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		result.Add(new ExplorerCard());
-		
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new FighterSquadCard());
-		result.Add(new CarrierCard());
-		result.Add(new CarrierCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new BattleCruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new CruiserCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new DestroyerCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		result.Add(new TurretCard());
-		
-		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());
-		result.Add(new MajorReconstructionCard());	
-		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());
-		result.Add(new MinorReconstructionCard());	
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new ReinforceCard());
-		result.Add(new SmallNukeCard());
-		result.Add(new SmallNukeCard());
-		result.Add(new SmallNukeCard());
-		result.Add(new SmallNukeCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		result.Add(new PreciseMissileCard());
-		
-		return result;
-	}
-
-	// TODO Keep up todate and find a better method for this
-	public static void InitCards() {
-		new TurretCard();
-		new FaultyLaunchersCard();
-		new FaultyThrustersCard();
-		new FinalSacrificeCard();
-		new GreatNukeCard();
-		new ImproveThrustersCard();
-		new MadScientistCard();
-		new MajorReconstructionCard();
-		new MindControlCard();
-		new MinorReconstructionCard();
-		new PreciseMissileCard();
-		new ReinforceCard();
-		new SelfDestructCard();
-		new SmallNukeCard();
-		new BattleCruiserCard();
-		new CarrierCard();
-		new CruiserCard();
-		new DestroyerCard();
-		new ExplorerCard();
-		new FighterSquadCard();
-		new MiningVesselCard();
-		new SaboteurCard();
-	}	
 }
 
 public enum CardType { UNIT, BUILDING, SPELL }

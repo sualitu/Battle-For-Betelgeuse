@@ -6,7 +6,7 @@ public class MindControlCard : SpellCard
 
 	public override int Cost {
 		get {
-			return 10;
+			return 15;
 		}
 	}
 
@@ -26,9 +26,21 @@ public class MindControlCard : SpellCard
 		}
 	}
 
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
+	{
+		return mo.Value(he);
+	}
+
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.Team = s.Caster.Team;
+		s.MainHex.Unit.Team = s.Caster.Team;
+		s.MainHex.Unit.Move(int.MaxValue);
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
 	}
 }
 

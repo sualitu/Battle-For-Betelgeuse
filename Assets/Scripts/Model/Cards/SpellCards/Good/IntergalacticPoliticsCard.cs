@@ -32,6 +32,18 @@ public class IntergalacticPoliticsCard : SpellCard {
 		CardText += "Grants all players " + amount + " victory points.";
 	}
 	
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
+	}
+	
+	public override string Image {
+		get {
+			return "diplomacy";
+		}
+	}
+	
 	public override void SpellEffect (StateObject s)
 	{
 		s.Caster.Points += amount;

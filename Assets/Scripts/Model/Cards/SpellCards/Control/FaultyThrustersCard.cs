@@ -28,6 +28,32 @@ public class FaultyThrustersCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.MaxMovement = 1;
+		int oldAttack = s.MainHex.Unit.MaxMovement;
+		s.MainHex.Unit.AddBuff(
+			new UnitBuff("Faulty Thrusters", 
+		             onRemove: (unit => OnRemove (unit, oldAttack)), 
+		             onApplication: OnAdd, 
+		             duration: -1)
+			);
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
+	}
+	
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
+	{
+		mo.Movement = 1;
+		return mo.Value(he);
+	}
+	
+	void OnAdd(Unit u) {
+		u.MaxMovement = 1;
+	}
+	
+	void OnRemove(Unit u, int i) {
+		u.MaxMovement = i;
 	}
 }

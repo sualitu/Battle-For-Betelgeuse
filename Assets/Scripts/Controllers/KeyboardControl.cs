@@ -13,6 +13,9 @@ public class KeyboardControl : MonoBehaviour
 			Application.LoadLevel (0);
 			*/
 		}
+		if(Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter)) {
+			GameControl.gameControl.EndTurnClicked();
+		}
 	}
 }
 

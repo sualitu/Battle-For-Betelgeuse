@@ -9,6 +9,12 @@ public class GeneratorsCard : SpellCard {
 			return 2;
 		}
 	}
+
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
+	}
 	
 	public override string Name {
 		get {
@@ -18,6 +24,23 @@ public class GeneratorsCard : SpellCard {
 	
 	public GeneratorsCard() {
 		CardText += "Gain one mana permanently";
+	}
+
+	public override string Image {
+		get {
+			return "generator";
+		}
+	}
+
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
+	{
+		return 9;
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
 	}
 	
 	public override void SpellEffect (StateObject s)

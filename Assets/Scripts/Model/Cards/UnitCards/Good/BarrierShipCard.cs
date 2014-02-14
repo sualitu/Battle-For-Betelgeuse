@@ -15,6 +15,13 @@ public class BarrierShipCard : UnitCard
 		}
 	}
 	
+	public override Faction Faction {
+		get {
+			return Faction.GOOD;
+		}
+	}
+
+	
 	public override int Health {
 		get {
 			return 4;
@@ -45,7 +52,7 @@ public class BarrierShipCard : UnitCard
 	
 	public override void OnPlay (StateObject s)
 	{
-		new AuraBuff("Shield Barrier", s.TargetHex.Unit, 2, OnRemove, OnAdd);
+		new AuraBuff("Shield Barrier", s.MainHex.Unit, 2, OnRemove, OnAdd);
 	}
 
 	void OnRemove(Unit unit) {

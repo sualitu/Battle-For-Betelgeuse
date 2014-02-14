@@ -15,16 +15,16 @@ public class DestructiveLoadCard : SpellCard
 		}
 	}
 	
-	public override Faction Faction {
-		get {
-			return Faction.GOOD;
-		}
-	}
-	
 	public override List<Hex> Targets (StateObject s)
 	{
 		List<Hex> result = s.Units.FindAll(u => u.Team == s.Caster.Team).ConvertAll<Hex>(u => u.Hex);
 		return result;
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
 	}
 	
 	public DestructiveLoadCard() {
@@ -33,7 +33,7 @@ public class DestructiveLoadCard : SpellCard
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.AddBuff(new DeathTouchBuff());
+		s.MainHex.Unit.AddBuff(new DeathTouchBuff());
 	}
 }
 

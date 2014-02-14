@@ -90,7 +90,7 @@ public class Player
 	}
 	
 	public void SetTargetsForCard(Card card) {
-		targets = card.Targets(new StateObject(gameControl.Units, null, this, (gameControl.ThisPlayer == this) ? gameControl.EnemyPlayer : gameControl.ThisPlayer));
+		targets = card.Targets(new StateObject(gameControl.Units, null, null, this, (gameControl.ThisPlayer == this) ? gameControl.EnemyPlayer : gameControl.ThisPlayer));
 	}
 	
 	public void SelectCard(GUICard guiCard) {
@@ -103,11 +103,10 @@ public class Player
 			selectedGUICard = guiCard;
 			selectedCard = guiCard.Card;
 			SetTargetsForCard(guiCard.Card);
-			if(targets.Count < 1) {
+			if(selectedCard.IsTargetless) {
 				// TODO Do this properly. This should be centralized.
 				if(GameControl.IsMulti) {
 					gameControl.NetworkControl.PlayNetworkCardOn(selectedCard, Base.Hex);
-
 				} else {
 					gameControl.PlayCardOnHex(selectedCard, Base.Hex, System.Guid.NewGuid().ToString());
 				}

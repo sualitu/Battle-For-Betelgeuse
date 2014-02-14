@@ -11,6 +11,7 @@ public class GameControl : MonoBehaviour {
 	public Player EnemyPlayer { get; set; }
 
 	// Collections
+	public List<Card> CardHistory = new List<Card>();
 	public List<Flag> Flags = new List<Flag>();
 	public List<Unit> Units = new List<Unit>();	
 	public List<AuraBuff> AuraBuffs = new List<AuraBuff>();
@@ -23,7 +24,7 @@ public class GameControl : MonoBehaviour {
 
 	// State
 	public static bool IsMulti = false;
-	public static bool Cheating = true;
+	public static bool Cheating = false;
 	
 	// Controllers
 	public GridControl GridControl { get; set; }
@@ -74,17 +75,17 @@ public class GameControl : MonoBehaviour {
 		DeckOption doZero = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doZero.index = 0;
 		doZero.h = -1000;
-		doZero.title = "Good Deck";
+		doZero.title = "Protection Deck";
 
 		DeckOption doOne = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doOne.index = 1;
 		doOne.h = -800;
-		doOne.title = "Neutral Deck";
+		doOne.title = "Control Deck";
 		
 		DeckOption doTwo = ((GameObject) Instantiate(DeckButtonPrefab)).GetComponent<DeckOption>();
 		doTwo.index = 2;
 		doTwo.h = -600;
-		doTwo.title = "Evil Deck";
+		doTwo.title = "Destruction Deck";
 		
 		dos.Add(doZero);
 		dos.Add(doOne);
@@ -105,7 +106,7 @@ public class GameControl : MonoBehaviour {
 	void InitGame() {
 		new MothershipCard();
 		State = State.PREGAME;
-		Card.InitCards();
+		Card.InitiateCards();
 	}
 	
 	void InitPlayers(List<Card> deck) {
@@ -115,7 +116,7 @@ public class GameControl : MonoBehaviour {
 		if(IsMulti) {
 			EnemyPlayer = new Player(deck, this);
 		} else {
-			EnemyPlayer = new Player(Card.AIDeck(), this);
+			EnemyPlayer = new Player(Card.NeutralDeck(), this);
 		}
 		EnemyPlayer.Ai = !IsMulti;
 		EnemyPlayer.Team = Team.ENEMY;		
@@ -171,12 +172,13 @@ public class GameControl : MonoBehaviour {
 			case State.MYTURN:
 				Flags.ForEach(f => f.OnNewTurn(null));
 				CalculatePoints();
+				ThisPlayer.DeselectCard();
 				GuiControl.SetMainButton(Dictionary.EndTurn);
 				Units.RemoveAll(u => u == null);
 				foreach(Unit u in Units) {
 					if(u.Team == ThisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(Units, u.Hex, ThisPlayer, EnemyPlayer));
+						u.OnNewTurn(new StateObject(Units, u.Hex, null, ThisPlayer, EnemyPlayer));
 					}
 				}
 				break;
@@ -187,7 +189,7 @@ public class GameControl : MonoBehaviour {
 				foreach(Unit u in Units) {
 					if(u.Team != ThisPlayer.Team) {
 						u.ResetStats();
-						u.OnNewTurn(new StateObject(Units, u.Hex, EnemyPlayer, ThisPlayer));
+						u.OnNewTurn(new StateObject(Units, u.Hex, null, EnemyPlayer, ThisPlayer));
 					}
 				}
 				if(!IsMulti) {
@@ -337,11 +339,13 @@ public class GameControl : MonoBehaviour {
 		ThisPlayer.MaxMana++;
 		ThisPlayer.ManaSpend = 0;
 		AudioControl.PlayNewTurnSound();
-		GuiControl.ShowSplashText(Dictionary.YourTurn);
+		GuiControl.ShowSplashTexture(Assets.Instance.YourTurn);
 		DoGameLoop();
 	}
 	
 	public Unit PlayCardOnHex(Card card, Hex hex, string id) {
+		CardHistory.Add(card);
+		GuiControl.AddCardToHistory(card);
 		// TODO Clean up this method to better handle multiple card types.
 		if(typeof(EntityCard).IsAssignableFrom(card.GetType())) {
 			EntityCard eCard = (EntityCard) card;
@@ -358,14 +362,14 @@ public class GameControl : MonoBehaviour {
 				// TODO Find a better way to sort this
 				ThisPlayer.PlayCard();
 			}
-			card.OnPlay(new StateObject(Units, hex, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
+			card.OnPlay(new StateObject(Units, hex, null, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
 			return unit;
 		} else {
 			if(MyTurn() && ThisPlayer.Hand.Count != 0) {
 				// TODO Find a better way to sort this
 				ThisPlayer.PlayCard();
 			}
-			card.OnPlay(new StateObject(Units, hex, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
+			card.OnPlay(new StateObject(Units, hex, null, MyTurn() ? ThisPlayer : EnemyPlayer, MyTurn() ? EnemyPlayer : ThisPlayer));
 			return null;
 		}
 	}

@@ -35,7 +35,13 @@ public class SpecializedAttacksCard : SpellCard {
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.AddBuff(new UnitBuff("Specialized Attacks", duration : -1, onRemove : OnRemove, onApplication : OnApply));
+		s.MainHex.Unit.AddBuff(new UnitBuff("Specialized Attacks", duration : -1, onRemove : OnRemove, onApplication : OnApply));
+	}
+
+	public override string Image {
+		get {
+			return "nuke1";
+		}
 	}
 
 	void OnApply(Unit unit) {

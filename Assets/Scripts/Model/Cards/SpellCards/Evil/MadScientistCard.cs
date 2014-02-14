@@ -6,19 +6,37 @@ public class MadScientistCard : SpellCard
 {
 	public override int Cost {
 		get {
-			return 10;
+			return 11;
 		}
 	}
 
 	public override string Name {
 		get {
-			return "Mad Scientist";
+			return "Armageddon";
 		}
 	}
 
 	public override List<Hex> Targets (StateObject s)
 	{
 		return new System.Collections.Generic.List<Hex>();
+	}
+
+	public override string Image {
+		get {
+			return "armageddon";
+		}
+	}
+
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
+	}
+	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
 	}
 	
 	public MadScientistCard() {

@@ -24,10 +24,16 @@ public class SalvageCard : SpellCard
 		CardText += "Sacrifice a unit and gain victory points equal to its health and attack times 10";
 	}
 	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
+	}
+	
 	public override void SpellEffect (StateObject s)
 	{
-		s.Caster.Points += (s.TargetHex.Unit.Attack+s.TargetHex.Unit.CurrentHealth() * 10);
-		s.TargetHex.Unit.Damage(int.MaxValue);
+		s.Caster.Points += (s.MainHex.Unit.Attack+s.MainHex.Unit.CurrentHealth() * 10);
+		s.MainHex.Unit.Damage(int.MaxValue);
 	}
 }
 

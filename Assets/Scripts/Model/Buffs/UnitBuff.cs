@@ -4,17 +4,23 @@ using UnityEngine;
 public class UnitBuff {
 
 	public int Duration  { get; set; }
-	public string Name { get; set; }
+	protected string name;
 	protected UnitBuffAction newTurnDel = DoNothing;
 	protected UnitBuffAction onRemove = DoNothing;
 	protected UnitBuffAction onApplication = DoNothing;
+
+	public virtual string Name {
+		get {
+			return name;
+		}
+	}
 
 	public delegate void UnitBuffAction(Unit unit);
 
 	public static void DoNothing(Unit unit) {
 	}
 
-	public virtual bool HasEffect {
+	public virtual bool HasVisualEffect {
 		get {
 			return false;
 		}
@@ -29,7 +35,7 @@ public class UnitBuff {
 	                UnitBuffAction onRemove = null,
 	                UnitBuffAction onApplication = null,
 	                int duration = 1) {
-		Name = name;
+		this.name = name;
 		newTurnDel = newTurn ?? DoNothing;
 		this.onRemove = onRemove ?? DoNothing;
 		this.onApplication = onApplication ?? DoNothing;

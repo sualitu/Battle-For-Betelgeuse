@@ -22,19 +22,36 @@ public class DematerializeCard : SpellCard {
 		return result;
 	}
 
+	public override string Image {
+		get {
+			return "dematerialise";
+		}
+	}
+
+	public override Faction Faction {
+		get {
+			return Faction.CONTROL;
+		}
+	}
+
 	public override void SpellAnimation (StateObject s)
 	{
-		Object.Instantiate((GameObject) Resources.Load ("Effects/Debuff"), s.TargetHex.collider.bounds.center , Quaternion.identity);
+		Object.Instantiate((GameObject) Resources.Load ("Effects/Debuff"), s.MainHex.collider.bounds.center , Quaternion.identity);
 		SpellEffect(s);
 	}
 	
 	public DematerializeCard() {
 		CardText += "Destroy an enemey unit. Owner draws 3 cards.";
 	}
+
+	public override int MockOnPlay (MockUnit mo, HexEvaluator he)
+	{
+		return 20;
+	}
 	
 	public override void SpellEffect (StateObject s)
 	{
-		s.TargetHex.Unit.Kill();
+		s.MainHex.Unit.Kill();
 		s.Opponent.DrawCards(3);
 	}
 }

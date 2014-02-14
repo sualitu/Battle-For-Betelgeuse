@@ -222,8 +222,8 @@ public class EasyAI : AIControl
 		if(hex.Unit != null) {
 			MockUnit mo = new MockUnit(hex.Unit);
 			int originValue = mo.Value(CalculateHexValue);
-			mo = sCard.MockOnPlay(mo);
-			int newValue = mo.Value(CalculateHexValue);
+
+			int newValue = sCard.MockOnPlay(mo, CalculateHexValue);
 			if(mo.Team == player.Team) {
 				return ((originValue - newValue) * -1);
 			} else {

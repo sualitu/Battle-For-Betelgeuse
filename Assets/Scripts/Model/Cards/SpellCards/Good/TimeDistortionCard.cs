@@ -35,21 +35,27 @@ public class TimeDistortionCard : SpellCard {
 		return result;
 	}
 	
+	public override string Image {
+		get {
+			return "timedist";
+		}
+	}
+	
 	public TimeDistortionCard() {
 		CardText += "Units within three tiles cannot attack or move next turn.";
 	}
 
 	public override void SpellAnimation (StateObject s) {
-		Object.Instantiate((GameObject) Resources.Load ("Effects/Splash"), s.TargetHex.collider.bounds.center, Quaternion.identity);
+		Object.Instantiate((GameObject) Resources.Load ("Effects/Splash"), s.MainHex.collider.bounds.center, Quaternion.identity);
 		SpellEffect(s);
 	}
 
 	public override void SpellEffect (StateObject s)
 	{
-		List<Unit> units = PathFinder.BreadthFirstSearch(s.TargetHex, GameControl.gameControl.GridControl.Map, 3, 0).FindAll(h => h.Unit != null).ConvertAll<Unit>(h => h.Unit);
+		List<Unit> units = PathFinder.BreadthFirstSearch(s.MainHex, GameControl.gameControl.GridControl.Map, 3, 0).FindAll(h => h.Unit != null).ConvertAll<Unit>(h => h.Unit);
 		units.RemoveAll(u => u.Team == s.Caster.Team);
 		effect = (GameObject) Resources.Load ("Effects/Debuff");
-		if(s.TargetHex.Unit != null && s.TargetHex.Unit.Team != s.Caster.Team) units.Add(s.TargetHex.Unit);
+		if(s.MainHex.Unit != null && s.MainHex.Unit.Team != s.Caster.Team) units.Add(s.MainHex.Unit);
 		units.ForEach(u => u.AddBuff (new UnitBuff("Distorted", newTurn : Buff, onApplication : Buff)));
 		units.ForEach(u => Effect(u.Hex.renderer.collider.bounds.center));
 	}

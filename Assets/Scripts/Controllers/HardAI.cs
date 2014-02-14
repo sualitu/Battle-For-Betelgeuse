@@ -87,10 +87,10 @@ public class HardAI : AIControl
 		if(hex.Unit != null) {
 			MockUnit mo = new MockUnit(hex.Unit);
 			int originValue = mo.Value(CalculateHexValue);
-			mo = sCard.MockOnPlay(mo);
-			int newValue = mo.Value(CalculateHexValue);
+			
+			int newValue = sCard.MockOnPlay(mo, CalculateHexValue);
 			if(mo.Team == player.Team) {
-				return ((originValue - newValue) * -1);
+				return ((newValue - originValue));
 			} else {
 				return ((originValue - newValue));
 			}
@@ -104,12 +104,16 @@ public class HardAI : AIControl
 			v = EntityCardValue((EntityCard) card);
 		} else if(typeof(SpellCard).IsAssignableFrom(card.GetType())) {
 			SpellCard sCard = (SpellCard) card;
-			player.SetTargetsForCard(card);
-			foreach(Hex hex in player.targets) {
-				int k = SpellOnHexValue(sCard, hex);
-				v = Mathf.Max (k, v);
+			if(!sCard.IsTargetless) {
+				player.SetTargetsForCard(card);
+				foreach(Hex hex in player.targets) {
+					int k = SpellOnHexValue(sCard, hex);
+					v = Mathf.Max (k, v);
+				}
+				player.targets = new List<Hex>();
+			} else {
+				v = sCard.TargetlessMockOnPlay();
 			}
-			player.targets = new List<Hex>();
 		} 
 		return v;
 	}
@@ -176,9 +180,13 @@ public class HardAI : AIControl
 	bool PlaySpellCard(SpellCard card) {
 		player.SetTargetsForCard(card);
 		Hex targetHex = null;
-		foreach(Hex hex in player.targets) {
-			if(targetHex == null || SpellOnHexValue(card, hex) > SpellOnHexValue(card, targetHex)) {
-				targetHex = hex;
+		if(card.IsTargetless) {
+			targetHex = player.Base.Hex;
+		} else {
+			foreach(Hex hex in player.targets) {
+				if(targetHex == null || SpellOnHexValue(card, hex) > SpellOnHexValue(card, targetHex)) {
+					targetHex = hex;
+				}
 			}
 		}
 		if(targetHex == null) { return false; }
@@ -354,8 +362,7 @@ public class HardAI : AIControl
 				if(!PlayCard()) {
 					unitPowerSet = gameControl.Units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0).PowerSet().ToList ().ConvertAll<List<Unit>>(e => e.ToList());
 					untouchedUnits = gameControl.Units.FindAll(u => u.Team == player.Team && u.MovementLeft() > 0);
-					// unitPowerSet.RemoveAll(l => l.Count > 3)
-					Say("Removed " + unitPowerSet.RemoveAll(l => l.Count > 3) + " items from the power set");
+					unitPowerSet.RemoveAll(l => l.Count > 3);
 					aistate++; 
 				}
 				i = 100;
@@ -371,15 +378,23 @@ public class HardAI : AIControl
 			break;
 		case AIState.MOVINGUNITS: 
 			if(!MoveUnits() && !MoveLeftOvers()) { 
+				i = 0;
 				aistate++; 
 			} 
 			break;
 		case AIState.DONE:
-			Say ("Ending turn");
-			EndTurn(); 
+			if(i < 24) {
+				i++;
+			} else {
+				DoEndTurn();
+			}
 			break;
 		default: break;
 		}
+	}
+
+	void DoEndTurn() {
+		EndTurn();
 	}
 
 	// Update is called once per frame

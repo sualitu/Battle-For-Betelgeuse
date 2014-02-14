@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Model\Cards\UnitCards\Control\CongreveShipCard.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Controllers\HardAI.cs">
     <Files>
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\Control\CongreveShipCard.cs" Line="26" Column="13" />
-      <File FileName="Assets\Scripts\Model\Cards\UnitCards\Neutral\CruiserCard.cs" Line="48" Column="24" />
+      <File FileName="Assets\Scripts\Controllers\HardAI.cs" Line="386" Column="16" />
+      <File FileName="Assets\Scripts\Controllers\AIControl.cs" Line="25" Column="31" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

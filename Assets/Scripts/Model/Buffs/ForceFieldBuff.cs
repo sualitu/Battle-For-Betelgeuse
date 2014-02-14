@@ -5,10 +5,10 @@ public class ForceFieldBuff : UnitBuff
 {
 	public ForceFieldBuff() {
 		Duration = -1;
-		Name = "Force Field";
+		name = "Force Field";
 	}
 
-	public override bool HasEffect {
+	public override bool HasVisualEffect {
 		get {
 			return true;
 		}

@@ -51,13 +51,18 @@ public class Assets : MonoBehaviour
 	public GUIText SmallTextSplashPrefab;
 	public GUIText TextSplashPrefab;
 	public GUITexture SelUnitBox;
+	public Texture2D YourTurn;
 	public GUIText SelUnitLabels;
 	public GUIText SelUnitValues;
 	public GUIText SelUnitName;
 	public GUIText PlayerStats;
 	public GUIText EnemyStats;
+	public GameObject SplashTexture;
 	public GUISkin Skin;
 	public GameObject CardPrefab;
 	public GameObject MainMenu;
 	public GameObject Fade;
+	public GameObject CardHistory;
+	public GameObject CardHistoryItem;
+	public GameObject CardHistoryScrollBar;
 }

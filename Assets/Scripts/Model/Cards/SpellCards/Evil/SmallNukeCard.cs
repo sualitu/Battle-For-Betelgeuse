@@ -34,10 +34,16 @@ public class SmallNukeCard : SpellCard {
 		CardText += "Deals 2 damage to target unit and all adjacent units. Does not affect motherships.";
 	}
 	
+	public override Faction Faction {
+		get {
+			return Faction.EVIL;
+		}
+	}
+	
 	public override void SpellAnimation (StateObject s)
 	{
 		//AudioControl.PlayAudioFile("alarm");
-		Hex hex = s.TargetHex;
+		Hex hex = s.MainHex;
 		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
 		Nuke nuke = missile.AddComponent<Nuke>();
 		missile.transform.localScale = new Vector3(0.2f,0.2f,0.2f);
@@ -49,11 +55,11 @@ public class SmallNukeCard : SpellCard {
 	{
 		//AudioControl.PlayAudioFile("explosions/nuke");
 		List<Hex> targets = new List<Hex>();
-		if(s.TargetHex.Unit != s.Caster.Base && s.TargetHex.Unit != s.Opponent.Base) {
-			targets.Add(s.TargetHex);
+		if(s.MainHex.Unit != s.Caster.Base && s.MainHex.Unit != s.Opponent.Base) {
+			targets.Add(s.MainHex);
 		}
 		
-		s.TargetHex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => targets.Add(h));
+		s.MainHex.Adjacent(GameControl.gameControl.GridControl.Map).ForEach(h => targets.Add(h));
 		
 		foreach(Hex h in targets) {
 			if(h.Unit != null && h.Unit != s.Caster.Base && h.Unit != s.Opponent.Base) {

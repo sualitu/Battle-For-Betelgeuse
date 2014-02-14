@@ -27,12 +27,24 @@ public class InstantServiceCard : SpellCard
 	}
 
 	public InstantServiceCard() {
-		CardText += "Heals up to three random friendly damaged buildings or units.";
+		CardText += "Heals up to three random friendly damaged buildings or units for two.";
+	}
+	
+	public override bool IsTargetless {
+		get {
+			return true;
+		}
 	}
 	
 	public void HealUnit(Unit u) {
+		u.Heal (2);
 		StandardAnimation(u.Hex.collider.bounds.center);
-		u.Damage(-2);
+	}
+	
+	public override string Image {
+		get {
+			return "instantservice";
+		}
 	}
 	
 	public override void SpellEffect (StateObject s)

@@ -15,6 +15,13 @@ public class PrimeCommanderCard : UnitCard
 		}
 	}
 	
+	public override Faction Faction {
+		get {
+			return Faction.GOOD;
+		}
+	}
+
+	
 	public override int Health {
 		get {
 			return 4;
@@ -51,7 +58,7 @@ public class PrimeCommanderCard : UnitCard
 	
 	public override void OnPlay (StateObject s)
 	{
-		new AuraBuff("Commander Presence", s.TargetHex.Unit, 1, OnRemove, OnAdd);
+		new AuraBuff("Commander Presence", s.MainHex.Unit, 1, OnRemove, OnAdd);
 	}
 	
 	void OnRemove(Unit unit) {
