@@ -115,6 +115,6 @@ public class NetworkControl : Photon.MonoBehaviour {
 	
 	[RPC]
 	public void ReceiverEndNetworkTurn() {
-		gameControl.EnemeyEndTurn();
+		gameControl.EnemyEndTurn();
 	}
 }

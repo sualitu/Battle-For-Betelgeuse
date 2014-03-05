@@ -27,6 +27,12 @@ public class MiningVesselCard : UnitCard
 		}
 	}
 
+	public override Faction Faction {
+		get {
+			return Faction.GOOD;
+		}
+	}
+
 	public override string Name {
 		get {
 			return "Mining Vessel";

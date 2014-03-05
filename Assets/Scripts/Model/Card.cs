@@ -24,9 +24,9 @@ public abstract class Card
 	}	
 
 	public static void InitiateCards() {
-		GoodDeck();
-		EvilDeck();
-		NeutralDeck();
+		ProtectionDeck();
+		DestructionDeck();
+		ControlDeck();
 	}
 
 	public virtual Faction Faction {
@@ -74,7 +74,7 @@ public abstract class Card
 		}
 	}
 	
-	public static List<Card> GoodDeck() {
+	public static List<Card> ProtectionDeck() {
 		List<Card> result = new List<Card>();
 		result.Add (new IntergalacticPoliticsCard());
 		result.Add (new DeepSpaceExplorationCard());
@@ -117,7 +117,7 @@ public abstract class Card
 		return result;
 	}
 	
-	public static List<Card> NeutralDeck() {
+	public static List<Card> ControlDeck() {
 		List<Card> result = new List<Card>();
 		result.Add(new ExplorerCard());
 		result.Add(new ExplorerCard());
@@ -158,7 +158,7 @@ public abstract class Card
 		return result;
 	}
 	
-	public static List<Card> EvilDeck() {
+	public static List<Card> DestructionDeck() {
 		List<Card> result = new List<Card>();
 		result.Add(new MajorReconstructionCard());
 		result.Add(new MajorReconstructionCard());	

@@ -36,12 +36,11 @@ public class GreatNukeCard : SpellCard {
 	}
 	
 	public GreatNukeCard() {
-		CardText += "Deals five damage to target unit and all units within two tiles. Does not affect motherships.";
+		CardText += "Deals five damage to target unit and all units within three tiles. Does not affect motherships.";
 	}
 	
 	public override void SpellAnimation (StateObject s)
 	{
-		AudioControl.PlayAudioFile("alarm");
 		Hex hex = s.MainHex;
 		GameObject missile = (GameObject) Object.Instantiate(((GameObject) Resources.Load("Projectiles/missiles")), s.Caster.Base.transform.localPosition, Quaternion.identity);
 		Nuke nuke = missile.AddComponent<Nuke>();
@@ -52,9 +51,8 @@ public class GreatNukeCard : SpellCard {
 
 	public override void SpellEffect (StateObject s)
 	{
-		AudioControl.PlayAudioFileAt("explosions/nuke", s.MainHex.transform.localPosition);
 		List<Hex> targets = new List<Hex>();
-		targets = PathFinder.BreadthFirstSearch(s.MainHex, GameControl.gameControl.GridControl.Map, 2, 0);
+		targets = PathFinder.BreadthFirstSearch(s.MainHex, GameControl.gameControl.GridControl.Map, 3, 0);
 		if(s.MainHex.Unit != s.Caster.Base && s.MainHex.Unit != s.Opponent.Base) {
 			targets.Add(s.MainHex);
 		}

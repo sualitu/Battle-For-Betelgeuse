@@ -26,7 +26,6 @@ public class GUIControl : MonoBehaviour {
 	void Start() {
 		gameControl = GetComponent<GameControl>();
 		et = GameObject.Find("EndTurn").GetComponent<EndTurn>();
-		et.title = "Random Deck";
 		selUnitLabelObject = (GUIText) Instantiate(Assets.Instance.SelUnitLabels);
 		selUnitValueObject = (GUIText) Instantiate(Assets.Instance.SelUnitValues);
 		selUnitNameObject = (GUIText) Instantiate(Assets.Instance.SelUnitName);

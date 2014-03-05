@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EndTurn : MonoBehaviour {
 
-	public string title = "End turn";
+	public string title = "Start Game";
 	public GUISkin skin = null;
 	public Rect position;
 	int x = 154;

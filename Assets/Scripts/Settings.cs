@@ -31,7 +31,7 @@ public class Settings
 	public static Color MovableTileColour = new Color(0.95f, 0.47f, 0.13f); // Dark Orange
 	public static Color OwnedFlagTileColour = Color.green;
 	public static Color EnemyFlagTileColour = new Color(0.66f, 0f, 0.2f);
-	public static Color NeutralFlagTileColour = Color.gray;
+	public static Color NeutralFlagTileColour = new Color(0.75f,0.75f,0.75f);
 	public static Color StandardTileColour = Color.white;
 	public static Color SelectedTileColour = Color.red;
 	// Temp	

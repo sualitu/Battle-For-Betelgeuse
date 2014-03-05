@@ -4,12 +4,35 @@ using System.Collections;
 public class MenuSelection : MonoBehaviour {
 
 	public GameObject Fade;
+	public GameObject GameMode;
+
+	public void SelectEasy() {
+		GameControl.Difficulty = Difficulty.EASY;
+	}
+
+	public void SelectHard() {
+		GameControl.Difficulty = Difficulty.HARD;
+	}
+
+	public void SelectControl() {
+		GameControl.Deck = Card.ControlDeck();
+	}
+
+	public void SelectProtection() {
+		GameControl.Deck = Card.ProtectionDeck();
+	}
+
+	public void SelectDestruction() {
+		GameControl.Deck = Card.DestructionDeck();
+	}
 
 	public void Quit() {
 		Application.Quit();
 	}
 
 	public void SinglePlayer() {
+		if(GameControl.Deck == null || GameControl.Difficulty == null) return;
+		GameMode.GetComponent<UITweener>().Play(false);
 		GameControl.IsMulti = false; 
 		StartCoroutine(StartGame ());
 	}

@@ -5,7 +5,19 @@ using System.Collections.Generic;
 public class Unit : MonoBehaviour {
 
 	// Properties
-	public int Attack { get; set; }
+	public int Attack { 
+		get {
+			return attack;
+		}
+		set {
+			if(value > 0) {
+				attack = value;
+			} else {
+				attack = value;
+			}
+		}
+	}
+	int attack;
 	public string UnitName { get; set; }
 	public string Id { get; set; }
 	public virtual Team Team { get; set; }
@@ -38,6 +50,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void Kill() {
+		damageTaken = 0;
 		MaxHealth = 0;
 	}
 

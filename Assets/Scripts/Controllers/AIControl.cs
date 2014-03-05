@@ -22,7 +22,7 @@ public abstract class AIControl : MonoBehaviour
 	public void EndTurn() {
 		
 		aistate = AIState.ENEMYTURN;
-		gameControl.EnemeyEndTurn();
+		gameControl.EnemyEndTurn();
 	}
 	
 	protected bool MyTurn() {
